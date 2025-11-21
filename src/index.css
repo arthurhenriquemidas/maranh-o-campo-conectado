@@ -8,29 +8,29 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Cores do Governo do Maranhão */
+    /* Cores SIGAMA */
     --background: 0 0% 98%;
-    --foreground: 95 60% 15%;
+    --foreground: 180 20% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 95 60% 15%;
+    --card-foreground: 180 20% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 95 60% 15%;
+    --popover-foreground: 180 20% 15%;
 
-    /* Verde Maranhão */
-    --primary: 95 60% 20%;
+    /* Verde SIGAMA - Cor principal #096666 */
+    --primary: 180 84% 22%;
     --primary-foreground: 0 0% 100%;
     
-    /* Amarelo Maranhão */
-    --secondary: 45 95% 55%;
-    --secondary-foreground: 95 60% 15%;
+    /* Verde claro complementar */
+    --secondary: 150 60% 45%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 95 20% 95%;
-    --muted-foreground: 95 20% 45%;
+    --muted: 180 15% 95%;
+    --muted-foreground: 180 15% 45%;
 
-    /* Azul governamental */
-    --accent: 210 80% 45%;
+    /* Verde água */
+    --accent: 175 70% 40%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -44,46 +44,48 @@ All colors MUST be HSL.
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 95 20% 88%;
-    --input: 95 20% 90%;
-    --ring: 95 60% 20%;
+    --border: 180 15% 88%;
+    --input: 180 15% 90%;
+    --ring: 180 84% 22%;
 
     --radius: 0.75rem;
 
-    /* Gradientes */
-    --gradient-primary: linear-gradient(135deg, hsl(95 60% 20%) 0%, hsl(95 50% 30%) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(45 95% 55%) 0%, hsl(45 95% 65%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(210 80% 45%) 0%, hsl(210 70% 55%) 100%);
+    /* Gradientes natureza */
+    --gradient-primary: linear-gradient(135deg, hsl(180 84% 22%) 0%, hsl(175 70% 35%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(150 60% 45%) 0%, hsl(140 55% 55%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(175 70% 40%) 0%, hsl(170 65% 50%) 100%);
+    --gradient-nature: linear-gradient(180deg, hsl(150 50% 95%) 0%, hsl(180 40% 98%) 100%);
     
     /* Sombras */
-    --shadow-sm: 0 1px 2px 0 hsl(95 60% 20% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(95 60% 20% / 0.1);
-    --shadow-lg: 0 10px 15px -3px hsl(95 60% 20% / 0.15);
+    --shadow-sm: 0 1px 2px 0 hsl(180 84% 22% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(180 84% 22% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(180 84% 22% / 0.15);
+    --shadow-nature: 0 8px 20px -5px hsl(150 60% 45% / 0.2);
     
     /* Animações */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dark {
-    --background: 95 30% 8%;
+    --background: 180 30% 8%;
     --foreground: 0 0% 98%;
 
-    --card: 95 25% 12%;
+    --card: 180 25% 12%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 95 25% 12%;
+    --popover: 180 25% 12%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 95 50% 35%;
+    --primary: 180 70% 30%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 45 90% 50%;
-    --secondary-foreground: 95 60% 15%;
+    --secondary: 150 55% 40%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 95 20% 20%;
-    --muted-foreground: 95 10% 65%;
+    --muted: 180 20% 20%;
+    --muted-foreground: 180 10% 65%;
 
-    --accent: 210 75% 50%;
+    --accent: 175 65% 45%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 80% 55%;
@@ -95,9 +97,9 @@ All colors MUST be HSL.
     --warning: 38 90% 55%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 95 20% 20%;
-    --input: 95 20% 20%;
-    --ring: 95 50% 35%;
+    --border: 180 20% 20%;
+    --input: 180 20% 20%;
+    --ring: 180 70% 30%;
   }
 }
 
