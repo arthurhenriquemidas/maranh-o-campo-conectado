@@ -60,11 +60,13 @@ export default {
         'gradient-primary': 'var(--gradient-primary)',
         'gradient-secondary': 'var(--gradient-secondary)',
         'gradient-accent': 'var(--gradient-accent)',
+        'gradient-nature': 'var(--gradient-nature)',
       },
       boxShadow: {
         'sm': 'var(--shadow-sm)',
         'md': 'var(--shadow-md)',
         'lg': 'var(--shadow-lg)',
+        'nature': 'var(--shadow-nature)',
       },
       transitionProperty: {
         'smooth': 'var(--transition-smooth)',
