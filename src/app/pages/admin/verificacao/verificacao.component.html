@@ -1,0 +1,360 @@
+<!-- Layout Admin -->
+<div class="admin-layout">
+  
+  <!-- Header Component -->
+  <app-admin-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-admin-header>
+
+  <!-- Breadcrumb -->
+  <div class="layout-breadcrumb p-3">
+    <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome"></p-breadcrumb>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div class="layout-content p-4">
+    
+    <!-- Header da Página -->
+    <div class="page-header mb-4">
+      <div class="flex align-items-center justify-content-between">
+        <div>
+          <h1 class="text-3xl font-bold text-900 mb-2">Verificação de Identidade</h1>
+          <p class="text-xl text-color-secondary">
+            Gerencie verificações de identidade e documentos dos usuários.
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <p-button 
+            label="Aprovar em Lote" 
+            icon="pi pi-check"
+            class="p-button-success p-button-lg"
+            [disabled]="selectedVerificacoes.length === 0"
+            (click)="aprovarEmLote()">
+          </p-button>
+          <p-button 
+            label="Exportar Relatório" 
+            icon="pi pi-download"
+            disabled="true"
+            class="p-button-info p-button-lg"
+            (click)="exportarRelatorio()">
+          </p-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção: Métricas de Verificação -->
+    <div class="queue-section mb-4">
+      <p-card header="Métricas de Verificação" class="queue-card">
+        <div class="queue-metrics">
+          <div class="metric-item">
+            <div class="metric-value">{{ estatisticas.totalPendentes }}</div>
+            <div class="metric-label">Pendentes</div>
+            <div class="metric-icon">
+              <i class="pi pi-clock"></i>
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-value">{{ estatisticas.totalEmAnalise }}</div>
+            <div class="metric-label">Em Análise</div>
+            <div class="metric-icon">
+              <i class="pi pi-search"></i>
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-value">{{ estatisticas.totalAprovados }}</div>
+            <div class="metric-label">Aprovados</div>
+            <div class="metric-icon">
+              <i class="pi pi-check"></i>
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-value">{{ estatisticas.totalRejeitados }}</div>
+            <div class="metric-label">Rejeitados</div>
+            <div class="metric-icon">
+              <i class="pi pi-times"></i>
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-value">{{ estatisticas.advogadosPendentes }}</div>
+            <div class="metric-label">Advogados Pendentes</div>
+            <div class="metric-icon">
+              <i class="pi pi-briefcase"></i>
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-value">{{ estatisticas.tempoMedioAnalise }}h</div>
+            <div class="metric-label">Tempo Médio de Análise</div>
+            <div class="metric-icon">
+              <i class="pi pi-stopwatch"></i>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+ 
+
+    <!-- Seção: Verificações -->
+    <div class="processos-section">
+      <p-card header="Verificações de Identidade">
+        <div class="search-container mb-4"> 
+            <div class="search-filters">
+              <div class="filter-group">
+                <label class="filter-label">Status</label>
+                <p-multiSelect 
+                  [(ngModel)]="filtro.status"
+                  name="filtroStatus"
+                  [options]="statusOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Todos os status"
+                  [showClear]="true"
+                  (onChange)="onFilterChange()"
+                  class="filter-dropdown">
+                </p-multiSelect>
+              </div>
+    
+              <div class="filter-group">
+                <label class="filter-label">Tipo de Usuário</label>
+                <p-dropdown 
+                  [options]="tipoUsuarioOptions" 
+                  [(ngModel)]="filtro.tipoUsuario"
+                  name="filtroTipoUsuario"
+                  placeholder="Todos os tipos"
+                  (onChange)="onFilterChange()"
+                  class="filter-dropdown">
+                </p-dropdown>
+              </div>
+    
+              <div class="filter-actions">
+                <p-button 
+                  icon="pi pi-refresh" 
+                  label="Atualizar"
+                  severity="secondary"
+                  outlined="true"
+                  size="small"
+                  pTooltip="Recarregar dados"
+                  (click)="loadVerificacoes()">
+                </p-button>
+                
+                <p-button 
+                  icon="pi pi-filter-slash" 
+                  label="Limpar Filtros"
+                  severity="secondary"
+                  text="true"
+                  size="small"
+                  pTooltip="Remover todos os filtros"
+                  (click)="clearAllFilters()">
+                </p-button>
+              </div>
+            </div>
+    
+            <!-- Barra de Busca -->
+            <div class="search-main mt-3">
+              <div class="search-input-wrapper">
+                <div class="search-icon">
+                  <i class="pi pi-search"></i>
+                </div>
+                <input 
+                  type="text" 
+                  pInputText 
+                  placeholder="Buscar por nome, email ou documento..." 
+                  [(ngModel)]="filtro.busca"
+                  name="filtroBusca"
+                  (input)="onFilterChange()"
+                  class="search-input">
+                <div class="search-actions">
+                  <p-button 
+                    *ngIf="filtro.busca"
+                    class="clear-btn"
+                    (click)="clearSearch()"
+                    pTooltip="Limpar busca"
+                    tooltipPosition="top">
+                    <i class="pi pi-times"></i>
+                  </p-button>
+                </div>
+              </div>
+            </div>
+        </div>
+        <p-toolbar class="mb-3">
+          <ng-template pTemplate="left">
+            <span class="font-medium">
+              {{ verificacoes.length }} verificações encontradas
+            </span>
+          </ng-template>
+          <ng-template pTemplate="right">
+            <p-button 
+              label="Aprovar em Lote" 
+              icon="pi pi-check"
+              class="p-button-success p-button-sm"
+              [disabled]="selectedVerificacoes.length === 0"
+              (click)="aprovarEmLote()">
+            </p-button>
+          </ng-template>
+        </p-toolbar>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="grid">
+          <div *ngFor="let item of [1,2,3,4,5]" class="col-12">
+            <div class="flex align-items-center p-3 border-bottom-1 surface-border">
+              <p-skeleton shape="circle" size="3rem" class="mr-3"></p-skeleton>
+              <div class="flex-1">
+                <p-skeleton width="100%" height="1rem" class="mb-2"></p-skeleton>
+                <p-skeleton width="75%" height="0.8rem" class="mb-2"></p-skeleton>
+                <p-skeleton width="50%" height="0.6rem"></p-skeleton>
+              </div>
+              <div class="flex align-items-center">
+                <p-skeleton width="4rem" height="2rem" class="mr-2"></p-skeleton>
+                <p-skeleton shape="circle" size="2rem"></p-skeleton>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabela de Verificações -->
+        <div *ngIf="!loading">
+          <p-table 
+            [value]="verificacoes" 
+            [paginator]="true" 
+            [rows]="10"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} verificações"
+            [rowsPerPageOptions]="[5, 10, 25, 50]"
+            [selectionMode]="'multiple'"
+            [(selection)]="selectedVerificacoes"
+            dataKey="id"
+            styleClass="p-datatable-sm">
+            
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 3rem">
+                  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th>Usuário</th>
+                <th>Tipo</th>
+                <th>Status</th>
+                <th>Data Submissão</th>
+                <th style="width: 8rem">Ações</th>
+              </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="body" let-verificacao>
+              <tr>
+                <td>
+                  <p-tableCheckbox [value]="verificacao"></p-tableCheckbox>
+                </td>
+                <td>
+                  <div class="flex align-items-center">
+                    <p-avatar 
+                      [label]="getInitials(verificacao.usuarioNome)" 
+                      size="normal" 
+                      class="mr-2">
+                    </p-avatar>
+                    <div>
+                      <div class="font-medium">{{ verificacao.usuarioNome }}</div>
+                      <div class="text-sm text-color-secondary">{{ verificacao.usuarioEmail }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <p-tag 
+                    [value]="verificacao.tipoUsuario === 'advogado' ? 'Advogado' : 'Cliente'"
+                    [severity]="verificacao.tipoUsuario === 'advogado' ? 'info' : 'success'">
+                  </p-tag>
+                </td>
+                <td>
+                  <p-tag 
+                    [value]="getStatusLabel(verificacao.status)"
+                    [severity]="getStatusSeverity(verificacao.status)">
+                  </p-tag>
+                </td>
+                <td>
+                  <span class="text-sm">{{ formatDate(verificacao.dataSubmissao) }}</span>
+                </td>
+                <td>
+                  <div class="flex gap-1">
+                    <p-button 
+                      icon="pi pi-eye" 
+                      class="p-button-rounded p-button-text p-button-sm"
+                      pTooltip="Ver detalhes"
+                      (onClick)="showDetalhes(verificacao)">
+                    </p-button>
+                    <p-button 
+                      *ngIf="['pendente', 'em_analise'].includes(verificacao.status)"
+                      icon="pi pi-check" 
+                      class="p-button-rounded p-button-text p-button-sm"
+                      pTooltip="Aprovar"
+                      (onClick)="prepararAprovacao(verificacao)">
+                    </p-button>
+                    <p-button 
+                      *ngIf="['pendente', 'em_analise'].includes(verificacao.status)"
+                      icon="pi pi-times" 
+                      class="p-button-rounded p-button-text p-button-sm"
+                      pTooltip="Rejeitar"
+                      (onClick)="prepararRejeicao(verificacao)">
+                    </p-button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6" class="text-center p-4">
+                  <div class="empty-state">
+                    <i class="pi pi-shield text-6xl text-color-secondary mb-4"></i>
+                    <h3 class="text-color-secondary mb-3">
+                      {{ filtro.busca || (filtro.status && filtro.status.length > 0) ? 'Nenhuma verificação encontrada' : 'Nenhuma verificação disponível' }}
+                    </h3>
+                    <p class="text-color-secondary mb-4" *ngIf="!filtro.busca && (!filtro.status || filtro.status.length === 0)">
+                      Todas as verificações foram processadas ou não há verificações cadastradas.
+                    </p>
+                    <p class="text-color-secondary mb-4" *ngIf="filtro.busca || (filtro.status && filtro.status.length > 0)">
+                      Tente ajustar os filtros de busca.
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </p-card>
+    </div>
+
+  </div>
+</div>
+
+<!-- Dialogs simplificados para teste -->
+<p-dialog [(visible)]="showDetalhesDialog" header="Detalhes" [modal]="true">
+  <div *ngIf="verificacaoSelecionada">
+    <p>{{ verificacaoSelecionada.usuarioNome }}</p>
+    <p>Status: {{ getStatusLabel(verificacaoSelecionada.status) }}</p>
+  </div>
+</p-dialog>
+
+<p-dialog [(visible)]="showAprovarDialog" header="Aprovar" [modal]="true">
+  <p>Confirmar aprovação?</p>
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" (click)="showAprovarDialog = false"></p-button>
+    <p-button label="Aprovar" (click)="confirmarAprovacao()"></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="showRejeitarDialog" header="Rejeitar" [modal]="true">
+  <textarea [(ngModel)]="motivoRejeicao" name="motivoRejeicao" placeholder="Motivo da rejeição"></textarea>
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" (click)="showRejeitarDialog = false"></p-button>
+    <p-button label="Rejeitar" (click)="confirmarRejeicao()"></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>

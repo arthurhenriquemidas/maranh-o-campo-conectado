@@ -1,0 +1,526 @@
+<!-- Layout com Menu e Breadcrumb -->
+<div class="advogado-layout">
+  
+  <!-- Header Component -->
+  <app-advogado-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-advogado-header>
+
+  <!-- Breadcrumb -->
+  <div class="layout-breadcrumb p-3">
+    <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome"></p-breadcrumb>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div class="layout-content p-4">
+
+    <!-- Header da Agenda -->
+    <div class="agenda-header mb-4">
+      <h1 class="text-3xl font-bold">
+        <i class="pi pi-calendar text-primary mr-3"></i>
+        Agenda de Compromissos
+      </h1>
+      <p class="text-lg text-secondary">
+        Acompanhe seus compromissos, audiências e prazos importantes.
+      </p>
+    </div>
+
+    <!-- Estados da Agenda -->
+    <ng-container *ngIf="state$ | async as state">
+      <ng-container [ngSwitch]="state.status">
+        
+        <!-- Loading State -->
+        <app-loading-state *ngSwitchCase="'loading'" [rows]="4" [card]="true"></app-loading-state>
+
+        <!-- Empty State -->
+        <app-empty-state
+          *ngSwitchCase="'empty'"
+          icon="pi pi-calendar-times"
+          title="Nenhum compromisso agendado"
+          description="Você não possui compromissos agendados no momento. Novos eventos aparecerão aqui quando forem criados."
+        ></app-empty-state>
+
+        <!-- Error State -->
+        <p-card *ngSwitchCase="'error'">
+          <ng-template pTemplate="title">
+            <i class="pi pi-exclamation-triangle text-red-500 mr-2"></i>
+            Erro ao carregar agenda
+          </ng-template>
+          <p>Ocorreu um erro ao carregar sua agenda. Tente novamente em alguns instantes.</p>
+          <p-button 
+            label="Tentar Novamente" 
+            icon="pi pi-refresh"
+            (onClick)="ngOnInit()">
+          </p-button>
+        </p-card>
+
+        <!-- Success State - Timeline -->
+        <div *ngSwitchCase="'success'" class="agenda-container">
+          
+          <!-- Filtros e Ações -->
+          <div class="agenda-filters mb-4">
+            <div class="grid">
+              <div class="col-12 md:col-6">
+                <h3 class="text-xl font-semibold mb-3">
+                  <i class="pi pi-filter mr-2"></i>
+                  Filtros
+                </h3>
+                <div class="flex gap-2 flex-wrap">
+                  <p-button 
+                    label="Todos" 
+                    size="small"
+                    [outlined]="filtroAtivo !== 'todos'"
+                    [class]="filtroAtivo === 'todos' ? 'p-button-primary' : 'p-button-outlined'"
+                    icon="pi pi-list"
+                    (click)="aplicarFiltro('todos')">
+                  </p-button>
+                  <p-button 
+                    label="Audiências" 
+                    size="small"
+                    [outlined]="filtroAtivo !== 'audiências'"
+                    [class]="filtroAtivo === 'audiências' ? 'p-button-primary' : 'p-button-outlined'"
+                    icon="pi pi-briefcase"
+                    (click)="aplicarFiltro('audiências')">
+                  </p-button>
+                  <p-button 
+                    label="Reuniões" 
+                    size="small"
+                    [outlined]="filtroAtivo !== 'reuniões'"
+                    [class]="filtroAtivo === 'reuniões' ? 'p-button-primary' : 'p-button-outlined'"
+                    icon="pi pi-users"
+                    (click)="aplicarFiltro('reuniões')">
+                  </p-button>
+                  <p-button 
+                    label="Prazos" 
+                    size="small"
+                    [outlined]="filtroAtivo !== 'prazos'"
+                    [class]="filtroAtivo === 'prazos' ? 'p-button-primary' : 'p-button-outlined'"
+                    icon="pi pi-clock"
+                    (click)="aplicarFiltro('prazos')">
+                  </p-button>
+                  <p-button 
+                    label="Entregas" 
+                    size="small"
+                    [outlined]="filtroAtivo !== 'entregas'"
+                    [class]="filtroAtivo === 'entregas' ? 'p-button-primary' : 'p-button-outlined'"
+                    icon="pi pi-send"
+                    (click)="aplicarFiltro('entregas')">
+                  </p-button>
+                  <p-button 
+                    label="Consultas" 
+                    size="small"
+                    [outlined]="filtroAtivo !== 'consultas'"
+                    [class]="filtroAtivo === 'consultas' ? 'p-button-primary' : 'p-button-outlined'"
+                    icon="pi pi-question-circle"
+                    (click)="aplicarFiltro('consultas')">
+                  </p-button>
+                </div>
+              </div>
+              <div class="col-12 md:col-6 text-right">
+                <p-button 
+                  label="Novo Compromisso" 
+                  icon="pi pi-plus"
+                  severity="success"
+                  (onClick)="abrirModalNovoCompromisso()">
+                </p-button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeline de Eventos -->
+          <div *ngIf="eventosFiltrados.length > 0; else semEventosFiltrados">
+            <p-timeline 
+              [value]="eventosFiltrados" 
+              align="alternate" 
+              class="agenda-timeline">
+            
+            <!-- Marcador do Timeline -->
+            <ng-template pTemplate="marker" let-item>
+              <div class="agenda-marker" [ngClass]="'agenda-marker--' + item.tipo">
+                <i [class]="getTipoIcon(item.tipo)"></i>
+              </div>
+            </ng-template>
+            
+            <!-- Conteúdo do Evento -->
+            <ng-template pTemplate="content" let-item>
+              <div class="agenda-event">
+                
+                <!-- Header do Evento -->
+                <div class="agenda-event__header">
+                  <div class="agenda-event__date">
+                    <i class="pi pi-calendar mr-2"></i>
+                    {{ item.date | date: 'fullDate' }}
+                  </div>
+                  <div class="agenda-event__time">
+                    <i class="pi pi-clock mr-2"></i>
+                    {{ item.date | date: 'shortTime' }}
+                  </div>
+                </div>
+
+                <!-- Título e Descrição -->
+                <div class="agenda-event__content">
+                  <h4 class="agenda-event__title">{{ item.title }}</h4>
+                  <p class="agenda-event__description">{{ item.description }}</p>
+                </div>
+
+                <!-- Meta Informações -->
+                <div class="agenda-event__meta">
+                  <div class="agenda-event__customer">
+                    <i class="pi pi-user mr-2"></i>
+                    <span><strong>Cliente:</strong> {{ item.customer }}</span>
+                  </div>
+                  
+                  <div class="agenda-event__process">
+                    <i class="pi pi-briefcase mr-2"></i>
+                    <span><strong>Processo:</strong> {{ item.processId }}</span>
+                  </div>
+                  
+                  <div class="agenda-event__location">
+                    <i class="pi pi-map-marker mr-2"></i>
+                    <span><strong>Local:</strong> {{ item.local }}</span>
+                  </div>
+                </div>
+
+                <!-- Status e Prioridade -->
+                <div class="agenda-event__status">
+                  <p-tag 
+                    [value]="getStatusLabel(item.status)"
+                    [severity]="getStatusSeverity(item.status)"
+                    class="mr-2">
+                  </p-tag>
+                  
+                  <p-tag 
+                    [value]="item.prioridade"
+                    [severity]="getPrioridadeSeverity(item.prioridade)"
+                    class="ml-2">
+                  </p-tag>
+                </div>
+
+                <!-- Ações -->
+                <div class="agenda-event__actions">
+                  <p-button 
+                    label="Ver Processo" 
+                    icon="pi pi-eye"
+                    size="small"
+                    [outlined]="true"
+                    (onClick)="verProcesso(item.processId)">
+                  </p-button>
+                  
+                  <p-button 
+                    *ngIf="item.status === 'agendado'"
+                    label="Confirmar" 
+                    icon="pi pi-check"
+                    size="small"
+                    severity="success"
+                    (onClick)="confirmarEvento(item.id)">
+                  </p-button>
+                  
+                  <p-button 
+                    *ngIf="item.status === 'confirmado'"
+                    label="Marcar Realizado" 
+                    icon="pi pi-check-circle"
+                    size="small"
+                    severity="success"
+                    (onClick)="marcarComoRealizado(item.id)">
+                  </p-button>
+                  
+                  <p-button 
+                    *ngIf="item.status !== 'cancelado' && item.status !== 'realizado'"
+                    label="Cancelar" 
+                    icon="pi pi-times"
+                    size="small"
+                    severity="danger"
+                    [outlined]="true"
+                    (onClick)="cancelarEvento(item.id)">
+                  </p-button>
+                </div>
+
+              </div>
+            </ng-template>
+            </p-timeline>
+          </div>
+
+          <!-- Template para quando não há eventos filtrados -->
+          <ng-template #semEventosFiltrados>
+            <div class="text-center p-6">
+              <i class="pi pi-filter text-4xl text-gray-400 mb-4"></i>
+              <h3 class="text-xl font-semibold text-gray-600 mb-2">
+                Nenhum evento encontrado
+              </h3>
+              <p class="text-gray-500 mb-4">
+                Não há eventos do tipo "{{ getFiltroLabel() }}" na sua agenda.
+              </p>
+              <p-button 
+                label="Ver Todos os Eventos" 
+                icon="pi pi-list"
+                size="small"
+                [outlined]="true"
+                (click)="aplicarFiltro('todos')">
+              </p-button>
+            </div>
+          </ng-template>
+
+        </div>
+
+      </ng-container>
+    </ng-container>
+
+  </div>
+</div>
+
+<!-- Modal Novo Compromisso -->
+<p-dialog 
+  header="Novo Compromisso" 
+  [(visible)]="showNovoCompromissoModal" 
+  [modal]="true"
+  [responsive]="true" 
+  [style]="{width: '90vw', maxWidth: '800px'}"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="fecharModalNovoCompromisso()">
+  
+  <div class="novo-compromisso-form">
+    <div class="grid">
+      <!-- Título do Compromisso -->
+      <div class="col-12">
+        <div class="field">
+          <label for="titulo" class="field-label">
+            <i class="pi pi-tag mr-1"></i>
+            Título do Compromisso <span class="text-red-500">*</span>
+          </label>
+          <input 
+            id="titulo"
+            type="text" 
+            pInputText 
+            [(ngModel)]="novoCompromisso.titulo"
+            name="titulo"
+            placeholder="Ex: Audiência de Conciliação"
+            class="w-full">
+        </div>
+      </div>
+      
+      <!-- Tipo e Prioridade -->
+      <div class="col-12 md:col-6">
+        <div class="field">
+          <label for="tipo" class="field-label">
+            <i class="pi pi-briefcase mr-1"></i>
+            Tipo <span class="text-red-500">*</span>
+          </label>
+          <p-dropdown 
+            id="tipo"
+            [options]="tipoOptions" 
+            [(ngModel)]="novoCompromisso.tipo"
+            name="tipo"
+            placeholder="Selecione o tipo"
+            class="w-full">
+          </p-dropdown>
+        </div>
+      </div>
+      
+      <div class="col-12 md:col-6">
+        <div class="field">
+          <label for="prioridade" class="field-label">
+            <i class="pi pi-exclamation-triangle mr-1"></i>
+            Prioridade
+          </label>
+          <p-dropdown 
+            id="prioridade"
+            [options]="prioridadeOptions" 
+            [(ngModel)]="novoCompromisso.prioridade"
+            name="prioridade"
+            placeholder="Selecione a prioridade"
+            class="w-full">
+          </p-dropdown>
+        </div>
+      </div>
+      
+      <!-- Data e Hora -->
+      <div class="col-12 md:col-6">
+        <div class="field">
+          <label for="data" class="field-label">
+            <i class="pi pi-calendar mr-1"></i>
+            Data <span class="text-red-500">*</span>
+          </label>
+          <div class="calendar-container">
+            <p-calendar 
+              id="data"
+              [(ngModel)]="novoCompromisso.data"
+              name="data"
+              placeholder="Selecione a data"
+              [showIcon]="false"
+              [showButtonBar]="true"
+              [showTime]="false"
+              [dateFormat]="'dd/mm/yy'"
+              [locale]="ptBR"
+              [inputStyle]="{'width': '100%'}"
+              [appendTo]="'body'"
+              class="w-full calendar-full-width">
+            </p-calendar>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-12 md:col-6">
+        <div class="field">
+          <label for="hora" class="field-label">
+            <i class="pi pi-clock mr-1"></i>
+            Hora <span class="text-red-500">*</span>
+          </label>
+          <div class="calendar-container">
+            <p-calendar 
+              id="hora"
+              [(ngModel)]="novoCompromisso.hora"
+              name="hora"
+              placeholder="Selecione a hora"
+              [showIcon]="false"
+              [showButtonBar]="true"
+              [showTime]="true"
+              [timeOnly]="true"
+              [dateFormat]="'HH:mm'"
+              [locale]="ptBR"
+              [inputStyle]="{'width': '100%'}"
+              [appendTo]="'body'"
+              class="w-full calendar-full-width">
+            </p-calendar>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Cliente e Processo -->
+      <div class="col-12 md:col-6">
+        <div class="field">
+          <label for="cliente" class="field-label">
+            <i class="pi pi-user mr-1"></i>
+            Cliente
+          </label>
+          <p-dropdown 
+            id="cliente"
+            [options]="clienteOptions" 
+            [(ngModel)]="novoCompromisso.clienteId"
+            name="cliente"
+            placeholder="Selecione o cliente"
+            class="w-full">
+          </p-dropdown>
+        </div>
+      </div>
+      
+      <div class="col-12 md:col-6">
+        <div class="field">
+          <label for="processo" class="field-label">
+            <i class="pi pi-briefcase mr-1"></i>
+            Processo
+          </label>
+          <p-dropdown 
+            id="processo"
+            [options]="processoOptions" 
+            [(ngModel)]="novoCompromisso.processoId"
+            name="processo"
+            placeholder="Selecione o processo"
+            class="w-full">
+          </p-dropdown>
+        </div>
+      </div>
+      
+      <!-- Local -->
+      <div class="col-12">
+        <div class="field">
+          <label for="local" class="field-label">
+            <i class="pi pi-map-marker mr-1"></i>
+            Local
+          </label>
+          <input 
+            id="local"
+            type="text" 
+            pInputText 
+            [(ngModel)]="novoCompromisso.local"
+            name="local"
+            placeholder="Ex: Fórum Central, Sala 205"
+            class="w-full">
+        </div>
+      </div>
+      
+      <!-- Descrição -->
+      <div class="col-12">
+        <div class="field">
+          <label for="descricao" class="field-label">
+            <i class="pi pi-file-edit mr-1"></i>
+            Descrição
+          </label>
+          <textarea 
+            id="descricao"
+            pInputTextarea 
+            [(ngModel)]="novoCompromisso.descricao"
+            name="descricao"
+            rows="4"
+            placeholder="Detalhes sobre o compromisso..."
+            class="w-full">
+          </textarea>
+        </div>
+      </div>
+      
+      <!-- Observações -->
+      <div class="col-12">
+        <div class="field">
+          <label for="observacoes" class="field-label">
+            <i class="pi pi-comment mr-1"></i>
+            Observações
+          </label>
+          <textarea 
+            id="observacoes"
+            pInputTextarea 
+            [(ngModel)]="novoCompromisso.observacoes"
+            name="observacoes"
+            rows="3"
+            placeholder="Observações adicionais..."
+            class="w-full">
+          </textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-between align-items-center">
+      <div class="flex gap-2">
+        <p-button 
+          label="Google Calendar" 
+          icon="pi pi-google"
+          class="p-button-outlined p-button-sm"
+          [disabled]="!isFormValid()"
+          (click)="criarConviteGoogle()">
+        </p-button>
+               <p-button
+                 label="Download ICS"
+                 icon="pi pi-download"
+                 class="p-button-outlined p-button-sm"
+                 [disabled]="!isFormValid()"
+                 (click)="criarConviteOutlook()">
+               </p-button>
+      </div>
+      <div class="flex gap-2">
+        <p-button 
+          label="Cancelar" 
+          icon="pi pi-times"
+          class="p-button-outlined"
+          (click)="fecharModalNovoCompromisso()">
+        </p-button>
+        <p-button 
+          label="Salvar Compromisso" 
+          icon="pi pi-check"
+          class="p-button-success"
+          [loading]="salvandoCompromisso"
+          [disabled]="!isFormValid()"
+          (click)="salvarCompromisso()">
+        </p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- Toast para notificações -->
+<p-toast position="top-right"></p-toast>

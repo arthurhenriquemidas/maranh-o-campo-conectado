@@ -1,0 +1,440 @@
+// Layout do Cliente
+.cliente-layout {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.layout-header {
+  background: var(--legal-neutral);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  
+  :ng-deep .cliente-menubar {
+    background: transparent !important;
+    border: none !important;
+    
+    .p-menubar-root-list > .p-menuitem > .p-menuitem-link {
+      color: white !important;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+      }
+    }
+    
+    .p-menuitem-text {
+      color: white !important;
+    }
+    
+    .p-menuitem-icon {
+      color: white !important;
+    }
+  }
+}
+
+.layout-breadcrumb {
+  background: white;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.layout-content {
+  padding: 2rem;
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+// Welcome Section
+.welcome-section {
+  h1 {
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    color: var(--text-color-secondary);
+    margin-bottom: 0;
+  }
+}
+
+// Cards de Estatísticas
+.stats-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  :ng-deep .p-card-body {
+    padding: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  
+  i {
+    opacity: 0.8;
+  }
+}
+
+// Ações Rápidas
+.quick-actions-card {
+  :ng-deep .p-card-header {
+    background: linear-gradient(135deg, var(--legal-neutral), var(--legal-accent));
+    color: white;
+    font-weight: bold;
+  }
+  
+  .help-text {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 6px;
+    border-left: 4px solid var(--legal-neutral);
+  }
+}
+
+// Agenda
+.agenda-card {
+  :ng-deep .p-card-header {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    font-weight: bold;
+  }
+}
+
+.agenda-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e9ecef;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  p {
+    margin-bottom: 0.25rem;
+  }
+}
+
+// Processos Recentes
+.recent-processes {
+  :ng-deep .p-card-header {
+    background: linear-gradient(135deg, #6f42c1, #e83e8c);
+    color: white;
+    font-weight: bold;
+  }
+}
+
+.processo-item {
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: #f8f9fa;
+  }
+  
+  h4 {
+    color: var(--text-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+}
+
+// Empty State
+.empty-state {
+  i {
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    max-width: 400px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.5;
+  }
+}
+
+// Dialog Styles
+:ng-deep .p-dialog {
+  .p-dialog-header {
+    background: var(--legal-neutral);
+    color: white;
+    
+    .p-dialog-title {
+      color: white;
+    }
+    
+    .p-dialog-header-icon {
+      color: white;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+// Form Field Standardization
+.form-field-standard {
+  // Padronização de altura para todos os campos
+  :ng-deep {
+    .p-inputtext,
+    .p-dropdown,
+    .p-inputnumber,
+    .p-inputtextarea,
+    .p-fileupload {
+      height: 2.5rem !important;
+      min-height: 2.5rem !important;
+      width: 100% !important;
+    }
+    
+    // Textarea com altura específica
+    .p-inputtextarea {
+      height: auto !important;
+      min-height: 2.5rem !important;
+    }
+    
+    // FileUpload com altura específica
+    .p-fileupload {
+      height: auto !important;
+      min-height: 2.5rem !important;
+      
+      .p-button {
+        height: 2.5rem !important;
+        min-height: 2.5rem !important;
+      }
+    }
+    
+    // InputNumber com altura específica e largura completa
+    .p-inputnumber {
+      width: 100% !important;
+      
+      .p-inputnumber-input {
+        height: 2.5rem !important;
+        min-height: 2.5rem !important;
+        width: 100% !important;
+        padding: 0.75rem !important;
+        font-size: 0.875rem !important;
+      }
+    }
+    
+    // Dropdown com altura específica e largura completa
+    .p-dropdown {
+      width: 100% !important;
+      height: 2.5rem !important;
+      min-height: 2.5rem !important;
+      
+      .p-dropdown-label {
+        height: 2.5rem !important;
+        min-height: 2.5rem !important;
+        line-height: 2.5rem !important;
+        padding: 0 0.75rem !important;
+        font-size: 0.875rem !important;
+      }
+      
+      .p-dropdown-trigger {
+        height: 2.5rem !important;
+        min-height: 2.5rem !important;
+        width: 2.5rem !important;
+      }
+    }
+    
+    // InputText com altura específica
+    .p-inputtext {
+      padding: 0.75rem !important;
+      font-size: 0.875rem !important;
+      width: 100% !important;
+    }
+    
+    // Labels padronizados
+    .form-label {
+      font-size: 0.875rem !important;
+      font-weight: 600 !important;
+      margin-bottom: 0.5rem !important;
+      color: var(--text-color) !important;
+      display: block !important;
+    }
+    
+    // Campos obrigatórios
+    .required-field {
+      .form-label::after {
+        content: " *";
+        color: #dc3545;
+        font-weight: bold;
+      }
+    }
+    
+    // Espaçamento entre campos
+    .form-field {
+      margin-bottom: 1.25rem !important;
+    }
+    
+    // Grid responsivo
+    .form-grid {
+      .col-12 {
+        margin-bottom: 1rem;
+      }
+      
+      .col-6 {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}
+
+// Estilos específicos para o modal de novo processo
+:ng-deep .p-dialog .form-field-standard {
+  // Garantir que todos os campos tenham a mesma altura e largura
+  .p-inputtext,
+  .p-dropdown,
+  .p-inputnumber,
+  .p-inputtextarea,
+  .p-fileupload {
+    width: 100% !important;
+    border-radius: 6px !important;
+    border: 1px solid #ced4da !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+    
+    &:focus {
+      border-color: var(--legal-neutral) !important;
+      box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.25) !important;
+    }
+  }
+  
+  // Textarea com altura fixa
+  .p-inputtextarea {
+    min-height: 6rem !important;
+    resize: vertical !important;
+  }
+  
+  // FileUpload customizado
+  .p-fileupload {
+    .p-button {
+      background-color: var(--legal-neutral) !important;
+      border-color: var(--legal-neutral) !important;
+      color: white !important;
+      font-size: 0.875rem !important;
+      padding: 0.5rem 1rem !important;
+      
+      &:hover {
+        background-color: var(--legal-accent) !important;
+        border-color: var(--legal-accent) !important;
+      }
+    }
+  }
+  
+  // InputNumber com formatação de moeda e largura completa
+  .p-inputnumber {
+    width: 100% !important;
+    display: block !important;
+    
+    .p-inputnumber-input {
+      text-align: left !important;
+      font-size: 0.875rem !important;
+      width: 100% !important;
+      height: 2.5rem !important;
+      min-height: 2.5rem !important;
+      padding: 0.75rem !important;
+    }
+  }
+  
+  // Dropdown customizado com altura e largura corretas
+  .p-dropdown {
+    width: 100% !important;
+    height: 2.5rem !important;
+    min-height: 2.5rem !important;
+    display: block !important;
+    
+    .p-dropdown-label {
+      font-size: 0.875rem !important;
+      height: 2.5rem !important;
+      min-height: 2.5rem !important;
+      line-height: 2.5rem !important;
+      padding: 0 0.75rem !important;
+    }
+    
+    .p-dropdown-trigger {
+      height: 2.5rem !important;
+      min-height: 2.5rem !important;
+      width: 2.5rem !important;
+    }
+    
+    .p-dropdown-panel {
+      .p-dropdown-item {
+        font-size: 0.875rem !important;
+        padding: 0.5rem 0.75rem !important;
+      }
+    }
+  }
+}
+
+// Loading Skeletons
+:ng-deep .p-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Tags de Status
+:ng-deep .p-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .layout-content {
+    padding: 1rem 0.5rem;
+  }
+  
+  .stats-card {
+    margin-bottom: 1rem;
+    
+    h3 {
+      font-size: 1.5rem;
+    }
+    
+    i {
+      font-size: 2rem !important;
+    }
+  }
+  
+  .welcome-section {
+    h1 {
+      font-size: 2rem;
+    }
+    
+    p {
+      font-size: 1rem;
+    }
+  }
+  
+  :ng-deep .p-dialog {
+    width: 95vw !important;
+    
+    .p-dialog-content {
+      padding: 1rem;
+    }
+  }
+}

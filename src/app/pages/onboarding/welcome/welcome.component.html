@@ -1,0 +1,313 @@
+<!-- Top Navigation -->
+<app-custom-menu
+  [menuItems]="menuItems"
+  [logoText]="'4'"
+  [activeMenuItem]="activeMenuItem"
+  (menuItemClick)="onMenuItemClick($event)"
+  (logoClick)="onLogoClick()">
+</app-custom-menu>
+
+<!-- Hero Section - Análise de Problema -->
+<div class="hero-section">
+  <div class="hero-content">
+    <div class="hero-grid">
+      <!-- Coluna Esquerda: Venda da Solução 4Jus -->
+      <div class="hero-left">
+        <div class="hero-branding">
+          <h1 class="hero-brand-title">
+             Justiça Acessível para Todos
+          </h1>
+          <div class="hero-selling-points">
+            <p class="selling-point">
+              <strong>Conectamos você aos melhores advogados de forma simples e transparente!</strong>
+            </p>
+            <p class="selling-description">
+              Resolva suas questões jurídicas e acorods com segurança, agilidade e custo acessível.
+              Nossa plataforma facilita o contato entre clientes e advogados.
+            </p>
+            <div class="hero-features">
+              <div class="feature-item">
+                <i class="pi pi-shield"></i>
+                <span>Segurança Total</span>
+              </div>
+              <div class="feature-item">
+                <i class="pi pi-clock"></i>
+                <span>Rapidez no Atendimento</span>
+              </div>
+              <div class="feature-item">
+                <i class="pi pi-dollar"></i>
+                <span>Preços Justos</span>
+              </div>
+              <div class="feature-item">
+                <i class="pi pi-bolt"></i>
+                <span>Processos Ágeis</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna Direita: Análise de Problema -->
+      <div class="hero-right">
+        <!-- Título - FORA DO QUADRADO (onde estava) -->
+        <h2 class="hero-analysis-title" style="margin-bottom: 4rem;">
+          Conte-me o seu problema
+        </h2>
+
+        <!-- Quadrado Opaco - SEMPRE VISÍVEL -->
+        <div class="problem-form">
+          <!-- Toggle Button - DENTRO DO QUADRADO (no topo) -->
+          <div class="toggle-container">
+            <button 
+              class="toggle-btn" 
+              [class.active]="!showHelpMode"
+              (click)="setAnalysisMode()">
+              Análise
+            </button>
+            <button 
+              class="toggle-btn" 
+              [class.active]="showHelpMode"
+              (click)="setHelpMode()">
+              Ajuda
+            </button>
+          </div>
+
+          <!-- Conteúdo Análise - CONDICIONAL -->
+          <div *ngIf="!showHelpMode">
+            <!-- Passo 1: Descrição do problema -->
+            <div *ngIf="!showAnalysis && !showRegistration">
+              <div class="form-group">
+                <label for="problemDescription" class="form-label">
+                  Descreva seu problema jurídico. <br>Iremos analisar sua situação e estimar o potencial de ganho automaticamente
+                </label>
+
+                <textarea
+                  id="problemDescription"
+                  pInputTextarea
+                  [autoResize]="true"
+                  class="form-input"
+                  [(ngModel)]="problemDescription"
+                  placeholder="Ex: Fui demitido sem justa causa e não recebi meus direitos..."
+                  rows="4"
+                  maxlength="500">
+                </textarea>
+                <div class="char-count">{{ problemDescription.length }}/500</div>
+              </div>
+
+              <button
+                class="hero-btn-primary analysis-btn"
+                (click)="analyzeProblem()"
+                [disabled]="!problemDescription.trim() || isAnalyzing">
+                <span *ngIf="!isAnalyzing">
+                  <i class="pi pi-search mr-2"></i>
+                  Quero minha análise agora
+                </span>
+                <span *ngIf="isAnalyzing" class="loading-text">
+                  <i class="pi pi-spin pi-spinner mr-2"></i>
+                  Analisando seu caso...
+                </span>
+              </button>
+
+              <div class="trust-indicators">
+                <div class="trust-item">
+                  <i class="pi pi-clock"></i>
+                  <span>Resposta em minutos</span>
+                </div>
+                <div class="trust-item">
+                  <i class="pi pi-shield"></i>
+                  <span>Seus dados são protegidos</span>
+                </div>
+                <div class="trust-item">
+                  <i class="pi pi-chart-line"></i>
+                  <span>Potencial de ganho avaliado pela IA</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Passo 2: Loading da análise -->
+            <div class="analysis-loading" *ngIf="showAnalysis && !showRegistration">
+              <div class="loading-content">
+                <div class="loading-spinner">
+                  <i class="pi pi-spin pi-cog"></i>
+                </div>
+                <h2 class="loading-title">Já estamos iniciando sua análise!</h2>
+                <p class="loading-description">
+                  Estamos processando sua solicitação e avaliando o potencial do seu caso.
+                  Em instantes você verá os resultados.
+                </p>
+
+                <div class="loading-progress">
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="loadingProgress"></div>
+                  </div>
+                  <div class="progress-text">{{ loadingProgress }}% concluído</div>
+                </div>
+
+                <div class="loading-benefits">
+                  <div class="benefit-item">
+                    <i class="pi pi-check-circle"></i>
+                    <span>Analisando jurisdição aplicável</span>
+                  </div>
+                  <div class="benefit-item">
+                    <i class="pi pi-check-circle"></i>
+                    <span>Estimando potencial de ganho</span>
+                  </div>
+                  <div class="benefit-item">
+                    <i class="pi pi-check-circle"></i>
+                    <span>Identificando advogados especializados</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Passo 3: Resultado e cadastro -->
+            <div class="analysis-result" *ngIf="showRegistration">
+              <div class="result-content">
+                <div class="result-header">
+                  <div class="result-icon success">
+                    <i class="pi pi-check-circle"></i>
+                  </div>
+                  <h2 class="result-title">Análise concluída com sucesso!</h2>
+                  <p class="result-description">
+                    Seu processo tem <strong>potencial positivo</strong>, você pode ganhar até
+                    <strong class="potential-amount">{{ formatCurrency(potentialAmount) }}</strong>
+                  </p>
+                </div>
+
+                <div class="result-benefits">
+                  <div class="benefit-highlight">
+                    <i class="pi pi-clock"></i>
+                    <span>Resolva seu processo <strong>o mais rápido possível</strong></span>
+                  </div>
+                  <div class="benefit-highlight">
+                    <i class="pi pi-users"></i>
+                    <span>Temos advogados disponíveis <strong>nesse momento</strong> para iniciar o seu processo</span>
+                  </div>
+                </div>
+
+                <div class="registration-prompt">
+                  <button class="hero-btn-primary register-btn" (click)="navegarPara('/auth/register')">
+                    <i class="pi pi-money-bill mr-2"></i>
+                    Ver status e detalhes do meu processo
+                  </button>
+
+                  <button class="hero-btn-secondary login-btn" (click)="navegarPara('/auth/login')">
+                    <i class="pi pi-sign-in mr-2"></i>
+                    Entrar e falar com advogado
+                  </button>
+                </div>
+
+                <div class="trust-indicators final">
+                  <div class="trust-item">
+                    <i class="pi pi-clock"></i>
+                    <span>Resposta em minutos</span>
+                  </div>
+                  <div class="trust-item">
+                    <i class="pi pi-shield"></i>
+                    <span>Seus dados são protegidos</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Conteúdo Ajuda - CONDICIONAL (apenas espaço vazio por enquanto) -->
+          <div *ngIf="showHelpMode">
+            <div class="flex gap-6 flex-wrap justify-center">
+        
+              <!-- Card 1 -->
+              <div class="w-72 bg-gradient-to-br from-teal-800 to-teal-900 shadow-2xl overflow-hidden relative" style="border-radius: 24px; clip-path: polygon(0 0, calc(100% - 60px) 0, 100% 60px, 100% 100%, 0 100%);">
+                  <div class="absolute top-0 right-0 w-16 h-16 bg-teal-700" style="clip-path: polygon(100% 0, 100% 100%, 0 0);"></div>
+                  
+                  <div class="p-6 pb-4">
+                      <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center shadow-lg">
+                          <span class="text-4xl font-bold text-teal-800">1</span>
+                      </div>
+                  </div>
+
+                  <div class="px-6 pb-8">
+                      <h2 class="text-white text-3xl font-bold leading-tight mb-4">
+                          Conte sua<br>situação
+                      </h2>
+                      
+                      <p class="text-teal-100 text-base leading-relaxed">
+                          Descreva seu problema
+                      </p>
+                  </div>
+              </div>
+
+              <!-- Card 2 -->
+              <div class="w-72 bg-gradient-to-br from-teal-800 to-teal-900 shadow-2xl overflow-hidden relative" style="border-radius: 24px; clip-path: polygon(0 0, calc(100% - 60px) 0, 100% 60px, 100% 100%, 0 100%);">
+                  <div class="absolute top-0 right-0 w-16 h-16 bg-teal-700" style="clip-path: polygon(100% 0, 100% 100%, 0 0);"></div>
+                  
+                  <div class="p-6 pb-4">
+                      <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center shadow-lg">
+                          <span class="text-4xl font-bold text-teal-800">2</span>
+                      </div>
+                  </div>
+
+                  <div class="px-6 pb-8">
+                      <h2 class="text-white text-3xl font-bold leading-tight mb-4">
+                          Análise
+                      </h2>
+                      
+                      <p class="text-teal-100 text-base leading-relaxed">
+                          Avaliação em segundos
+                      </p>
+                  </div>
+              </div>
+
+              <!-- Card 3 -->
+              <div class="w-72 bg-gradient-to-br from-teal-800 to-teal-900 shadow-2xl overflow-hidden relative" style="border-radius: 24px; clip-path: polygon(0 0, calc(100% - 60px) 0, 100% 60px, 100% 100%, 0 100%);">
+                  <div class="absolute top-0 right-0 w-16 h-16 bg-teal-700" style="clip-path: polygon(100% 0, 100% 100%, 0 0);"></div>
+                  
+                  <div class="p-6 pb-4">
+                      <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center shadow-lg">
+                          <span class="text-4xl font-bold text-teal-800">3</span>
+                      </div>
+                  </div>
+
+                  <div class="px-6 pb-8">
+                      <h2 class="text-white text-3xl font-bold leading-tight mb-4">
+                          Crie sua<br>conta
+                      </h2>
+                      
+                      <p class="text-teal-100 text-base leading-relaxed">
+                          Veja os detalhes e valor estimado
+                      </p>
+                  </div>
+              </div>
+
+              <!-- Card 4 -->
+              <div class="w-72 bg-gradient-to-br from-teal-800 to-teal-900 shadow-2xl overflow-hidden relative" style="border-radius: 24px; clip-path: polygon(0 0, calc(100% - 60px) 0, 100% 60px, 100% 100%, 0 100%);">
+                  <div class="absolute top-0 right-0 w-16 h-16 bg-teal-700" style="clip-path: polygon(100% 0, 100% 100%, 0 0);"></div>
+                  
+                  <div class="p-6 pb-4">
+                      <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center shadow-lg">
+                          <span class="text-4xl font-bold text-teal-800">4</span>
+                      </div>
+                  </div>
+
+                  <div class="px-6 pb-8">
+                      <h2 class="text-white text-3xl font-bold leading-tight mb-4">
+                          Fale com<br>advogado
+                      </h2>
+                      
+                      <p class="text-teal-100 text-base leading-relaxed">
+                          Conecte-se imediatamente
+                      </p>
+                  </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer Section -->
+<app-onboarding-footer></app-onboarding-footer>
+
+

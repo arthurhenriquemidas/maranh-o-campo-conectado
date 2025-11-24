@@ -1,0 +1,347 @@
+[
+  {
+    "id": "proc-001",
+    "reference": "PROC-2024-001",
+    "title": "Ação de Cobrança - Cliente Silva",
+    "area": "Direito Civil",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "updatedAt": "2024-01-20T14:45:00Z",
+    "status": "EM_ANDAMENTO",
+    "slaHours": 72,
+    "nextDeadline": "2024-01-25T17:00:00Z",
+    "priority": "alta",
+    "customerId": "cli-001",
+    "customerName": "João Silva",
+    "customerPlan": "premium",
+    "lawyerId": "adv-001",
+    "lawyerName": "Carlos Oliveira",
+    "description": "Ação de cobrança de valores em atraso referentes a serviços prestados. Cliente possui contrato de prestação de serviços com prazo de pagamento de 30 dias.",
+    "tags": ["cobrança", "contrato", "direito civil"],
+    "allowUploads": true,
+    "timeline": [
+      {
+        "id": "timeline-001",
+        "title": "Processo iniciado",
+        "description": "Ação de cobrança protocolada no sistema",
+        "createdAt": "2024-01-15T10:30:00Z",
+        "createdBy": "Carlos Oliveira",
+        "role": "advogado"
+      }
+    ],
+    "documents": [
+      {
+        "id": "doc-001",
+        "name": "Contrato de Prestação de Serviços.pdf",
+        "type": "application/pdf",
+        "uploadedAt": "2024-01-15T11:00:00Z",
+        "uploadedBy": "João Silva",
+        "size": "2.5 MB"
+      }
+    ]
+  },
+  {
+    "id": "proc-002",
+    "reference": "PROC-2024-002",
+    "title": "Divórcio Consensual - Casal Santos",
+    "area": "Direito de Família",
+    "createdAt": "2024-01-10T09:15:00Z",
+    "updatedAt": "2024-01-18T16:20:00Z",
+    "status": "AGUARDANDO_CLIENTE",
+    "slaHours": 48,
+    "nextDeadline": "2024-01-22T12:00:00Z",
+    "priority": "media",
+    "customerId": "cli-002",
+    "customerName": "Maria Santos",
+    "customerPlan": "gratuito",
+    "lawyerId": "adv-001",
+    "lawyerName": "Carlos Oliveira",
+    "description": "Processo de divórcio consensual entre Maria e José Santos. Ambos concordam com a separação e divisão de bens.",
+    "tags": ["divórcio", "consensual", "direito de família"],
+    "allowUploads": true,
+    "timeline": [
+      {
+        "id": "timeline-002",
+        "title": "Petição inicial protocolada",
+        "description": "Documentos iniciais enviados para análise",
+        "createdAt": "2024-01-10T09:15:00Z",
+        "createdBy": "Carlos Oliveira",
+        "role": "advogado"
+      }
+    ],
+    "documents": [
+      {
+        "id": "doc-002",
+        "name": "Certidão de Casamento.pdf",
+        "type": "application/pdf",
+        "uploadedAt": "2024-01-10T10:00:00Z",
+        "uploadedBy": "Maria Santos",
+        "size": "1.2 MB"
+      }
+    ]
+  },
+  {
+    "id": "proc-003",
+    "reference": "PROC-2024-003",
+    "title": "Contrato de Trabalho - Funcionário",
+    "area": "Direito do Trabalho",
+    "createdAt": "2024-01-05T14:20:00Z",
+    "updatedAt": "2024-01-22T11:30:00Z",
+    "status": "CONCLUIDO",
+    "slaHours": 24,
+    "nextDeadline": null,
+    "priority": "baixa",
+    "customerId": "cli-003",
+    "customerName": "Pedro Costa",
+    "customerPlan": "premium",
+    "lawyerId": "adv-001",
+    "lawyerName": "Carlos Oliveira",
+    "description": "Análise e revisão de contrato de trabalho para funcionário da empresa TechCorp. Verificação de cláusulas trabalhistas e benefícios.",
+    "tags": ["trabalho", "contrato", "análise"],
+    "allowUploads": false,
+    "timeline": [
+      {
+        "id": "timeline-003",
+        "title": "Contrato analisado",
+        "description": "Revisão completa do contrato realizada",
+        "createdAt": "2024-01-22T11:30:00Z",
+        "createdBy": "Carlos Oliveira",
+        "role": "advogado",
+        "statusAfter": "CONCLUIDO"
+      }
+    ],
+    "documents": [
+      {
+        "id": "doc-003",
+        "name": "Contrato de Trabalho Original.pdf",
+        "type": "application/pdf",
+        "uploadedAt": "2024-01-05T15:00:00Z",
+        "uploadedBy": "Pedro Costa",
+        "size": "3.1 MB"
+      },
+      {
+        "id": "doc-004",
+        "name": "Relatório de Análise.pdf",
+        "type": "application/pdf",
+        "uploadedAt": "2024-01-22T11:30:00Z",
+        "uploadedBy": "Carlos Oliveira",
+        "size": "1.8 MB"
+      }
+    ]
+  },
+  {
+    "id": "proc-004",
+    "reference": "PROC-2024-004",
+    "title": "Ação Trabalhista - Rescisão",
+    "area": "Direito do Trabalho",
+    "createdAt": "2024-01-12T08:45:00Z",
+    "updatedAt": "2024-01-19T13:15:00Z",
+    "status": "EM_ANDAMENTO",
+    "slaHours": 96,
+    "nextDeadline": "2024-01-28T17:00:00Z",
+    "priority": "alta",
+    "customerId": "cli-004",
+    "customerName": "Ana Rodrigues",
+    "customerPlan": "premium",
+    "lawyerId": "adv-001",
+    "lawyerName": "Carlos Oliveira",
+    "description": "Ação trabalhista por rescisão indevida. Cliente alega demissão sem justa causa e busca indenização por danos morais e materiais.",
+    "tags": ["trabalhista", "rescisão", "indenização"],
+    "allowUploads": true,
+    "timeline": [
+      {
+        "id": "timeline-004",
+        "title": "Reclamação trabalhista protocolada",
+        "description": "Processo iniciado no TRT da 2ª Região",
+        "createdAt": "2024-01-12T08:45:00Z",
+        "createdBy": "Carlos Oliveira",
+        "role": "advogado"
+      }
+    ],
+    "documents": [
+      {
+        "id": "doc-005",
+        "name": "Carteira de Trabalho.pdf",
+        "type": "application/pdf",
+        "uploadedAt": "2024-01-12T09:30:00Z",
+        "uploadedBy": "Ana Rodrigues",
+        "size": "2.1 MB"
+      }
+    ]
+  },
+  {
+    "id": "proc-005",
+    "reference": "PROC-2024-005",
+    "title": "Consultoria Jurídica - Empresa",
+    "area": "Direito Empresarial",
+    "createdAt": "2024-01-08T16:30:00Z",
+    "updatedAt": "2024-01-21T10:45:00Z",
+    "status": "ABERTO",
+    "slaHours": 120,
+    "nextDeadline": "2024-01-30T17:00:00Z",
+    "priority": "media",
+    "customerId": "cli-005",
+    "customerName": "TechCorp Ltda",
+    "customerPlan": "premium",
+    "lawyerId": "adv-001",
+    "lawyerName": "Carlos Oliveira",
+    "description": "Consultoria jurídica para adequação de contratos empresariais à nova legislação de proteção de dados (LGPD).",
+    "tags": ["consultoria", "lgpd", "contratos", "empresarial"],
+    "allowUploads": true,
+    "timeline": [
+      {
+        "id": "timeline-005",
+        "title": "Consultoria solicitada",
+        "description": "Empresa solicitou análise de adequação à LGPD",
+        "createdAt": "2024-01-08T16:30:00Z",
+        "createdBy": "TechCorp Ltda",
+        "role": "cliente"
+      }
+    ],
+    "documents": [
+      {
+        "id": "doc-006",
+        "name": "Contratos Atuais.zip",
+        "type": "application/zip",
+        "uploadedAt": "2024-01-08T17:00:00Z",
+        "uploadedBy": "TechCorp Ltda",
+        "size": "15.3 MB"
+      }
+    ]
+  },
+  {
+    "id": "proc-006",
+    "reference": "PROC-2024-006",
+    "title": "Ação de Cobrança - Empresa ABC",
+    "area": "Direito Civil",
+    "createdAt": "2024-01-23T09:15:00Z",
+    "updatedAt": "2024-01-23T09:15:00Z",
+    "status": "AGUARDANDO_APROVACAO",
+    "slaHours": 72,
+    "nextDeadline": "2024-01-26T17:00:00Z",
+    "priority": "alta",
+    "customerId": "cli-006",
+    "customerName": "Empresa ABC Ltda",
+    "customerPlan": "premium",
+    "lawyerId": "adv-001",
+    "lawyerName": "Carlos Oliveira",
+    "description": "Ação de cobrança de valores em atraso referentes a serviços de consultoria prestados. Cliente possui fatura em aberto há 90 dias.",
+    "tags": ["cobrança", "empresarial", "direito civil"],
+    "allowUploads": true,
+    "timeline": [
+      {
+        "id": "timeline-006",
+        "title": "Processo atribuído",
+        "description": "Processo atribuído ao advogado para análise e aprovação",
+        "createdAt": "2024-01-23T09:15:00Z",
+        "createdBy": "Sistema",
+        "role": "admin"
+      }
+    ],
+    "documents": [
+      {
+        "id": "doc-007",
+        "name": "Fatura em Atraso.pdf",
+        "type": "application/pdf",
+        "uploadedAt": "2024-01-23T09:30:00Z",
+        "uploadedBy": "Empresa ABC Ltda",
+        "size": "1.5 MB"
+      }
+    ]
+  },
+  {
+    "id": "proc-007",
+    "reference": "PROC-2024-007",
+    "title": "Divórcio Litigioso - Casal Ferreira",
+    "area": "Direito de Família",
+    "createdAt": "2024-01-22T14:20:00Z",
+    "updatedAt": "2024-01-22T14:20:00Z",
+    "status": "AGUARDANDO_APROVACAO",
+    "slaHours": 96,
+    "nextDeadline": "2024-01-26T17:00:00Z",
+    "priority": "media",
+    "customerId": "cli-007",
+    "customerName": "Roberto Ferreira",
+    "customerPlan": "gratuito",
+    "lawyerId": "adv-001",
+    "lawyerName": "Carlos Oliveira",
+    "description": "Processo de divórcio litigioso com disputa de guarda dos filhos e divisão de bens. Caso complexo que requer análise detalhada.",
+    "tags": ["divórcio", "litigioso", "guarda", "direito de família"],
+    "allowUploads": true,
+    "timeline": [
+      {
+        "id": "timeline-007",
+        "title": "Processo atribuído",
+        "description": "Processo atribuído ao advogado para análise e aprovação",
+        "createdAt": "2024-01-22T14:20:00Z",
+        "createdBy": "Sistema",
+        "role": "admin"
+      }
+    ],
+    "documents": [
+      {
+        "id": "doc-008",
+        "name": "Certidão de Casamento.pdf",
+        "type": "application/pdf",
+        "uploadedAt": "2024-01-22T15:00:00Z",
+        "uploadedBy": "Roberto Ferreira",
+        "size": "1.8 MB"
+      },
+      {
+        "id": "doc-009",
+        "name": "Certidão de Nascimento dos Filhos.pdf",
+        "type": "application/pdf",
+        "uploadedAt": "2024-01-22T15:05:00Z",
+        "uploadedBy": "Roberto Ferreira",
+        "size": "2.2 MB"
+      }
+    ]
+  },
+  {
+    "id": "proc-008",
+    "reference": "PROC-2024-008",
+    "title": "Ação Trabalhista - Horas Extras",
+    "area": "Direito do Trabalho",
+    "createdAt": "2024-01-24T11:30:00Z",
+    "updatedAt": "2024-01-24T11:30:00Z",
+    "status": "AGUARDANDO_APROVACAO",
+    "slaHours": 48,
+    "nextDeadline": "2024-01-26T17:00:00Z",
+    "priority": "alta",
+    "customerId": "cli-008",
+    "customerName": "Fernanda Lima",
+    "customerPlan": "premium",
+    "lawyerId": "adv-001",
+    "lawyerName": "Carlos Oliveira",
+    "description": "Ação trabalhista por não pagamento de horas extras e adicional noturno. Cliente trabalhou por 2 anos sem receber os devidos adicionais.",
+    "tags": ["trabalhista", "horas extras", "adicional noturno"],
+    "allowUploads": true,
+    "timeline": [
+      {
+        "id": "timeline-008",
+        "title": "Processo atribuído",
+        "description": "Processo atribuído ao advogado para análise e aprovação",
+        "createdAt": "2024-01-24T11:30:00Z",
+        "createdBy": "Sistema",
+        "role": "admin"
+      }
+    ],
+    "documents": [
+      {
+        "id": "doc-010",
+        "name": "Carteira de Trabalho.pdf",
+        "type": "application/pdf",
+        "uploadedAt": "2024-01-24T12:00:00Z",
+        "uploadedBy": "Fernanda Lima",
+        "size": "2.3 MB"
+      },
+      {
+        "id": "doc-011",
+        "name": "Holerites.pdf",
+        "type": "application/pdf",
+        "uploadedAt": "2024-01-24T12:05:00Z",
+        "uploadedBy": "Fernanda Lima",
+        "size": "3.7 MB"
+      }
+    ]
+  }
+]

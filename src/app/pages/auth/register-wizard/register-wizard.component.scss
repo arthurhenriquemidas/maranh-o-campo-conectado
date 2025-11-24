@@ -1,0 +1,260 @@
+// Layout do Wizard
+.wizard-layout {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.wizard-container {
+  width: 100%;
+  max-width: 800px;
+}
+
+.container {
+  padding: 0;
+}
+
+// Card do Wizard
+.wizard-card {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  
+  :ng-deep .p-card-header {
+    padding: 2rem 2rem 1rem;
+    background: white;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  :ng-deep .p-card-body {
+    padding: 2rem;
+  }
+  
+  :ng-deep .p-card-footer {
+    padding: 1rem 2rem 2rem;
+    background: #fafafa;
+    border-top: 1px solid #f0f0f0;
+  }
+}
+
+// Header
+.wizard-header {
+  h1 {
+    color: var(--text-color);
+  }
+  
+  p {
+    color: var(--text-color-secondary);
+  }
+}
+
+// Opções de Tipo
+.tipo-option {
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    border-color: var(--legal-neutral);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  &.selected {
+    border-color: var(--primary-color);
+    background: #f8f9ff;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1);
+  }
+  
+  h4, h5 {
+    color: var(--text-color);
+  }
+  
+  p {
+    color: var(--text-color-secondary);
+  }
+}
+
+// Formulários
+.field {
+  margin-bottom: 1.5rem;
+  
+  label {
+    color: var(--text-color);
+    font-weight: 600;
+  }
+  
+  .p-inputtext {
+    padding: 0.75rem;
+    font-size: 1rem;
+    
+    &.ng-invalid.ng-dirty {
+      border-color: #e74c3c;
+    }
+  }
+}
+
+// Resumo dos Dados
+.dados-resumo {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  
+  h4 {
+    color: var(--text-color);
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 0.5rem;
+  }
+  
+  .grid {
+    font-size: 0.9rem;
+    
+    .col-6:first-child {
+      color: var(--text-color-secondary);
+    }
+    
+    .col-6:last-child {
+      color: var(--text-color);
+      font-weight: 500;
+    }
+  }
+}
+
+// Steps customizado
+:ng-deep .p-steps {
+  .p-steps-item {
+    .p-menuitem-link {
+      padding: 1rem;
+      
+      .p-steps-number {
+        background: #e9ecef;
+        color: #6c757d;
+        border: 2px solid #e9ecef;
+        width: 2.5rem;
+        height: 2.5rem;
+        font-weight: 600;
+      }
+      
+      .p-steps-title {
+        color: #6c757d;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+    }
+    
+    &.p-highlight {
+      .p-menuitem-link {
+        .p-steps-number {
+          background: var(--primary-color);
+          color: white;
+          border-color: var(--primary-color);
+        }
+        
+        .p-steps-title {
+          color: var(--primary-color);
+        }
+      }
+    }
+    
+    &.p-disabled {
+      opacity: 0.6;
+    }
+  }
+}
+
+// Botões
+:ng-deep .p-button {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 6px;
+  
+  &.p-button-outlined {
+    border-color: var(--legal-neutral);
+    color: var(--legal-neutral);
+    
+    &:hover {
+      background: var(--legal-neutral);
+      color: white;
+    }
+  }
+}
+
+// Checkbox customizado
+:ng-deep .p-checkbox {
+  .p-checkbox-box {
+    border-radius: 4px;
+    
+    &.p-highlight {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+  }
+}
+
+// Mensagens de Erro
+.p-error {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+// Ícone de Sucesso
+.success-icon {
+  animation: successBounce 1s ease-in-out;
+}
+
+@keyframes successBounce {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .wizard-layout {
+    padding: 1rem 0.5rem;
+  }
+  
+  .wizard-card {
+    :ng-deep .p-card-header {
+      padding: 1.5rem 1.5rem 1rem;
+    }
+    
+    :ng-deep .p-card-body {
+      padding: 1.5rem;
+    }
+    
+    :ng-deep .p-card-footer {
+      padding: 1rem 1.5rem 1.5rem;
+    }
+  }
+  
+  .wizard-header {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+  
+  .tipo-option {
+    margin-bottom: 1rem;
+  }
+  
+  .grid .col-12 {
+    padding: 0.5rem;
+  }
+}
+
+// Toast customizado
+:ng-deep .p-toast {
+  z-index: 9999;
+}

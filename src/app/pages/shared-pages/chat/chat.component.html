@@ -1,0 +1,218 @@
+  <!-- Header Component -->
+  <app-shared-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-shared-header>
+
+<!-- Layout do Chat Responsivo -->
+<div class="chat-layout">
+<!-- Breadcrumb (Desktop) -->
+  <p-breadcrumb 
+    [model]="breadcrumbItems" 
+    [home]="breadcrumbHome">
+  </p-breadcrumb>
+  <!-- Header do Chat -->
+  <div class="chat-header">
+    <div class="chat-header-content">
+      
+      <!-- Header Principal -->
+      <div class="header-main">
+        
+        <!-- Botão Voltar Mobile -->
+        <button class="back-btn mobile-only" (click)="voltar()" aria-label="Voltar" title="Voltar">
+          <i class="pi pi-arrow-left"></i>
+        </button>
+
+        <!-- Informações do Chat -->
+        <div class="chat-info">
+          
+          <!-- Avatar -->
+          <div class="chat-avatar">
+            <div class="avatar-circle">
+              <i class="pi pi-user"></i>
+            </div>
+            <div class="status-indicator" [class.online]="participanteOnline" [class.offline]="!participanteOnline"></div>
+          </div>
+
+          <!-- Detalhes do Participante -->
+          <div class="participant-info">
+            <h2 class="participant-name">{{ participanteNome }}</h2>
+            <div class="participant-status">
+              <span class="status-text" [class.online]="participanteOnline" [class.offline]="!participanteOnline">
+                <i class="status-dot" [class.online]="participanteOnline" [class.offline]="!participanteOnline"></i>
+                {{ participanteOnline ? 'Online' : 'Offline' }}
+              </span>
+              <span *ngIf="participanteDigitando" class="typing-indicator">
+                <i class="pi pi-ellipsis-h typing-animation"></i>
+                Digitando...
+              </span>
+            </div>
+            <div *ngIf="processo" class="process-info">
+              <i class="pi pi-folder"></i>
+              <span>{{ processo.titulo }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ações do Header -->
+        <div class="header-actions">
+          <p-button 
+            icon="pi pi-file-text"
+            label="Ver Processo"
+            size="small"
+            (onClick)="irParaDetalhes()"
+            class="desktop-only">
+          </p-button>
+          <p-button 
+            icon="pi pi-arrow-left"
+            label="Voltar"
+            size="small"
+            (onClick)="voltar()"
+            class="desktop-only">
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Container das Mensagens -->
+  <div class="chat-container">
+    
+    <!-- Loading State -->
+    <div *ngIf="loading" class="chat-loading">
+      <div class="loading-content">
+        <div class="loading-spinner">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+        <p class="loading-text">Carregando mensagens...</p>
+      </div>
+    </div>
+
+    <!-- Mensagens -->
+    <div *ngIf="!loading" class="chat-messages" #messagesContainer>
+      
+      <!-- Estado Vazio -->
+      <div *ngIf="messages.length === 0" class="empty-chat">
+        <div class="empty-content">
+          <div class="empty-icon">
+            <i class="pi pi-comments"></i>
+          </div>
+          <h3 class="empty-title">Nenhuma mensagem ainda</h3>
+          <p class="empty-description">Inicie uma conversa sobre este processo.</p>
+        </div>
+      </div>
+
+      <!-- Lista de Mensagens -->
+      <div *ngIf="messages.length > 0" class="messages-list">
+        
+        <div *ngFor="let message of messages; let i = index; trackBy: trackByMessage" 
+             class="message-wrapper">
+          
+          <!-- Separador de Data -->
+          <div *ngIf="shouldShowDateSeparator(message, i)" class="date-separator">
+            <div class="date-line"></div>
+            <span class="date-label">{{ formatarData(message.dataEnvio) }}</span>
+            <div class="date-line"></div>
+          </div>
+
+          <!-- Mensagem -->
+          <div class="message-item" 
+               [class.my-message]="isMyMessage(message)"
+               [class.other-message]="!isMyMessage(message)">
+            
+            <!-- Avatar (apenas para mensagens do outro usuário) -->
+            <div *ngIf="!isMyMessage(message)" class="message-avatar">
+              <div class="avatar-small">
+                <i class="pi pi-user"></i>
+              </div>
+            </div>
+
+            <!-- Conteúdo da Mensagem -->
+            <div class="message-content">
+              <div class="message-bubble">
+                <div class="message-text">{{ message.conteudo }}</div>
+                <div class="message-meta">
+                  <span class="message-time">{{ formatarHora(message.dataEnvio) }}</span>
+                  <span *ngIf="isMyMessage(message)" class="message-status">
+                    <i [class]="getStatusIcon(message.status)" 
+                       [style.color]="getStatusColor(message.status)"
+                       [pTooltip]="getStatusTooltip(message.status)"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Input de Mensagem -->
+  <div class="chat-input-container">
+    <div class="input-wrapper">
+      
+      <!-- Área de Input -->
+      <div class="input-area">
+        <div class="input-field">
+          <textarea 
+            #messageInput
+            [(ngModel)]="novaMensagem"
+            name="novaMensagem"
+            placeholder="Digite sua mensagem..."
+            class="message-input"
+            rows="1"
+            [disabled]="enviandoMensagem"
+            (input)="onMessageInput()"
+            (keydown)="onEnterPress($event)"
+            maxlength="1000">
+          </textarea>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="input-actions">
+          
+          <!-- Botão Anexar (futuro) -->
+          <button 
+            class="attach-btn"
+            type="button"
+            [disabled]="true"
+            pTooltip="Anexar arquivo (em breve)"
+            tooltipPosition="top"
+            aria-label="Anexar arquivo"
+            title="Anexar arquivo">
+            <i class="pi pi-paperclip"></i>
+          </button>
+
+          <!-- Botão Enviar -->
+          <button 
+            class="send-btn"
+            type="button"
+            [disabled]="!novaMensagem.trim() || enviandoMensagem"
+            [class.loading]="enviandoMensagem"
+            pTooltip="Enviar mensagem"
+            tooltipPosition="top"
+            aria-label="Enviar mensagem"
+            title="Enviar mensagem"
+            (click)="enviarMensagem()">
+            <i class="pi" [class.pi-send]="!enviandoMensagem" [class.pi-spin]="enviandoMensagem" [class.pi-spinner]="enviandoMensagem"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Contador de Caracteres -->
+      <div *ngIf="novaMensagem.length > 800" class="char-counter">
+        <small>{{ novaMensagem.length }}/1000</small>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast para notificações -->
+<p-toast position="top-right"></p-toast>

@@ -1,0 +1,1447 @@
+/* ===============================
+   AGENDA ADVOGADO - MOBILE FIRST
+   Tema Pastel Jurídico Responsivo
+   =============================== */
+
+/* === VARIÁVEIS LOCAIS === */
+:host {
+  --search-primary: var(--primary-600);
+  --search-primary-light: var(--primary-100);
+  --search-accent: var(--brand-accent, #10b981);
+  --search-surface: var(--surface-0, #ffffff);
+  --search-surface-50: var(--surface-50, #fafbfc);
+  --search-surface-100: var(--surface-100, #f3f4f6);
+  --search-text: var(--text-color, #374151);
+  --search-text-muted: var(--text-color-muted, #9ca3af);
+  --search-border: var(--border-color, #d1d5db);
+  --search-border-light: var(--border-color-light, #e5e7eb);
+  --search-success: var(--success, #10b981);
+  --search-warning: var(--warning, #f59e0b);
+  --search-danger: var(--danger, #f87171);
+  
+  --search-radius: 12px;
+  --search-radius-lg: 16px;
+  --search-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --search-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --search-shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* === LAYOUT PRINCIPAL === */
+.advogado-layout {
+  min-height: 100vh;
+  background: var(--search-surface-50);
+}
+
+/* === HEADER ELEGANTE === */
+.elegant-header {
+  background: linear-gradient(135deg, var(--search-surface) 0%, var(--search-surface-50) 100%);
+  box-shadow: var(--search-shadow-lg);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 70px;
+  gap: 2rem;
+}
+
+/* === BRAND/LOGO === */
+.header-brand {
+  flex-shrink: 0;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.brand-icon {
+  font-size: 2rem;
+  color: var(--search-primary);
+  background: linear-gradient(135deg, var(--search-primary) 0%, var(--search-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 4px rgba(124, 58, 237, 0.2));
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.brand-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--search-text);
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.brand-subtitle {
+  font-size: 0.75rem;
+  color: var(--search-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === NAVEGAÇÃO === */
+.header-nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  max-width: 600px;
+}
+
+:ng-deep .elegant-menubar {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+
+  .p-menubar-root-list {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    border: none !important;
+  }
+
+  .p-menuitem {
+    position: relative;
+    border: none !important;
+
+    .p-menuitem-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      color: var(--search-text);
+      font-weight: 500;
+      font-size: 0.9375rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      border: none !important;
+      outline: none !important;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, var(--search-primary-light) 0%, rgba(124, 58, 237, 0.1) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: var(--search-radius);
+      }
+
+      &:hover {
+        color: var(--search-primary);
+        transform: translateY(-1px);
+        box-shadow: var(--search-shadow);
+
+        &::before {
+          opacity: 1;
+        }
+      }
+
+      &.p-menuitem-link-active {
+        color: var(--search-primary);
+        background: var(--search-primary-light);
+        box-shadow: var(--search-shadow);
+
+        &::before {
+          opacity: 1;
+        }
+      }
+
+      .p-menuitem-icon {
+        font-size: 1rem;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover .p-menuitem-icon {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+/* === ÁREA DO USUÁRIO === */
+.header-user {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: var(--search-surface-100);
+  border-radius: 50px;
+  border: 1px solid var(--search-border-light);
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--search-primary-light);
+    border-color: var(--search-primary);
+    transform: translateY(-1px);
+    box-shadow: var(--search-shadow);
+  }
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--search-primary) 0%, var(--search-accent) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.25rem;
+  box-shadow: var(--search-shadow);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--search-text);
+  font-size: 0.9375rem;
+  line-height: 1.2;
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: var(--search-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === AÇÕES DO USUÁRIO === */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+:ng-deep .user-actions {
+  .action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--search-surface-100);
+    border: 1px solid var(--search-border-light);
+    color: var(--search-text-muted);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+      background: var(--search-primary-light);
+      border-color: var(--search-primary);
+      color: var(--search-primary);
+      transform: translateY(-2px);
+      box-shadow: var(--search-shadow-lg);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    .p-button-icon {
+      font-size: 1rem;
+    }
+  }
+
+  .notification-btn {
+    position: relative;
+
+    .notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: var(--search-danger);
+      color: white;
+      font-size: 0.625rem;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--search-surface);
+      animation: pulse 2s infinite;
+    }
+  }
+
+  .logout-btn {
+    &:hover {
+      background: var(--search-danger);
+      border-color: var(--search-danger);
+      color: white;
+    }
+  }
+}
+
+/* === LAYOUT CONTENT === */
+.layout-breadcrumb {
+  background: white;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.layout-content {
+  flex: 1;
+  padding: 1rem;
+  
+  @media (min-width: 768px) {
+    padding: 1.5rem;
+  }
+  
+  @media (min-width: 1200px) {
+    padding: 2rem;
+  }
+}
+
+/* === AGENDA CONTAINER === */
+.agenda-container {
+  .agenda-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    
+    h1 {
+      color: var(--search-text);
+      margin-bottom: 0.5rem;
+    }
+    
+    p {
+      color: var(--search-text-muted);
+      font-size: 1.1rem;
+    }
+  }
+
+  .agenda-filters {
+    background: var(--search-surface);
+    border: 1px solid var(--search-border-light);
+    border-radius: var(--search-radius);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--search-shadow);
+    
+    h3 {
+      color: var(--search-text);
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+// Timeline personalizada
+.agenda-timeline {
+  .p-timeline-event {
+    margin-bottom: 2rem;
+  }
+
+  .p-timeline-event-content {
+    padding: 0;
+  }
+
+  .p-timeline-event-marker {
+    display: none;
+  }
+
+  // Timeline alternada desktop
+  .p-timeline-event:nth-child(even) {
+    .agenda-event {
+      margin-left: 0;
+      margin-right: 2rem;
+
+      &::before {
+        left: auto;
+        right: -1rem;
+        border-right: none;
+        border-left: 12px solid var(--search-border-light);
+      }
+
+      &::after {
+        left: auto;
+        right: -0.9rem;
+        border-right: none;
+        border-left: 12px solid var(--search-surface);
+      }
+    }
+  }
+}
+
+// Marcador personalizado
+.agenda-marker {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  &--audiência {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+  }
+
+  &--reunião {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+  }
+
+  &--prazo {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+  }
+
+  &--entrega {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  }
+
+  &--consulta {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+  }
+}
+
+// Evento da agenda
+.agenda-event {
+  background: var(--search-surface);
+  border: 1px solid var(--search-border-light);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-left: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    top: 1.5rem;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 12px solid var(--search-border-light);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: -0.9rem;
+    top: 1.5rem;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 12px solid var(--search-surface);
+  }
+}
+
+.agenda-event__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--search-border-light);
+
+  .agenda-event__date,
+  .agenda-event__time {
+    display: flex;
+    align-items: center;
+    color: var(--search-text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .agenda-event__date {
+    color: var(--search-primary);
+    font-weight: 600;
+  }
+}
+
+.agenda-event__content {
+  margin-bottom: 1.5rem;
+
+  .agenda-event__title {
+    color: var(--search-text);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
+  }
+
+  .agenda-event__description {
+    color: var(--search-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+.agenda-event__meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--search-surface-100);
+  border-radius: 8px;
+
+  > div {
+    display: flex;
+    align-items: center;
+    color: var(--search-text-muted);
+    font-size: 0.9rem;
+
+    i {
+      color: var(--search-primary);
+      margin-right: 0.5rem;
+      width: 1rem;
+    }
+
+    strong {
+      color: var(--search-text);
+      margin-right: 0.25rem;
+    }
+  }
+}
+
+.agenda-event__status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.agenda-event__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+
+  .p-button {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .agenda-event {
+    margin-left: 1rem;
+    padding: 1rem;
+
+    &::before,
+    &::after {
+      left: -0.75rem;
+    }
+  }
+
+  .agenda-event__meta {
+    grid-template-columns: 1fr;
+  }
+
+  .agenda-event__actions {
+    flex-direction: column;
+    align-items: stretch;
+
+    .p-button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .agenda-filters {
+    .grid {
+      .col-12 {
+        text-align: center;
+      }
+    }
+  }
+}
+
+// Estados especiais
+.agenda-event--urgente {
+  border-left: 4px solid var(--search-danger);
+  
+  .agenda-event__title {
+    color: var(--search-danger);
+  }
+}
+
+.agenda-event--confirmado {
+  border-left: 4px solid var(--search-success);
+}
+
+.agenda-event--cancelado {
+  opacity: 0.7;
+  background: var(--search-surface-100);
+  
+  .agenda-event__title {
+    text-decoration: line-through;
+  }
+}
+
+// Animações
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.agenda-event {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+
+/* === SOBRESCRITA FORÇADA DO TEMA PRIMENG === */
+:host ::ng-deep .elegant-menubar.p-menubar,
+:host ::ng-deep .elegant-menubar .p-menubar-root-list,
+:host ::ng-deep .elegant-menubar .p-menuitem,
+:host ::ng-deep .elegant-menubar .p-menuitem-link {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+:host ::ng-deep .elegant-menubar .p-menuitem-link:focus,
+:host ::ng-deep .elegant-menubar .p-menuitem-link:hover,
+:host ::ng-deep .elegant-menubar .p-menuitem-link:active {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* === ANIMAÇÕES === */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === RESPONSIVIDADE === */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .header-container {
+    padding: 0 1rem;
+    gap: 1rem;
+  }
+
+  .brand-title {
+    font-size: 1.25rem;
+  }
+
+  .brand-subtitle {
+    font-size: 0.6875rem;
+  }
+
+  .user-details {
+    display: none;
+  }
+
+  .user-info {
+    padding: 0.5rem;
+  }
+
+  // Layout content tablet
+  .layout-content {
+    padding: 1rem;
+  }
+
+  // Agenda filters tablet
+  .agenda-filters {
+    padding: 1.25rem;
+    
+    .flex {
+      gap: 0.5rem;
+    }
+  }
+
+  // Timeline tablet
+  .agenda-timeline {
+    .p-timeline-event {
+      margin-bottom: 1.75rem;
+    }
+  }
+
+  // Agenda event tablet
+  .agenda-event {
+    margin-left: 1.5rem;
+    padding: 1.25rem;
+
+    &::before {
+      left: -0.75rem;
+    }
+
+    &::after {
+      left: -0.7rem;
+    }
+  }
+
+  // Event header tablet
+  .agenda-event__header {
+    gap: 0.75rem;
+  }
+
+  // Event content tablet
+  .agenda-event__content {
+    .agenda-event__title {
+      font-size: 1.2rem;
+    }
+
+    .agenda-event__description {
+      font-size: 0.95rem;
+    }
+  }
+
+  // Event meta tablet
+  .agenda-event__meta {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    padding: 0.9rem;
+
+    > div {
+      font-size: 0.9rem;
+    }
+  }
+
+  // Event actions tablet
+  .agenda-event__actions {
+    gap: 0.6rem;
+
+    .p-button {
+      font-size: 0.9rem;
+      padding: 0.6rem 1.2rem;
+    }
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .header-container {
+    padding: 0 0.75rem;
+    gap: 0.75rem;
+    min-height: 60px;
+  }
+
+  .brand-text {
+    display: none;
+  }
+
+  .brand-icon {
+    font-size: 1.75rem;
+  }
+
+  .header-nav {
+    display: none;
+  }
+
+  .user-actions {
+    gap: 0.25rem;
+  }
+
+  :ng-deep .user-actions .action-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  // Layout content mobile
+  .layout-content {
+    padding: 0.75rem;
+  }
+
+  // Agenda header mobile
+  .agenda-header {
+    text-align: left;
+    margin-bottom: 1.5rem;
+    
+    h1 {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  // Agenda filters mobile
+  .agenda-filters {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    
+    h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .grid {
+      .col-12 {
+        text-align: center;
+      }
+    }
+    
+    .flex {
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+  }
+
+  // Timeline mobile - simplificada
+  .agenda-timeline {
+    position: relative;
+    padding-left: 1rem;
+
+    // Linha vertical da timeline
+    &::before {
+      content: '';
+      position: absolute;
+      left: 1.25rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--search-primary), var(--search-accent));
+      border-radius: 1px;
+    }
+
+    .p-timeline-event {
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    // Força todos os eventos para a esquerda no mobile
+    .p-timeline-event:nth-child(even) {
+      .agenda-event {
+        margin-left: 0;
+        margin-right: 0;
+
+        &::before {
+          left: -0.5rem;
+          right: auto;
+          border-right-width: 8px;
+          border-left-width: 0;
+        }
+
+        &::after {
+          left: -0.4rem;
+          right: auto;
+          border-right-width: 8px;
+          border-left-width: 0;
+        }
+      }
+    }
+  }
+
+  // Marcador mobile
+  .agenda-marker {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1rem;
+    position: absolute;
+    left: -2.25rem;
+    top: 0.5rem;
+    z-index: 3;
+    border: 3px solid var(--search-surface);
+  }
+
+  // Agenda event mobile
+  .agenda-event {
+    margin-left: 0;
+    padding: 1rem;
+    border-radius: 8px;
+    position: relative;
+
+    &::before {
+      left: -0.5rem;
+      top: 1rem;
+      border-right-width: 8px;
+    }
+
+    &::after {
+      left: -0.4rem;
+      top: 1rem;
+      border-right-width: 8px;
+    }
+  }
+
+  // Event header mobile
+  .agenda-event__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+
+    .agenda-event__date,
+    .agenda-event__time {
+      font-size: 0.85rem;
+    }
+  }
+
+  // Event content mobile
+  .agenda-event__content {
+    margin-bottom: 1rem;
+
+    .agenda-event__title {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .agenda-event__description {
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+  }
+
+  // Event meta mobile
+  .agenda-event__meta {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+
+    > div {
+      font-size: 0.85rem;
+      
+      i {
+        font-size: 0.9rem;
+        margin-right: 0.4rem;
+      }
+    }
+  }
+
+  // Event status mobile
+  .agenda-event__status {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  // Event actions mobile
+  .agenda-event__actions {
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .p-button {
+      width: 100%;
+      justify-content: center;
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+
+}
+
+/* Mobile Pequeno */
+@media (max-width: 480px) {
+  .header-container {
+    padding: 0 0.5rem;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .user-actions {
+    gap: 0.25rem;
+  }
+
+  // Layout content mobile pequeno
+  .layout-content {
+    padding: 0.5rem;
+  }
+
+  // Agenda header mobile pequeno
+  .agenda-header {
+    margin-bottom: 1rem;
+    
+    h1 {
+      font-size: 1.5rem;
+    }
+    
+    p {
+      font-size: 0.9rem;
+    }
+  }
+
+  // Agenda filters mobile pequeno
+  .agenda-filters {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    
+    h3 {
+      font-size: 1rem;
+    }
+    
+    .flex {
+      gap: 0.25rem;
+    }
+  }
+
+  // Agenda event mobile pequeno
+  .agenda-event {
+    margin-left: 0;
+    padding: 0.75rem;
+    position: relative;
+
+    &::before {
+      left: -0.25rem;
+      border-right-width: 6px;
+    }
+
+    &::after {
+      left: -0.2rem;
+      border-right-width: 6px;
+    }
+  }
+
+  // Event header mobile pequeno
+  .agenda-event__header {
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+
+    .agenda-event__date,
+    .agenda-event__time {
+      font-size: 0.8rem;
+    }
+  }
+
+  // Event content mobile pequeno
+  .agenda-event__content {
+    margin-bottom: 0.75rem;
+
+    .agenda-event__title {
+      font-size: 1rem;
+    }
+
+    .agenda-event__description {
+      font-size: 0.85rem;
+    }
+  }
+
+  // Event meta mobile pequeno
+  .agenda-event__meta {
+    padding: 0.5rem;
+    gap: 0.25rem;
+
+    > div {
+      font-size: 0.8rem;
+      
+      i {
+        font-size: 0.85rem;
+        margin-right: 0.3rem;
+      }
+    }
+  }
+
+  // Event actions mobile pequeno
+  .agenda-event__actions {
+    gap: 0.25rem;
+
+    .p-button {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.75rem;
+    }
+  }
+
+  // Timeline mobile pequeno - ultra simplificada
+  .agenda-timeline {
+    padding-left: 0.75rem;
+
+    // Linha vertical da timeline
+    &::before {
+      left: 1rem;
+      width: 1.5px;
+    }
+
+    .p-timeline-event {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    // Força todos os eventos para a esquerda no mobile pequeno
+    .p-timeline-event:nth-child(even) {
+      .agenda-event {
+        margin-left: 0;
+        margin-right: 0;
+
+        &::before {
+          left: -0.25rem;
+          right: auto;
+          border-right-width: 6px;
+          border-left-width: 0;
+        }
+
+        &::after {
+          left: -0.2rem;
+          right: auto;
+          border-right-width: 6px;
+          border-left-width: 0;
+        }
+      }
+    }
+  }
+
+  // Marcador mobile pequeno
+  .agenda-marker {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.9rem;
+    position: absolute;
+    left: -1.75rem;
+    top: 0.5rem;
+    z-index: 3;
+    border: 2px solid var(--search-surface);
+  }
+}
+
+// Tema escuro
+@media (prefers-color-scheme: dark) {
+  .agenda-event {
+    background: var(--search-surface);
+    border-color: var(--search-border-light);
+    
+    &::before {
+      border-right-color: var(--search-border-light);
+    }
+    
+    &::after {
+      border-right-color: var(--search-surface);
+    }
+  }
+
+  .agenda-event__meta {
+    background: var(--search-surface-100);
+  }
+}
+
+/* === MODAL NOVO COMPROMISSO === */
+.novo-compromisso-form {
+  .field {
+    margin-bottom: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    .field-label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-color);
+      font-size: 0.875rem;
+      
+      i {
+        margin-right: 0.5rem;
+        color: var(--primary-500);
+      }
+      
+      .text-red-500 {
+        color: var(--red-500);
+        margin-left: 0.25rem;
+      }
+    }
+  }
+  
+  // Estilos específicos para p-calendar
+  :host ::ng-deep .p-calendar {
+    width: 100% !important;
+    display: block !important;
+    
+    .p-inputtext {
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    
+    .p-button {
+      width: auto !important;
+      min-width: auto !important;
+      flex-shrink: 0 !important;
+    }
+    
+    .p-calendar-w-btn {
+      width: 100% !important;
+      display: flex !important;
+    }
+    
+    .p-calendar-w-btn .p-inputtext {
+      flex: 1 !important;
+      width: auto !important;
+    }
+  }
+  
+  // Classe específica para calendários com largura total
+  :host ::ng-deep .calendar-full-width {
+    width: 100% !important;
+    display: block !important;
+    max-width: none !important;
+    
+    .p-calendar-w-btn {
+      width: 100% !important;
+      max-width: 100% !important;
+      display: flex !important;
+      align-items: center !important;
+      box-sizing: border-box !important;
+    }
+    
+    .p-calendar-w-btn .p-inputtext {
+      flex: 1 1 auto !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: none !important;
+      box-sizing: border-box !important;
+    }
+    
+    .p-calendar-w-btn .p-button {
+      flex: 0 0 auto !important;
+      flex-shrink: 0 !important;
+      margin-left: 0.5rem !important;
+      width: auto !important;
+    }
+  }
+  
+  // Forçar largura específica para o modal
+  .novo-compromisso-form .field {
+    :host ::ng-deep .calendar-full-width {
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
+  }
+  
+  // Container para calendário
+  .calendar-container {
+    width: 100% !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+  
+  // Estilo mais agressivo para forçar largura
+  :host ::ng-deep .novo-compromisso-form {
+    .calendar-container {
+      width: 100% !important;
+      display: block !important;
+      
+      .p-calendar {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        display: block !important;
+        
+        .p-calendar-w-btn {
+          width: 100% !important;
+          max-width: 100% !important;
+          min-width: 0 !important;
+          display: flex !important;
+          box-sizing: border-box !important;
+        }
+        
+        .p-calendar-w-btn .p-inputtext {
+          width: 100% !important;
+          max-width: 100% !important;
+          min-width: 0 !important;
+          flex: 1 1 0% !important;
+          box-sizing: border-box !important;
+        }
+        
+        .p-calendar-w-btn .p-button {
+          flex: 0 0 auto !important;
+          flex-shrink: 0 !important;
+          width: auto !important;
+          min-width: auto !important;
+        }
+      }
+    }
+  }
+}
+
+// Estilo global mais agressivo para forçar largura
+:host ::ng-deep .calendar-container .p-calendar {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  display: block !important;
+  
+  .p-calendar-w-btn {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    box-sizing: border-box !important;
+  }
+  
+  .p-calendar-w-btn .p-inputtext {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 0% !important;
+    box-sizing: border-box !important;
+  }
+  
+  .p-calendar-w-btn .p-button {
+    flex: 0 0 auto !important;
+    flex-shrink: 0 !important;
+    width: auto !important;
+    min-width: auto !important;
+  }
+}
+
+/* === BOTÕES DE FILTRO DA AGENDA === */
+:host ::ng-deep .agenda-filters {
+  .p-button {
+    &.p-button-outlined {
+      border-color: var(--primary-500) !important;
+      color: var(--primary-500) !important;
+      background: transparent !important;
+      
+      &:hover {
+        background: var(--primary-50) !important;
+        border-color: var(--primary-600) !important;
+        color: var(--primary-600) !important;
+      }
+      
+      .p-button-label {
+        color: var(--primary-500) !important;
+      }
+      
+      .pi {
+        color: var(--primary-500) !important;
+      }
+    }
+    
+    &.p-button-primary {
+      background: var(--primary-500) !important;
+      border-color: var(--primary-500) !important;
+      color: white !important;
+      
+      &:hover {
+        background: var(--primary-600) !important;
+        border-color: var(--primary-600) !important;
+        color: white !important;
+      }
+      
+      .p-button-label {
+        color: white !important;
+      }
+      
+      .pi {
+        color: white !important;
+      }
+    }
+  }
+}
+
+/* === BOTÕES DE INTEGRAÇÃO === */
+:host ::ng-deep .p-dialog .p-dialog-footer {
+  .p-button {
+    &.p-button-outlined {
+      &.p-button-sm {
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+        
+        &.p-button-outlined {
+          border-color: var(--primary-500);
+          color: var(--primary-500);
+          
+          &:hover {
+            background: var(--primary-50);
+            border-color: var(--primary-600);
+            color: var(--primary-600);
+          }
+        }
+      }
+    }
+  }
+  
+  .flex {
+    gap: 0.75rem;
+    
+    &.justify-content-between {
+      align-items: center;
+    }
+  }
+}

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demonstração - Tema Custom PrimeNG</title>
+    
+    <!-- PrimeNG Theme Base -->
+    <link rel="stylesheet" href="../../node_modules/primeng/resources/themes/saga-blue/theme.css">
+    <link rel="stylesheet" href="../../node_modules/primeng/resources/primeng.css">
+    <link rel="stylesheet" href="../../node_modules/primeicons/primeicons.css">
+    
+    <!-- Tema Personalizado -->
+    <link rel="stylesheet" href="theme-custom.css">
+    
+    <style>
+        body { 
+            padding: 2rem; 
+            background: var(--surface-50); 
+        }
+        .demo-section { 
+            margin: 2rem 0; 
+            padding: 1.5rem; 
+            background: var(--surface-0); 
+            border-radius: var(--radius-lg); 
+            border: 1px solid var(--border-color-light);
+        }
+        .demo-title { 
+            color: var(--brand-primary); 
+            font-weight: var(--font-weight-semibold); 
+            margin-bottom: 1rem; 
+        }
+        .demo-grid { 
+            display: grid; 
+            gap: 1rem; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            margin: 1rem 0;
+        }
+        .compact-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="compact-toggle">
+        <button class="p-button p-button-sm" onclick="toggleCompact()">
+            <i class="pi pi-compress"></i>
+            Densidade Compacta
+        </button>
+    </div>
+
+    <h1 style="color: var(--brand-primary); text-align: center; margin-bottom: 2rem;">
+        ⚖️ Tema Jurídico Light - Cores Pastéis
+    </h1>
+
+    <!-- Botões -->
+    <div class="demo-section">
+        <h2 class="demo-title">Botões</h2>
+        <div class="demo-grid">
+            <button class="p-button">
+                <i class="pi pi-check"></i>
+                Primary
+            </button>
+            <button class="p-button p-button-secondary">
+                <i class="pi pi-cog"></i>
+                Secondary
+            </button>
+            <button class="p-button p-button-outlined">
+                <i class="pi pi-plus"></i>
+                Outlined
+            </button>
+            <button class="p-button p-button-text">
+                <i class="pi pi-pencil"></i>
+                Text
+            </button>
+            <button class="p-button p-button-success">
+                <i class="pi pi-check"></i>
+                Success
+            </button>
+            <button class="p-button p-button-warning">
+                <i class="pi pi-exclamation-triangle"></i>
+                Warning
+            </button>
+            <button class="p-button p-button-danger">
+                <i class="pi pi-times"></i>
+                Danger
+            </button>
+            <button class="p-button p-button-info">
+                <i class="pi pi-info-circle"></i>
+                Info
+            </button>
+        </div>
+        
+        <h3 style="margin-top: 2rem; color: var(--text-color-secondary);">Tamanhos</h3>
+        <div class="demo-grid">
+            <button class="p-button p-button-sm">Small</button>
+            <button class="p-button">Medium (Default)</button>
+            <button class="p-button p-button-lg">Large</button>
+            <button class="p-button p-button-rounded">Rounded</button>
+        </div>
+    </div>
+
+    <!-- Inputs -->
+    <div class="demo-section">
+        <h2 class="demo-title">Campos de Entrada</h2>
+        <div class="demo-grid">
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: var(--font-weight-medium);">Input Normal</label>
+                <input type="text" class="p-inputtext" placeholder="Digite algo...">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: var(--font-weight-medium);">Input com Erro</label>
+                <input type="text" class="p-inputtext p-invalid" placeholder="Campo obrigatório">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: var(--font-weight-medium);">Input com Sucesso</label>
+                <input type="text" class="p-inputtext success" placeholder="Campo válido" value="exemplo@email.com">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: var(--font-weight-medium);">Dropdown</label>
+                <select class="p-dropdown">
+                    <option>Selecione uma opção</option>
+                    <option>Opção 1</option>
+                    <option>Opção 2</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="demo-section">
+        <h2 class="demo-title">Cards</h2>
+        <div class="demo-grid">
+            <div class="p-card">
+                <div class="p-card-header">
+                    <h3 class="p-card-title">Card Exemplo</h3>
+                    <p class="p-card-subtitle">Subtítulo do card</p>
+                </div>
+                <div class="p-card-body">
+                    <div class="p-card-content">
+                        Este é um exemplo de card com o tema personalizado aplicado.
+                    </div>
+                </div>
+                <div class="p-card-footer">
+                    <button class="p-button p-button-sm">Ação</button>
+                </div>
+            </div>
+
+            <div class="p-card">
+                <div class="p-card-body">
+                    <div class="p-card-content">
+                        <h4 style="margin-top: 0;">Card Simples</h4>
+                        <p>Card sem header, apenas com conteúdo.</p>
+                        <div style="margin-top: 1rem;">
+                            <span class="p-badge p-badge-success">Ativo</span>
+                            <span class="p-badge p-badge-warning" style="margin-left: 0.5rem;">Pendente</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="demo-section">
+        <h2 class="demo-title">Mensagens</h2>
+        <div class="p-message p-message-info">
+            <i class="p-message-icon pi pi-info-circle"></i>
+            <div class="p-message-text">Esta é uma mensagem informativa.</div>
+        </div>
+        <div class="p-message p-message-success">
+            <i class="p-message-icon pi pi-check"></i>
+            <div class="p-message-text">Operação realizada com sucesso!</div>
+        </div>
+        <div class="p-message p-message-warn">
+            <i class="p-message-icon pi pi-exclamation-triangle"></i>
+            <div class="p-message-text">Atenção: verifique os dados inseridos.</div>
+        </div>
+        <div class="p-message p-message-error">
+            <i class="p-message-icon pi pi-times-circle"></i>
+            <div class="p-message-text">Erro: não foi possível processar a solicitação.</div>
+        </div>
+    </div>
+
+    <!-- Tags e Badges -->
+    <div class="demo-section">
+        <h2 class="demo-title">Tags e Badges</h2>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+            <span class="p-tag p-tag-success">Sucesso</span>
+            <span class="p-tag p-tag-info">Informação</span>
+            <span class="p-tag p-tag-warning">Aviso</span>
+            <span class="p-tag p-tag-danger">Erro</span>
+            <span class="p-tag p-tag-rounded">Rounded</span>
+            
+            <span style="position: relative;">
+                <i class="pi pi-bell" style="font-size: 1.5rem; color: var(--text-color-muted);"></i>
+                <span class="p-badge" style="position: absolute; top: -8px; right: -8px;">5</span>
+            </span>
+            
+            <span class="p-chip">
+                <span class="p-chip-text">Chip Exemplo</span>
+                <i class="p-chip-remove-icon pi pi-times"></i>
+            </span>
+        </div>
+    </div>
+
+    <!-- Tabela Exemplo -->
+    <div class="demo-section">
+        <h2 class="demo-title">Tabela</h2>
+        <div class="p-datatable">
+            <div class="p-datatable-wrapper">
+                <table>
+                    <thead class="p-datatable-thead">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class="p-datatable-tbody">
+                        <tr>
+                            <td>João Silva</td>
+                            <td>joao@email.com</td>
+                            <td><span class="p-tag p-tag-success">Ativo</span></td>
+                            <td>
+                                <button class="p-button p-button-text p-button-sm">
+                                    <i class="pi pi-pencil"></i>
+                                </button>
+                                <button class="p-button p-button-text p-button-sm">
+                                    <i class="pi pi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Maria Santos</td>
+                            <td>maria@email.com</td>
+                            <td><span class="p-tag p-tag-warning">Pendente</span></td>
+                            <td>
+                                <button class="p-button p-button-text p-button-sm">
+                                    <i class="pi pi-pencil"></i>
+                                </button>
+                                <button class="p-button p-button-text p-button-sm">
+                                    <i class="pi pi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="demo-section">
+        <h2 class="demo-title">Progress</h2>
+        <div class="p-progressbar" style="margin-bottom: 1rem;">
+            <div class="p-progressbar-value" style="width: 75%;">
+                <div class="p-progressbar-label">75%</div>
+            </div>
+        </div>
+        
+        <div class="p-skeleton" style="height: 2rem; margin-bottom: 0.5rem;"></div>
+        <div class="p-skeleton" style="height: 1rem; width: 75%; margin-bottom: 0.5rem;"></div>
+        <div class="p-skeleton p-skeleton-circle" style="width: 3rem; height: 3rem;"></div>
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem; color: var(--text-color-secondary);">
+        <p>⚖️ Tema profissional com cores pastéis para o meio jurídico</p>
+        <p>🌸 Design suave e elegante • 📱 Totalmente responsivo • ♿ Acessível WCAG AA</p>
+        <p>🎨 Paleta pastel profissional para advogados, juízes e clientes</p>
+    </div>
+
+    <script>
+        function toggleCompact() {
+            document.documentElement.classList.toggle('is-compact');
+            const button = document.querySelector('.compact-toggle button');
+            if (document.documentElement.classList.contains('is-compact')) {
+                button.innerHTML = '<i class="pi pi-expand"></i> Densidade Normal';
+            } else {
+                button.innerHTML = '<i class="pi pi-compress"></i> Densidade Compacta';
+            }
+        }
+    </script>
+</body>
+</html>

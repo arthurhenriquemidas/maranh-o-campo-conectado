@@ -1,0 +1,1552 @@
+<!-- Layout de Gestão de Sindicados/Cooperativas -->
+<div class="sindicados-layout">
+  
+  <!-- Header Component -->
+  <app-admin-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-admin-header>
+
+  <!-- Conteúdo Principal -->
+  <div class="layout-content">
+    <div class="container">
+
+      <!-- Header da Página -->
+      <div class="page-header mb-4">
+        <div class="header-content">
+          <div class="header-info">
+            <h1 class="text-3xl font-bold text-900 m-0 mb-2">
+              Gestão de Sindicados/Cooperativas
+            </h1>
+            <p class="text-lg text-600">
+              Gerencie cooperativas e sindicatos, seus advogados e processos vinculados.
+            </p>
+          </div>
+          <div class="header-actions">
+            <p-button 
+              label="Novo Sindicado" 
+              icon="pi pi-building"
+              class="p-button-primary"
+              (click)="criarNovoSindicado()">
+            </p-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estatísticas -->
+      <div *ngIf="estatisticas" class="stats-section mb-4">
+        <div class="grid">
+          <div class="col-12 md:col-3">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="pi pi-building text-blue-500"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-number">{{ estatisticas.total }}</div>
+                <div class="stat-label">Total</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 md:col-3">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="pi pi-check-circle text-green-500"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-number">{{ estatisticas.ativos }}</div>
+                <div class="stat-label">Ativos</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 md:col-3">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="pi pi-users text-purple-500"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-number">{{ estatisticas.cooperativas }}</div>
+                <div class="stat-label">Cooperativas</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 md:col-3">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="pi pi-users text-orange-500"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-number">{{ estatisticas.sindicatos }}</div>
+                <div class="stat-label">Sindicatos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="filters-section mb-4">
+          <div class="grid">
+            <div class="col-12 md:col-3">
+              <label for="busca" class="block text-sm font-medium mb-2">Buscar</label>
+              <input 
+                id="busca"
+                type="text" 
+                pInputText 
+                placeholder="Nome, CNPJ..."
+                [(ngModel)]="buscaTexto"
+                class="w-full">
+            </div>
+            <div class="col-12 md:col-3">
+              <label for="tipo" class="block text-sm font-medium mb-2">Tipo</label>
+              <p-dropdown 
+                id="tipo"
+                [options]="tiposSindicado" 
+                [(ngModel)]="tipoFiltro"
+                placeholder="Selecione o tipo"
+                class="w-full">
+              </p-dropdown>
+            </div>
+            <div class="col-12 md:col-3">
+              <label for="status" class="block text-sm font-medium mb-2">Status</label>
+              <p-dropdown 
+                id="status"
+                [options]="statusOptions" 
+                [(ngModel)]="statusFiltro"
+                placeholder="Selecione o status"
+                class="w-full">
+              </p-dropdown>
+            </div>
+            <div class="col-12 md:col-3">
+              <label for="verificado" class="block text-sm font-medium mb-2">Verificação</label>
+              <p-dropdown 
+                id="verificado"
+                [options]="verificacaoOptions" 
+                [(ngModel)]="verificadoFiltro"
+                placeholder="Selecione"
+                class="w-full">
+              </p-dropdown>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-3">
+            <p-button 
+              label="Filtrar" 
+              icon="pi pi-search"
+              (click)="aplicarFiltros()">
+            </p-button>
+            <p-button 
+              label="Limpar" 
+              icon="pi pi-times"
+              class="p-button-secondary"
+              (click)="limparFiltros()">
+            </p-button>
+          </div>
+      </div>
+
+      <!-- Lista de Sindicados -->
+      <div class="sindicados-section">
+        <p-card>
+          <div *ngIf="loading" class="text-center py-4">
+            <i class="pi pi-spin pi-spinner text-2xl"></i>
+            <p class="mt-2">Carregando sindicados...</p>
+          </div>
+
+          <div *ngIf="!loading && sindicados.length === 0" class="text-center py-8">
+            <i class="pi pi-building text-6xl text-300 mb-3"></i>
+            <h3 class="text-xl text-600 mb-2">Nenhum sindicado encontrado</h3>
+            <p class="text-500 mb-4">Comece criando um novo sindicado ou cooperativa.</p>
+            <p-button 
+              label="Criar Primeiro Sindicado" 
+              icon="pi pi-plus"
+              (click)="criarNovoSindicado()">
+            </p-button>
+          </div>
+
+          <div *ngIf="!loading && sindicados.length > 0" class="grid">
+            <div *ngFor="let sindicado of sindicados" class="col-12 lg:col-6 xl:col-4">
+              <div class="sindicado-card">
+                <div class="card-header">
+                  <div class="sindicado-info">
+                    <div class="sindicado-avatar">
+                      <i [class]="getSindicadoIcon(sindicado.tipo)"></i>
+                    </div>
+                    <div class="sindicado-details">
+                      <h3 class="sindicado-nome">{{ sindicado.nome }}</h3>
+                      <p class="sindicado-tipo">{{ getSindicadoLabel(sindicado.tipo) }}</p>
+                      <p class="sindicado-cnpj">{{ sindicado.cnpj }}</p>
+                    </div>
+                  </div>
+                  <div class="sindicado-status">
+                    <i [class]="getStatusIcon(sindicado.status)"></i>
+                    <span class="status-label">{{ getStatusLabel(sindicado.status) }}</span>
+                  </div>
+                </div>
+
+                <div class="card-content">
+                  <div class="sindicado-meta">
+                    <div class="meta-item">
+                      <i class="pi pi-envelope"></i>
+                      <span>{{ sindicado.email }}</span>
+                    </div>
+                    <div class="meta-item">
+                      <i class="pi pi-phone"></i>
+                      <span>{{ sindicado.telefone }}</span>
+                    </div>
+                    <div class="meta-item">
+                      <i class="pi pi-user"></i>
+                      <span>{{ sindicado.nomeResponsavel }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-actions">
+                  <p-button 
+                    icon="pi pi-eye" 
+                    class="p-button-text p-button-sm"
+                    pTooltip="Visualizar"
+                    (click)="visualizarSindicado(sindicado)">
+                  </p-button>
+                  <p-button 
+                    icon="pi pi-pencil" 
+                    class="p-button-text p-button-sm"
+                    pTooltip="Editar"
+                    (click)="editarSindicado(sindicado)">
+                  </p-button>
+                  <p-button 
+                    icon="pi pi-users" 
+                    class="p-button-text p-button-sm"
+                    pTooltip="Gerenciar Advogados"
+                    (click)="gerenciarAdvogados(sindicado)">
+                  </p-button>
+                  <p-button 
+                    icon="pi pi-file" 
+                    class="p-button-text p-button-sm"
+                    pTooltip="Gerenciar Processos"
+                    (click)="gerenciarProcessos(sindicado)">
+                  </p-button>
+                  <p-button 
+                    icon="pi pi-upload" 
+                    class="p-button-text p-button-sm"
+                    pTooltip="Importar Advogados"
+                    (click)="importarAdvogados(sindicado)">
+                  </p-button>
+                  <p-button 
+                    icon="pi pi-trash" 
+                    class="p-button-text p-button-sm p-button-danger"
+                    pTooltip="Excluir"
+                    (click)="excluirSindicado(sindicado)">
+                  </p-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dialog de Sindicado -->
+<p-dialog 
+  [(visible)]="showSindicadoDialog" 
+  [header]="sindicadoDialogMode === 'create' ? 'Novo Sindicado' : (sindicadoDialogMode === 'edit' ? 'Editar Sindicado' : 'Visualizar Sindicado')"
+  [modal]="true" 
+  [style]="{width: '90vw', maxWidth: '1000px'}"
+  [closable]="true"
+  [maximizable]="true">
+  
+  <div *ngIf="selectedSindicado" class="sindicado-form">
+    <!-- Abas para organizar o formulário -->
+    <p-tabView>
+      <!-- Aba: Informações Básicas -->
+      <p-tabPanel header="Informações Básicas">
+        <div class="form-grid">
+          <!-- Linha 1: Nome e Email -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="nome" class="block text-sm font-medium mb-2">Nome *</label>
+              <input 
+                id="nome"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.nome"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                required>
+            </div>
+            <div class="form-field">
+              <label for="email" class="block text-sm font-medium mb-2">E-mail *</label>
+              <input 
+                id="email"
+                type="email" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.email"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                required>
+            </div>
+          </div>
+
+          <!-- Linha 2: Telefone e CNPJ -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="telefone" class="block text-sm font-medium mb-2">Telefone *</label>
+              <input 
+                id="telefone"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.telefone"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                placeholder="(11) 99999-9999"
+                required>
+            </div>
+            <div class="form-field">
+              <label for="cnpj" class="block text-sm font-medium mb-2">CNPJ *</label>
+              <input 
+                id="cnpj"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.cnpj"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                placeholder="00.000.000/0000-00"
+                required>
+            </div>
+          </div>
+
+          <!-- Linha 3: Razão Social (full width) -->
+          <div class="form-row">
+            <div class="form-field full-width">
+              <label for="razaoSocial" class="block text-sm font-medium mb-2">Razão Social *</label>
+              <input 
+                id="razaoSocial"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.razaoSocial"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                required>
+            </div>
+          </div>
+
+          <!-- Linha 4: Nome do Responsável e Tipo -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="nomeResponsavel" class="block text-sm font-medium mb-2">Nome do Responsável *</label>
+              <input 
+                id="nomeResponsavel"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.nomeResponsavel"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                required>
+            </div>
+            <div class="form-field">
+              <label for="tipo" class="block text-sm font-medium mb-2">Tipo *</label>
+              <p-dropdown 
+                id="tipo"
+                [options]="tiposSindicado" 
+                [(ngModel)]="selectedSindicado.tipo"
+                [disabled]="sindicadoDialogMode === 'view'"
+                placeholder="Selecione o tipo"
+                class="w-full"
+                required>
+              </p-dropdown>
+            </div>
+          </div>
+
+          <!-- Linha 5: Data de Fundação e Número de Associados -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="dataFundacao" class="block text-sm font-medium mb-2">Data de Fundação</label>
+              <p-calendar 
+                id="dataFundacao"
+                [(ngModel)]="selectedSindicado.dataFundacao"
+                [readonlyInput]="sindicadoDialogMode === 'view'"
+                [disabled]="sindicadoDialogMode === 'view'"
+                dateFormat="dd/mm/yy"
+                placeholder="Selecione a data"
+                class="w-full">
+              </p-calendar>
+            </div>
+            <div class="form-field">
+              <label for="numeroAssociados" class="block text-sm font-medium mb-2">Número de Associados</label>
+              <input 
+                id="numeroAssociados"
+                type="number" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.numeroAssociados"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                min="0">
+            </div>
+          </div>
+
+          <!-- Linha 6: Área de Atuação (full width) -->
+          <div class="form-row">
+            <div class="form-field full-width">
+              <label for="areaAtuacao" class="block text-sm font-medium mb-2">Área de Atuação</label>
+              <input 
+                id="areaAtuacao"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.areaAtuacao"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                placeholder="Ex: Agricultura, Comércio, Serviços...">
+            </div>
+          </div>
+
+          <!-- Linha 7: Observações (full width) -->
+          <div class="form-row">
+            <div class="form-field full-width">
+              <label for="observacoes" class="block text-sm font-medium mb-2">Observações</label>
+              <textarea 
+                id="observacoes"
+                pInputTextarea 
+                [(ngModel)]="selectedSindicado.observacoes"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                rows="3"
+                placeholder="Informações adicionais...">
+              </textarea>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <!-- Aba: Endereço -->
+      <p-tabPanel header="Endereço">
+        <div class="form-grid">
+          <!-- Linha 1: CEP e Endereço -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="cep" class="block text-sm font-medium mb-2">CEP *</label>
+              <input 
+                id="cep"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.cep"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                placeholder="00000-000"
+                required
+                (blur)="buscarCep()">
+            </div>
+            <div class="form-field">
+              <label for="endereco" class="block text-sm font-medium mb-2">Endereço *</label>
+              <input 
+                id="endereco"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.endereco"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                required>
+            </div>
+          </div>
+
+          <!-- Linha 2: Número e Complemento -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="numero" class="block text-sm font-medium mb-2">Número *</label>
+              <input 
+                id="numero"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.numero"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                required>
+            </div>
+            <div class="form-field">
+              <label for="complemento" class="block text-sm font-medium mb-2">Complemento</label>
+              <input 
+                id="complemento"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.complemento"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full">
+            </div>
+          </div>
+
+          <!-- Linha 3: Bairro e Cidade -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="bairro" class="block text-sm font-medium mb-2">Bairro *</label>
+              <input 
+                id="bairro"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.bairro"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                required>
+            </div>
+            <div class="form-field">
+              <label for="cidade" class="block text-sm font-medium mb-2">Cidade *</label>
+              <input 
+                id="cidade"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.cidade"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                required>
+            </div>
+          </div>
+
+          <!-- Linha 4: Estado (full width) -->
+          <div class="form-row">
+            <div class="form-field full-width">
+              <label for="estado" class="block text-sm font-medium mb-2">Estado *</label>
+              <p-dropdown 
+                id="estado"
+                [options]="estadosOptions" 
+                [(ngModel)]="selectedSindicado.estado"
+                [disabled]="sindicadoDialogMode === 'view'"
+                placeholder="Selecione o estado"
+                class="w-full"
+                required>
+              </p-dropdown>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <!-- Aba: Dados Jurídicos -->
+      <p-tabPanel header="Dados Jurídicos">
+        <div class="form-grid">
+          <!-- Linha 1: Registro Sindical e Data do Registro -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="registroSindical" class="block text-sm font-medium mb-2">Registro Sindical</label>
+              <input 
+                id="registroSindical"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.registroSindical"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                placeholder="Número do registro sindical">
+            </div>
+            <div class="form-field">
+              <label for="dataRegistroSindical" class="block text-sm font-medium mb-2">Data do Registro</label>
+              <p-calendar 
+                id="dataRegistroSindical"
+                [(ngModel)]="selectedSindicado.dataRegistroSindical"
+                [readonlyInput]="sindicadoDialogMode === 'view'"
+                [disabled]="sindicadoDialogMode === 'view'"
+                dateFormat="dd/mm/yy"
+                placeholder="Selecione a data"
+                class="w-full">
+              </p-calendar>
+            </div>
+          </div>
+
+          <!-- Linha 2: Órgão de Registro (full width) -->
+          <div class="form-row">
+            <div class="form-field full-width">
+              <label for="orgaoRegistro" class="block text-sm font-medium mb-2">Órgão de Registro</label>
+              <input 
+                id="orgaoRegistro"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.orgaoRegistro"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                placeholder="Ex: Ministério do Trabalho, Justiça do Trabalho...">
+            </div>
+          </div>
+
+          <!-- Linha 3: Representante Legal e CPF -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="representanteLegal" class="block text-sm font-medium mb-2">Representante Legal *</label>
+              <input 
+                id="representanteLegal"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.representanteLegal"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                required>
+            </div>
+            <div class="form-field">
+              <label for="cpfRepresentante" class="block text-sm font-medium mb-2">CPF do Representante *</label>
+              <input 
+                id="cpfRepresentante"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.cpfRepresentante"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                placeholder="000.000.000-00"
+                required>
+            </div>
+          </div>
+
+          <!-- Linha 4: Cargo e Email do Representante -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="cargoRepresentante" class="block text-sm font-medium mb-2">Cargo do Representante</label>
+              <input 
+                id="cargoRepresentante"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.cargoRepresentante"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                placeholder="Ex: Presidente, Diretor...">
+            </div>
+            <div class="form-field">
+              <label for="emailRepresentante" class="block text-sm font-medium mb-2">E-mail do Representante</label>
+              <input 
+                id="emailRepresentante"
+                type="email" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.emailRepresentante"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                placeholder="email@exemplo.com">
+            </div>
+          </div>
+
+          <!-- Linha 5: Telefone do Representante (full width) -->
+          <div class="form-row">
+            <div class="form-field full-width">
+              <label for="telefoneRepresentante" class="block text-sm font-medium mb-2">Telefone do Representante</label>
+              <input 
+                id="telefoneRepresentante"
+                type="text" 
+                pInputText 
+                [(ngModel)]="selectedSindicado.telefoneRepresentante"
+                [readonly]="sindicadoDialogMode === 'view'"
+                class="w-full"
+                placeholder="(11) 99999-9999">
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <!-- Aba: Documentos Comprobatórios -->
+      <p-tabPanel header="Documentos Comprobatórios">
+        <div class="documentos-section">
+          <!-- Informações sobre documentos necessários -->
+          <div class="documentos-info mb-4">
+            <div class="info-card">
+              <div class="info-header">
+                <h4 class="text-lg font-semibold">Documentos Necessários</h4>
+              </div>
+              <div class="info-content">
+                <p class="text-sm text-600 mb-3">
+                  Para comprovar a legitimidade do sindicado/cooperativa, é necessário anexar os seguintes documentos:
+                </p>
+                <ul class="text-sm text-600 list-disc list-inside space-y-1">
+                  <li><strong>Estatuto:</strong> Documento que define as regras e objetivos da organização</li>
+                  <li><strong>Ata de Constituição:</strong> Documento que registra a criação da entidade</li>
+                  <li><strong>CNPJ:</strong> Comprovante de inscrição no Cadastro Nacional de Pessoa Jurídica</li>
+                  <li><strong>Alvará de Funcionamento:</strong> Licença para funcionamento da entidade</li>
+                  <li><strong>Outros:</strong> Documentos adicionais que comprovem a legitimidade</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Documentos Temporários (modo criação) -->
+          <div *ngIf="sindicadoDialogMode === 'create' && documentosTemporarios.length > 0" class="mb-4">
+            <p-card>
+              <ng-template pTemplate="header">
+                <div class="flex align-items-center p-3">
+                  <i class="pi pi-clock text-orange-500 mr-2"></i>
+                  <h4 class="m-0 text-orange-600">Documentos Pendentes de Anexo</h4>
+                </div>
+              </ng-template>
+              
+              <ng-template pTemplate="content">
+                <div class="grid">
+                  <div *ngFor="let docTemp of documentosTemporarios; let i = index" class="col-12">
+                    <p-card class="mb-3">
+                      <ng-template pTemplate="content">
+                        <div class="flex align-items-center justify-content-between">
+                          <div class="flex align-items-center flex-1">
+                            <i [class]="getFileIcon(docTemp.arquivo.name)" class="text-2xl mr-3 text-blue-500"></i>
+                            <div class="flex-1">
+                              <h5 class="m-0 mb-1">{{ docTemp.arquivo.name }}</h5>
+                              <div class="flex align-items-center gap-3 text-sm text-600">
+                                <span>{{ getTipoDocumentoLabel(docTemp.tipo) }}</span>
+                                <span>{{ formatarTamanho(docTemp.arquivo.size) }}</span>
+                                <p-tag value="Pendente" severity="warning" [rounded]="true"></p-tag>
+                                <p-tag 
+                                  *ngIf="docTemp.prioridade" 
+                                  [value]="getPrioridadeLabel(docTemp.prioridade)" 
+                                  severity="info" 
+                                  [rounded]="true">
+                                </p-tag>
+                              </div>
+                              <p *ngIf="docTemp.observacoes" class="text-sm text-600 mt-2 mb-0">
+                                {{ docTemp.observacoes }}
+                              </p>
+                            </div>
+                          </div>
+                          <p-button 
+                            icon="pi pi-trash" 
+                            class="p-button-text p-button-danger"
+                            (click)="removerDocumentoTemporario(i)"
+                            pTooltip="Remover documento">
+                          </p-button>
+                        </div>
+                      </ng-template>
+                    </p-card>
+                  </div>
+                </div>
+              </ng-template>
+            </p-card>
+          </div>
+
+          <div class="mb-4">
+            <p-card>
+              <ng-template pTemplate="header">
+                <div class="flex align-items-center p-3">
+                  <i class="pi pi-file text-blue-500 mr-2"></i>
+                  <h4 class="m-0 text-blue-600">Documentos Anexados</h4>
+                </div>
+              </ng-template>
+              
+              <ng-template pTemplate="content">
+                <div *ngIf="documentosComprobatorios.length === 0 && (sindicadoDialogMode !== 'create' || documentosTemporarios.length === 0)" class="text-center py-8 text-500">
+              <i class="pi pi-file text-4xl mb-3"></i>
+              <p>Nenhum documento anexado ainda</p>
+            </div>
+                
+            <div *ngIf="documentosComprobatorios.length > 0" class="grid">
+                  <div *ngFor="let documento of documentosComprobatorios" class="col-12">
+                    <p-card class="mb-3">
+                      <ng-template pTemplate="content">
+                        <div class="flex align-items-start justify-content-between">
+                          <div class="flex align-items-start flex-1">
+                            <i [class]="getFileIcon(documento.nome)" class="text-2xl mr-3 text-blue-500"></i>
+                            <div class="flex-1">
+                              <h5 class="m-0 mb-2">{{ documento.nome }}</h5>
+                              
+                              <div class="flex align-items-center gap-3 text-sm text-600 mb-2">
+                                <span>{{ getTipoDocumentoLabel(documento.tipo) }}</span>
+                                <span>{{ formatarTamanho(documento.tamanho) }}</span>
+                                <span>{{ formatarData(documento.dataUpload) }}</span>
+                    </div>
+                              
+                              <div class="flex align-items-center gap-2 mb-2">
+                                <p-tag 
+                                  [value]="getStatusLabel(documento.status)" 
+                                  [severity]="getStatusSeverity(documento.status)"
+                                  [rounded]="true">
+                                </p-tag>
+                                
+                                <p-tag 
+                                  *ngIf="documento.prioridade" 
+                                  [value]="getPrioridadeLabel(documento.prioridade)" 
+                                  severity="info" 
+                                  [rounded]="true">
+                                </p-tag>
+                      </div>
+                              
+                              <div *ngIf="documento.observacoes" class="text-sm text-600 mb-2">
+                                <i class="pi pi-comment mr-1"></i>
+                                {{ documento.observacoes }}
+                      </div>
+                              
+                              <div *ngIf="documento.dataVencimento" class="text-sm text-600 mb-2">
+                                <i class="pi pi-calendar mr-1"></i>
+                                Vence em: {{ formatarData(documento.dataVencimento) }}
+                    </div>
+                              
+                              <div *ngIf="documento.motivoRejeicao" class="text-sm text-red-600 mb-2">
+                                <i class="pi pi-exclamation-triangle mr-1"></i>
+                                {{ documento.motivoRejeicao }}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="flex flex-column gap-2">
+                      <p-button 
+                        icon="pi pi-eye" 
+                        class="p-button-text p-button-sm"
+                        pTooltip="Visualizar"
+                        (click)="visualizarDocumento(documento)">
+                      </p-button>
+                      <p-button 
+                        icon="pi pi-download" 
+                        class="p-button-text p-button-sm"
+                        pTooltip="Download"
+                        (click)="downloadDocumento(documento)">
+                      </p-button>
+                      <p-button 
+                        icon="pi pi-trash" 
+                        class="p-button-text p-button-sm p-button-danger"
+                        pTooltip="Remover"
+                        (click)="removerDocumento(documento)"
+                        *ngIf="sindicadoDialogMode !== 'view'">
+                      </p-button>
+                    </div>
+                  </div>
+                      </ng-template>
+                    </p-card>
+                    </div>
+                    </div>
+              </ng-template>
+            </p-card>
+          </div>
+
+          <!-- Upload de novos documentos -->
+          <div *ngIf="sindicadoDialogMode !== 'view'" class="upload-section">
+            <h4 class="text-lg font-semibold mb-3">Anexar Novo Documento</h4>
+            
+            <!-- Seleção de tipo de documento -->
+            <div class="grid mb-4">
+              <div class="col-12">
+                <label for="tipoDocumento" class="block text-sm font-medium mb-2">Tipo do Documento *</label>
+                <p-dropdown 
+                  id="tipoDocumento"
+                  [options]="tiposDocumentoOptions" 
+                  [(ngModel)]="novoDocumento.tipo"
+                  placeholder="Selecione o tipo de documento"
+                  class="w-full"
+                  optionLabel="label"
+                  [showClear]="true"
+                  (onChange)="onTipoDocumentoChange()">
+                  <ng-template pTemplate="selectedItem" let-option>
+                    <div *ngIf="option" class="flex align-items-center">
+                      <span>{{ option.label }}</span>
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="item" let-option>
+                    <div class="flex flex-column">
+                      <span class="font-semibold">{{ option.label }}</span>
+                      <small class="text-500">{{ option.description }}</small>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
+
+            <!-- Botão principal de anexo -->
+            <div class="main-upload-section mb-4">
+              <div class="upload-header">
+                <h5 class="text-lg font-semibold mb-2">Anexar Documentos Comprobatórios</h5>
+                <p class="text-sm text-gray-600 mb-4">Selecione o tipo de documento e anexe os arquivos necessários</p>
+              </div>
+
+              <!-- Botão principal destacado -->
+              <div class="main-upload-button">
+                <p-button 
+                  label="Anexar Arquivo" 
+                  icon="pi pi-paperclip"
+                  class="p-button-primary"
+                  (click)="triggerMainFileInput()"
+                  [disabled]="!novoDocumento.tipo">
+                </p-button>
+              </div>
+
+             
+              
+              <!-- Inputs de arquivo ocultos -->
+              <input 
+                #mainInput
+                type="file" 
+                style="display: none;"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.bmp,.tiff"
+                (change)="onFileInputChange($event, 'all')">
+              
+              <input 
+                #pdfInput
+                type="file" 
+                style="display: none;"
+                accept=".pdf"
+                (change)="onFileInputChange($event, 'pdf')">
+              
+              <input 
+                #imageInput
+                type="file" 
+                style="display: none;"
+                accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff"
+                (change)="onFileInputChange($event, 'image')">
+              
+              <input 
+                #wordInput
+                type="file" 
+                style="display: none;"
+                accept=".doc,.docx"
+                (change)="onFileInputChange($event, 'word')">
+              
+              <input 
+                #allInput
+                type="file" 
+                style="display: none;"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.bmp,.tiff"
+                (change)="onFileInputChange($event, 'all')">
+            </div>
+
+            <!-- Área de upload com drag-and-drop -->
+            <div class="upload-area" 
+                 [class.drag-over]="isDragOver"
+                 (dragover)="onDragOver($event)"
+                 (dragleave)="onDragLeave($event)"
+                 (drop)="onDrop($event)">
+              <div class="upload-content" *ngIf="!novoDocumento.arquivo">
+                <i class="pi pi-cloud-upload text-4xl text-blue-500 mb-3"></i>
+                <h5 class="text-lg font-semibold mb-2">Arraste e solte o arquivo aqui</h5>
+                <p class="text-600 mb-3">ou use o botão acima</p>
+                <div class="upload-info mt-3">
+                  <p class="text-sm text-500 mb-1">Formatos aceitos: PDF, DOC, DOCX, JPG, PNG, GIF</p>
+                  <p class="text-sm text-500">Tamanho máximo: 50MB</p>
+                </div>
+              </div>
+
+              <!-- Preview do arquivo selecionado -->
+              <div class="file-preview" *ngIf="novoDocumento.arquivo">
+                <div class="preview-content">
+                  <div class="file-icon">
+                    <i [class]="getFileIcon(novoDocumento.arquivo.name)"></i>
+                  </div>
+                  <div class="file-info">
+                    <h6 class="file-name">{{ novoDocumento.arquivo.name }}</h6>
+                    <p class="file-size">{{ formatarTamanho(novoDocumento.arquivo.size) }}</p>
+                    <p class="file-type">{{ getFileType(novoDocumento.arquivo.name) }}</p>
+                  </div>
+                  <div class="file-actions">
+                    <p-button 
+                      icon="pi pi-times" 
+                      class="p-button-text p-button-sm p-button-danger"
+                      pTooltip="Remover arquivo"
+                      (click)="removerArquivoSelecionado()">
+                    </p-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Campos adicionais para o documento -->
+            <div class="grid mt-4" *ngIf="novoDocumento.arquivo">
+              <div class="col-12 md:col-6">
+                <label for="observacoesDocumento" class="block text-sm font-medium mb-2">Observações</label>
+                <textarea 
+                  id="observacoesDocumento"
+                  pInputTextarea 
+                  [(ngModel)]="novoDocumento.observacoes"
+                  class="w-full"
+                  rows="2"
+                  placeholder="Informações adicionais sobre o documento...">
+                </textarea>
+              </div>
+              <div class="col-12 md:col-6">
+                <label for="dataVencimento" class="block text-sm font-medium mb-2">Data de Vencimento</label>
+                <p-calendar 
+                  id="dataVencimento"
+                  [(ngModel)]="novoDocumento.dataVencimento"
+                  dateFormat="dd/mm/yy"
+                  placeholder="Selecione a data (opcional)"
+                  class="w-full">
+                </p-calendar>
+              </div>
+              <div class="col-12 md:col-6">
+                <label for="prioridadeDocumento" class="block text-sm font-medium mb-2">Prioridade</label>
+                <p-dropdown 
+                  id="prioridadeDocumento"
+                  [options]="prioridadeOptions" 
+                  [(ngModel)]="novoDocumento.prioridade"
+                  placeholder="Selecione a prioridade"
+                  class="w-full">
+                </p-dropdown>
+              </div>
+            </div>
+
+            <!-- Botões de ação -->
+            <div class="flex gap-2 mt-4">
+              <p-button 
+                label="Anexar Documento" 
+                icon="pi pi-upload"
+                [disabled]="!novoDocumento.arquivo || !novoDocumento.tipo"
+                [loading]="uploadingDocumento"
+                (click)="anexarDocumento()">
+              </p-button>
+              <p-button 
+                label="Cancelar" 
+                icon="pi pi-times"
+                class="p-button-secondary"
+                (click)="cancelarUpload()">
+              </p-button>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times"
+        class="p-button-secondary"
+        (click)="showSindicadoDialog = false">
+      </p-button>
+      <p-button 
+        *ngIf="sindicadoDialogMode !== 'view'"
+        [label]="sindicadoDialogMode === 'create' ? 'Criar' : 'Salvar'" 
+        icon="pi pi-check"
+        (click)="salvarSindicado()">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- Dialog de Verificação -->
+<p-dialog 
+  [(visible)]="showVerificationDialog" 
+  header="Verificar Sindicado"
+  [modal]="true" 
+  [style]="{width: '400px'}"
+  [closable]="true">
+  
+  <div class="text-center">
+    <i class="pi pi-question-circle text-6xl text-yellow-500 mb-3"></i>
+    <h3 class="text-xl mb-3">Verificar Sindicado</h3>
+    <p class="text-600 mb-4">
+      Tem certeza que deseja verificar este sindicado? 
+      Esta ação não pode ser desfeita.
+    </p>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times"
+        class="p-button-secondary"
+        (click)="showVerificationDialog = false">
+      </p-button>
+      <p-button 
+        label="Verificar" 
+        icon="pi pi-check"
+        (click)="confirmarVerificacao()">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- Dialog de Importação -->
+<p-dialog 
+  [(visible)]="showImportDialog" 
+  header="Importar Advogados"
+  [modal]="true" 
+  [style]="{width: '500px'}"
+  [closable]="true">
+  
+  <div class="import-section">
+    <div class="mb-4">
+      <label class="block text-sm font-medium mb-2">Selecionar Arquivo</label>
+      <p-fileUpload 
+        mode="basic" 
+        name="arquivo"
+        accept=".csv,.xlsx,.xls"
+        maxFileSize="1000000"
+        (onSelect)="onFileSelect($event)"
+        chooseLabel="Escolher Arquivo"
+        class="w-full">
+      </p-fileUpload>
+    </div>
+    
+    <div class="import-info">
+      <h4 class="text-lg font-semibold mb-2">Formato do Arquivo</h4>
+      <p class="text-sm text-600 mb-2">
+        O arquivo deve conter as seguintes colunas:
+      </p>
+      <ul class="text-sm text-600 list-disc list-inside">
+        <li>Nome</li>
+        <li>E-mail</li>
+        <li>Telefone</li>
+        <li>OAB</li>
+        <li>Especialidades (separadas por vírgula)</li>
+      </ul>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times"
+        class="p-button-secondary"
+        (click)="showImportDialog = false">
+      </p-button>
+      <p-button 
+        label="Importar" 
+        icon="pi pi-upload"
+        [loading]="importLoading"
+        [disabled]="!importFile"
+        (click)="executarImportacao()">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- Dialogs de Gerenciamento -->
+<p-dialog 
+  [(visible)]="showAdvogadosDialog" 
+  header="Gerenciar Advogados"
+  [modal]="true" 
+  [style]="{width: '90vw', maxWidth: '1200px'}"
+  [closable]="true"
+  [maximizable]="true">
+  
+  <div *ngIf="selectedSindicado" class="advogados-management">
+    <!-- Header do Sindicado -->
+    <div class="mb-4 p-3 bg-blue-50 border-round">
+      <h3 class="text-xl font-semibold text-blue-700 m-0 mb-1">
+        {{ selectedSindicado.nome }}
+      </h3>
+      <p class="text-blue-600 m-0">
+        CNPJ: {{ selectedSindicado.cnpj }} | 
+        Tipo: {{ selectedSindicado.tipo === 'cooperativa' ? 'Cooperativa' : 'Sindicato' }}
+      </p>
+    </div>
+
+    <p-tabView>
+      <!-- Aba: Advogados Vinculados -->
+      <p-tabPanel header="Advogados Vinculados">
+        <div class="mb-3">
+          <div class="flex justify-content-between align-items-center mb-3">
+            <h4 class="m-0">Advogados Vinculados ({{ advogadosVinculados.length }})</h4>
+            <p-button 
+              label="Adicionar Advogado" 
+              icon="pi pi-user-plus"
+              class="p-button-primary"
+              (click)="abrirSelecaoAdvogados()">
+            </p-button>
+          </div>
+          
+          <div *ngIf="advogadosVinculados.length === 0" class="text-center py-6 text-500">
+            <i class="pi pi-users text-4xl mb-3"></i>
+            <p>Nenhum advogado vinculado ainda</p>
+          </div>
+          
+          <div *ngIf="advogadosVinculados.length > 0" class="grid">
+            <div *ngFor="let advogado of advogadosVinculados" class="col-12 md:col-6 lg:col-4">
+              <p-card>
+                <ng-template pTemplate="content">
+                  <div class="flex align-items-start justify-content-between">
+                    <div class="flex align-items-start flex-1">
+                      <i class="pi pi-user text-2xl mr-3 text-blue-500"></i>
+                      <div class="flex-1">
+                        <h5 class="m-0 mb-1">{{ advogado.nome }}</h5>
+                        <p class="text-sm text-600 mb-2">{{ advogado.email }}</p>
+                        <div class="flex align-items-center gap-2 mb-2">
+                          <p-tag 
+                            [value]="advogado.verificado ? 'Verificado' : 'Pendente'" 
+                            [severity]="advogado.verificado ? 'success' : 'warning'"
+                            [rounded]="true">
+                          </p-tag>
+                          <p-tag 
+                            [value]="'OAB ' + advogado.oab" 
+                            severity="info"
+                            [rounded]="true">
+                          </p-tag>
+                        </div>
+                        <div class="text-sm text-600">
+                          <i class="pi pi-briefcase mr-1"></i>
+                          {{ advogado.processosVinculados?.length || 0 }} processos
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex flex-column gap-1">
+                      <p-button 
+                        icon="pi pi-eye" 
+                        class="p-button-text p-button-sm"
+                        pTooltip="Ver Perfil"
+                        (click)="verPerfilAdvogado(advogado)">
+                      </p-button>
+                      <p-button 
+                        icon="pi pi-briefcase" 
+                        class="p-button-text p-button-sm"
+                        pTooltip="Gerenciar Processos"
+                        (click)="gerenciarProcessosAdvogado(advogado)">
+                      </p-button>
+                      <p-button 
+                        icon="pi pi-times" 
+                        class="p-button-text p-button-sm p-button-danger"
+                        pTooltip="Remover"
+                        (click)="removerAdvogado(advogado)">
+                      </p-button>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-card>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <!-- Aba: Buscar e Adicionar Advogados -->
+      <p-tabPanel header="Buscar Advogados">
+        <div class="mb-4">
+          <h4 class="mb-3">Buscar Advogados da Plataforma</h4>
+          
+          <!-- Filtros de Busca -->
+          <div class="grid mb-4">
+            <div class="col-12 md:col-6">
+              <label for="buscaAdvogado" class="block text-sm font-medium mb-2">Nome ou Email</label>
+              <input 
+                id="buscaAdvogado"
+                type="text" 
+                pInputText 
+                [(ngModel)]="filtroAdvogado.busca"
+                placeholder="Digite nome ou email do advogado"
+                class="w-full"
+                (input)="buscarAdvogados()">
+            </div>
+            <div class="col-12 md:col-3">
+              <label for="filtroStatus" class="block text-sm font-medium mb-2">Status</label>
+              <p-dropdown
+                id="filtroStatus"
+                [options]="statusAdvogadoOptions"
+                [(ngModel)]="filtroAdvogado.status"
+                placeholder="Todos"
+                class="w-full"
+                optionLabel="label"
+                optionValue="value"
+                (onChange)="buscarAdvogados()">
+              </p-dropdown>
+            </div>
+            <div class="col-12 md:col-3">
+              <label for="filtroVerificado" class="block text-sm font-medium mb-2">Verificação</label>
+              <p-dropdown
+                id="filtroVerificado"
+                [options]="verificacaoOptions"
+                [(ngModel)]="filtroAdvogado.verificado"
+                placeholder="Todos"
+                class="w-full"
+                optionLabel="label"
+                optionValue="value"
+                (onChange)="buscarAdvogados()">
+              </p-dropdown>
+            </div>
+          </div>
+
+          <!-- Lista de Advogados Encontrados -->
+          <div *ngIf="advogadosDisponiveis.length > 0" class="grid">
+            <div *ngFor="let advogado of advogadosDisponiveis" class="col-12">
+              <p-card>
+                <ng-template pTemplate="content">
+                  <div class="flex align-items-center justify-content-between">
+                    <div class="flex align-items-center flex-1">
+                      <i class="pi pi-user text-2xl mr-3 text-blue-500"></i>
+                      <div class="flex-1">
+                        <h5 class="m-0 mb-1">{{ advogado.nome }}</h5>
+                        <p class="text-sm text-600 mb-2">{{ advogado.email }}</p>
+                        <div class="flex align-items-center gap-2">
+                          <p-tag 
+                            [value]="advogado.verificado ? 'Verificado' : 'Pendente'" 
+                            [severity]="advogado.verificado ? 'success' : 'warning'"
+                            [rounded]="true">
+                          </p-tag>
+                          <p-tag 
+                            [value]="'OAB ' + advogado.oab" 
+                            severity="info"
+                            [rounded]="true">
+                          </p-tag>
+                          <span class="text-sm text-600">
+                            <i class="pi pi-briefcase mr-1"></i>
+                            {{ advogado.processosVinculados?.length || 0 }} processos
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex gap-2">
+                      <p-button 
+                        label="Vincular" 
+                        icon="pi pi-link"
+                        class="p-button-primary p-button-sm"
+                        (click)="vincularAdvogado(advogado)"
+                        [disabled]="isAdvogadoVinculado(advogado.id)">
+                      </p-button>
+                      <p-button 
+                        icon="pi pi-eye" 
+                        class="p-button-text p-button-sm"
+                        pTooltip="Ver Perfil"
+                        (click)="verPerfilAdvogado(advogado)">
+                      </p-button>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-card>
+            </div>
+          </div>
+
+          <div *ngIf="advogadosDisponiveis.length === 0 && !carregandoAdvogados" class="text-center py-6 text-500">
+            <i class="pi pi-search text-4xl mb-3"></i>
+            <p>Nenhum advogado encontrado</p>
+          </div>
+
+          <div *ngIf="carregandoAdvogados" class="text-center py-6">
+            <i class="pi pi-spin pi-spinner text-2xl text-blue-500"></i>
+            <p class="mt-2">Buscando advogados...</p>
+          </div>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+</p-dialog>
+
+<!-- Modal de Gerenciamento de Processos do Advogado -->
+<p-dialog 
+  [(visible)]="showProcessosAdvogadoDialog" 
+  header="Gerenciar Processos do Advogado"
+  [modal]="true" 
+  [style]="{width: '90vw', maxWidth: '1200px'}"
+  [closable]="true"
+  [maximizable]="true">
+  
+  <div *ngIf="selectedAdvogado && selectedSindicado" class="processos-advogado-management">
+    <!-- Header do Advogado e Sindicado -->
+    <div class="mb-4 p-3 bg-green-50 border-round">
+      <div class="flex justify-content-between align-items-start">
+        <div>
+          <h3 class="text-xl font-semibold text-green-700 m-0 mb-1">
+            {{ selectedAdvogado.nome }}
+          </h3>
+          <p class="text-green-600 m-0 mb-2">
+            OAB: {{ selectedAdvogado.oab }} | Email: {{ selectedAdvogado.email }}
+          </p>
+          <p class="text-green-600 m-0">
+            Sindicado: {{ selectedSindicado.nome }} ({{ selectedSindicado.cnpj }})
+          </p>
+        </div>
+        <div class="text-right">
+          <p class="text-sm text-600 m-0">Processos Vinculados</p>
+          <h4 class="text-2xl font-bold text-green-700 m-0">{{ processosAdvogado.length }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <p-tabView>
+      <!-- Aba: Processos Vinculados -->
+      <p-tabPanel header="Processos Vinculados">
+        <div class="mb-3">
+          <div class="flex justify-content-between align-items-center mb-3">
+            <h4 class="m-0">Processos Vinculados ao Sindicado ({{ processosAdvogado.length }})</h4>
+            <p-button 
+              label="Vincular Processo" 
+              icon="pi pi-plus"
+              class="p-button-primary"
+              (click)="buscarProcessos()">
+            </p-button>
+          </div>
+          
+          <div *ngIf="processosAdvogado.length === 0" class="text-center py-6 text-500">
+            <i class="pi pi-briefcase text-4xl mb-3"></i>
+            <p>Nenhum processo vinculado ainda</p>
+          </div>
+          
+          <div *ngIf="processosAdvogado.length > 0" class="grid">
+            <div *ngFor="let processo of processosAdvogado" class="col-12">
+              <p-card>
+                <ng-template pTemplate="content">
+                  <div class="flex align-items-start justify-content-between">
+                    <div class="flex align-items-start flex-1">
+                      <i class="pi pi-briefcase text-2xl mr-3 text-green-500"></i>
+                      <div class="flex-1">
+                        <h5 class="m-0 mb-1">{{ processo.numero }}</h5>
+                        <p class="text-sm text-600 mb-2">{{ processo.descricao }}</p>
+                        <div class="flex align-items-center gap-3 text-sm text-600 mb-2">
+                          <span><strong>Cliente:</strong> {{ processo.cliente }}</span>
+                          <span><strong>Tipo:</strong> {{ getTipoProcessoLabel(processo.tipo) }}</span>
+                          <span><strong>Valor:</strong> {{ formatarValor(processo.valor) }}</span>
+                        </div>
+                        <div class="flex align-items-center gap-2">
+                          <p-tag 
+                            [value]="getStatusProcessoLabel(processo.status)" 
+                            [severity]="getStatusProcessoSeverity(processo.status)"
+                            [rounded]="true">
+                          </p-tag>
+                          <span class="text-sm text-600">
+                            <i class="pi pi-calendar mr-1"></i>
+                            Início: {{ processo.dataInicio | date:'dd/MM/yyyy' }}
+                          </span>
+                          <span *ngIf="processo.dataFim" class="text-sm text-600">
+                            <i class="pi pi-calendar mr-1"></i>
+                            Fim: {{ processo.dataFim | date:'dd/MM/yyyy' }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex flex-column gap-1">
+                      <p-button 
+                        icon="pi pi-eye" 
+                        class="p-button-text p-button-sm"
+                        pTooltip="Ver Detalhes">
+                      </p-button>
+                      <p-button 
+                        icon="pi pi-times" 
+                        class="p-button-text p-button-sm p-button-danger"
+                        pTooltip="Desvincular"
+                        (click)="desvincularProcesso(processo)">
+                      </p-button>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-card>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+
+      <!-- Aba: Buscar e Vincular Processos -->
+      <p-tabPanel header="Buscar Processos">
+        <div class="mb-4">
+          <h4 class="mb-3">Buscar Processos do Advogado</h4>
+          
+          <!-- Filtros de Busca -->
+          <div class="grid mb-4">
+            <div class="col-12 md:col-4">
+              <label for="buscaProcesso" class="block text-sm font-medium mb-2">Número, Cliente ou Descrição</label>
+              <input 
+                id="buscaProcesso"
+                type="text" 
+                pInputText 
+                [(ngModel)]="filtroProcesso.busca"
+                placeholder="Digite para buscar"
+                class="w-full"
+                (input)="buscarProcessos()">
+            </div>
+            <div class="col-12 md:col-2">
+              <label for="filtroStatusProcesso" class="block text-sm font-medium mb-2">Status</label>
+              <p-dropdown
+                id="filtroStatusProcesso"
+                [options]="statusProcessoOptions"
+                [(ngModel)]="filtroProcesso.status"
+                placeholder="Todos"
+                class="w-full"
+                optionLabel="label"
+                optionValue="value"
+                (onChange)="buscarProcessos()">
+              </p-dropdown>
+            </div>
+            <div class="col-12 md:col-2">
+              <label for="filtroTipoProcesso" class="block text-sm font-medium mb-2">Tipo</label>
+              <p-dropdown
+                id="filtroTipoProcesso"
+                [options]="tipoProcessoOptions"
+                [(ngModel)]="filtroProcesso.tipo"
+                placeholder="Todos"
+                class="w-full"
+                optionLabel="label"
+                optionValue="value"
+                (onChange)="buscarProcessos()">
+              </p-dropdown>
+            </div>
+            <div class="col-12 md:col-2">
+              <label for="dataInicio" class="block text-sm font-medium mb-2">Data Início</label>
+              <p-calendar
+                id="dataInicio"
+                [(ngModel)]="filtroProcesso.dataInicio"
+                placeholder="Selecione"
+                class="w-full"
+                [showIcon]="true"
+                (onSelect)="buscarProcessos()">
+              </p-calendar>
+            </div>
+            <div class="col-12 md:col-2">
+              <label for="dataFim" class="block text-sm font-medium mb-2">Data Fim</label>
+              <p-calendar
+                id="dataFim"
+                [(ngModel)]="filtroProcesso.dataFim"
+                placeholder="Selecione"
+                class="w-full"
+                [showIcon]="true"
+                (onSelect)="buscarProcessos()">
+              </p-calendar>
+            </div>
+          </div>
+
+          <!-- Lista de Processos Encontrados -->
+          <div *ngIf="processosDisponiveis.length > 0" class="grid">
+            <div *ngFor="let processo of processosDisponiveis" class="col-12">
+              <p-card>
+                <ng-template pTemplate="content">
+                  <div class="flex align-items-center justify-content-between">
+                    <div class="flex align-items-center flex-1">
+                      <i class="pi pi-briefcase text-2xl mr-3 text-green-500"></i>
+                      <div class="flex-1">
+                        <h5 class="m-0 mb-1">{{ processo.numero }}</h5>
+                        <p class="text-sm text-600 mb-2">{{ processo.descricao }}</p>
+                        <div class="flex align-items-center gap-3 text-sm text-600">
+                          <span><strong>Cliente:</strong> {{ processo.cliente }}</span>
+                          <span><strong>Tipo:</strong> {{ getTipoProcessoLabel(processo.tipo) }}</span>
+                          <span><strong>Valor:</strong> {{ formatarValor(processo.valor) }}</span>
+                        </div>
+                        <div class="flex align-items-center gap-2 mt-2">
+                          <p-tag 
+                            [value]="getStatusProcessoLabel(processo.status)" 
+                            [severity]="getStatusProcessoSeverity(processo.status)"
+                            [rounded]="true">
+                          </p-tag>
+                          <span class="text-sm text-600">
+                            <i class="pi pi-calendar mr-1"></i>
+                            {{ processo.dataInicio | date:'dd/MM/yyyy' }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex gap-2">
+                      <p-button 
+                        label="Vincular" 
+                        icon="pi pi-link"
+                        class="p-button-primary p-button-sm"
+                        (click)="vincularProcesso(processo)"
+                        [disabled]="isProcessoVinculado(processo.id)">
+                      </p-button>
+                      <p-button 
+                        icon="pi pi-eye" 
+                        class="p-button-text p-button-sm"
+                        pTooltip="Ver Detalhes">
+                      </p-button>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-card>
+            </div>
+          </div>
+
+          <div *ngIf="processosDisponiveis.length === 0 && !carregandoProcessos" class="text-center py-6 text-500">
+            <i class="pi pi-search text-4xl mb-3"></i>
+            <p>Nenhum processo encontrado</p>
+          </div>
+
+          <div *ngIf="carregandoProcessos" class="text-center py-6">
+            <i class="pi pi-spin pi-spinner text-2xl text-green-500"></i>
+            <p class="mt-2">Buscando processos...</p>
+          </div>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+</p-dialog>
+
+<p-dialog 
+  [(visible)]="showProcessosDialog" 
+  header="Gerenciar Processos"
+  [modal]="true" 
+  [style]="{width: '90vw', height: '90vh'}"
+  [closable]="true"
+  [maximizable]="true">
+  
+  <app-gerenciar-processos 
+    [sindicadoId]="selectedSindicado?.id"
+    [sindicadoNome]="selectedSindicado?.nome">
+  </app-gerenciar-processos>
+</p-dialog>

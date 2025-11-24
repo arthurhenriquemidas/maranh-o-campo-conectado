@@ -1,0 +1,595 @@
+/* ===============================
+   HEADER ELEGANTE - ADVOGADO
+   Tema Pastel Jurídico Mobile First
+   =============================== */
+
+/* === VARIÁVEIS LOCAIS === */
+:host {
+  --search-primary: var(--primary-600);
+  --search-primary-light: var(--primary-100);
+  --search-accent: var(--brand-accent, #10b981);
+  --search-surface: var(--surface-0, #ffffff);
+  --search-surface-50: var(--surface-50, #fafbfc);
+  --search-surface-100: var(--surface-100, #f3f4f6);
+  --search-text: var(--text-color, #374151);
+  --search-text-muted: var(--text-color-muted, #9ca3af);
+  --search-border: var(--border-color, #d1d5db);
+  --search-border-light: var(--border-color-light, #e5e7eb);
+  --search-success: var(--success, #10b981);
+  --search-warning: var(--warning, #f59e0b);
+  --search-danger: var(--danger, #f87171);
+  
+  --search-radius: 12px;
+  --search-radius-lg: 16px;
+  --search-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --search-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --search-shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.12);
+  
+  --mobile-padding: 1rem;
+  --mobile-gap: 0.75rem;
+  --mobile-header-height: 60px;
+}
+
+/* === HEADER PRINCIPAL === */
+.elegant-header {
+  background: linear-gradient(135deg, var(--search-surface) 0%, var(--search-surface-50) 100%);
+  box-shadow: var(--search-shadow-lg);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--mobile-padding);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--mobile-header-height);
+  gap: 1rem;
+  position: relative;
+}
+
+/* === MOBILE MENU BUTTON === */
+.mobile-menu-btn {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  background: var(--search-surface-100);
+  border: 1px solid var(--search-border-light);
+  color: var(--search-text-muted);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: var(--search-primary-light);
+    border-color: var(--search-primary);
+    color: var(--search-primary);
+    transform: scale(1.05);
+  }
+}
+
+/* === BRAND/LOGO === */
+.header-brand {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.brand-icon {
+  font-size: 1.5rem;
+  color: var(--search-primary);
+  background: linear-gradient(135deg, var(--search-primary) 0%, var(--search-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 4px rgba(124, 58, 237, 0.2));
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--search-text);
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.brand-subtitle {
+  font-size: 0.625rem;
+  color: var(--search-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === NAVEGAÇÃO DESKTOP === */
+.header-nav {
+  display: none;
+}
+
+.desktop-only {
+  display: none;
+}
+
+:ng-deep .elegant-menubar {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+
+  .p-menubar-root-list {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    border: none !important;
+  }
+
+  .p-menuitem {
+    position: relative;
+    border: none !important;
+
+    .p-menuitem-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      color: var(--search-text);
+      font-weight: 500;
+      font-size: 0.9375rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      border: none !important;
+      outline: none !important;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, var(--search-primary-light) 0%, rgba(124, 58, 237, 0.1) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: var(--search-radius);
+      }
+
+      &:hover {
+        color: var(--search-primary);
+        transform: translateY(-1px);
+        box-shadow: var(--search-shadow);
+
+        &::before {
+          opacity: 1;
+        }
+      }
+
+      &.p-menuitem-link-active {
+        color: var(--search-primary);
+        background: var(--search-primary-light);
+        box-shadow: var(--search-shadow);
+
+        &::before {
+          opacity: 1;
+        }
+      }
+
+      .p-menuitem-icon {
+        font-size: 1rem;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover .p-menuitem-icon {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+/* === ÁREA DO USUÁRIO MOBILE === */
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-info {
+  display: none;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--search-primary) 0%, var(--search-accent) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.25rem;
+  box-shadow: var(--search-shadow);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--search-text);
+  font-size: 0.9375rem;
+  line-height: 1.2;
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: var(--search-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === AÇÕES DO USUÁRIO === */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+:ng-deep .user-actions {
+  .action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--search-surface-100);
+    border: 1px solid var(--search-border-light);
+    color: var(--search-text-muted);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+      background: var(--search-primary-light);
+      border-color: var(--search-primary);
+      color: var(--search-primary);
+      transform: translateY(-2px);
+      box-shadow: var(--search-shadow-lg);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    .p-button-icon {
+      font-size: 0.875rem;
+    }
+  }
+
+  .notification-btn {
+    position: relative;
+
+    .notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: var(--search-danger);
+      color: white;
+      font-size: 0.5rem;
+      font-weight: 700;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--search-surface);
+      animation: pulse 2s infinite;
+    }
+  }
+
+  .logout-btn {
+    &:hover {
+      background: var(--search-danger);
+      border-color: var(--search-danger);
+      color: white;
+    }
+  }
+}
+
+/* === MOBILE MENU OVERLAY === */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  background: var(--search-surface);
+  box-shadow: var(--search-shadow-xl);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+
+  .mobile-menu-overlay.active & {
+    transform: translateX(0);
+  }
+}
+
+.mobile-menu-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--search-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--search-surface-50);
+}
+
+.user-info-mobile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.close-menu-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background: var(--search-surface-100);
+  border: 1px solid var(--search-border-light);
+  color: var(--search-text-muted);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: var(--search-danger);
+    border-color: var(--search-danger);
+    color: white;
+  }
+}
+
+.mobile-menu-items {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.mobile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  color: var(--search-text);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+
+  &:hover {
+    background: var(--search-primary-light);
+    color: var(--search-primary);
+    border-left-color: var(--search-primary);
+  }
+
+  &.active {
+    background: var(--search-primary-light);
+    color: var(--search-primary);
+    border-left-color: var(--search-primary);
+  }
+
+  .menu-icon {
+    font-size: 1.25rem;
+    width: 24px;
+    text-align: center;
+  }
+
+  .menu-label {
+    font-weight: 500;
+    font-size: 1rem;
+  }
+}
+
+.mobile-menu-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--search-border-light);
+  background: var(--search-surface-50);
+}
+
+.mobile-logout-btn {
+  width: 100%;
+  background: var(--search-danger);
+  border-color: var(--search-danger);
+  color: white;
+  font-weight: 500;
+
+  &:hover {
+    background: #dc2626;
+    border-color: #dc2626;
+  }
+}
+
+/* === SOBRESCRITA FORÇADA DO TEMA PRIMENG === */
+:host ::ng-deep .elegant-menubar.p-menubar,
+:host ::ng-deep .elegant-menubar .p-menubar-root-list,
+:host ::ng-deep .elegant-menubar .p-menuitem,
+:host ::ng-deep .elegant-menubar .p-menuitem-link {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+:host ::ng-deep .elegant-menubar .p-menuitem-link:focus,
+:host ::ng-deep .elegant-menubar .p-menuitem-link:hover,
+:host ::ng-deep .elegant-menubar .p-menuitem-link:active {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* === ANIMAÇÕES === */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* === RESPONSIVIDADE === */
+
+/* Tablet */
+@media (min-width: 768px) {
+  .header-container {
+    padding: 0 1.5rem;
+    gap: 2rem;
+    min-height: 70px;
+  }
+
+  .mobile-menu-btn {
+    display: none;
+  }
+
+  .header-brand {
+    flex: none;
+    justify-content: flex-start;
+  }
+
+  .brand-logo {
+    gap: 0.75rem;
+  }
+
+  .brand-icon {
+    font-size: 2rem;
+  }
+
+  .brand-title {
+    font-size: 1.5rem;
+  }
+
+  .brand-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .header-nav {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    max-width: 600px;
+  }
+
+  .desktop-only {
+    display: block;
+  }
+
+  .header-user {
+    gap: 1rem;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: var(--search-surface-100);
+    border-radius: 50px;
+    border: 1px solid var(--search-border-light);
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--search-primary-light);
+      border-color: var(--search-primary);
+      transform: translateY(-1px);
+      box-shadow: var(--search-shadow);
+    }
+  }
+
+  .user-actions {
+    gap: 0.5rem;
+  }
+
+  :ng-deep .user-actions .action-btn {
+    width: 40px;
+    height: 40px;
+
+    .p-button-icon {
+      font-size: 1rem;
+    }
+  }
+
+  :ng-deep .user-actions .notification-btn .notification-badge {
+    width: 18px;
+    height: 18px;
+    font-size: 0.625rem;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .header-container {
+    padding: 0 1.5rem;
+  }
+
+  .brand-title {
+    font-size: 1.5rem;
+  }
+
+  .brand-subtitle {
+    font-size: 0.75rem;
+  }
+}
+
+/* Desktop Grande */
+@media (min-width: 1200px) {
+  .header-container {
+    padding: 0 2rem;
+  }
+}

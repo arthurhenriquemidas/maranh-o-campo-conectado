@@ -1,0 +1,462 @@
+<!-- Layout de Ajuda -->
+<div class="help-layout">
+  
+  <!-- Header Component -->
+  <app-shared-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-shared-header>
+
+  <!-- Breadcrumb -->
+  <!-- <div class="layout-breadcrumb">
+    <div class="container">
+      <p-breadcrumb 
+        [model]="breadcrumbItems" 
+        [home]="breadcrumbHome">
+      </p-breadcrumb>
+    </div>
+  </div> -->
+
+  <!-- Conteúdo Principal -->
+  <div class="layout-content">
+    <div class="container">
+      
+      <!-- Header da Página -->
+      <div class="page-header mb-6">
+        <div class="text-center">
+          <h1 class="text-4xl font-bold text-900 m-0 mb-3">
+            <i class="pi pi-question-circle mr-3 text-primary"></i>
+          Central de Ajuda
+        </h1>
+          <p class="text-xl text-600 mb-4">
+            Encontre respostas rápidas para suas dúvidas sobre a plataforma jurídica
+          </p>
+          
+          <!-- Busca Rápida -->
+          <div class="search-container">
+            <div class="p-input-icon-left w-full max-w-2xl mx-auto">
+              <i class="pi pi-search" style="padding-top: 15px;"></i>
+              <input 
+                type="text" 
+                pInputText 
+                placeholder="Digite sua dúvida aqui..."
+                class="w-full"
+                [(ngModel)]="buscaTexto"
+                (input)="filtrarConteudo()">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categorias Principais -->
+      <div class="categories-section mb-6">
+      <div class="grid">
+          <div class="col-12 md:col-3" *ngFor="let categoria of categorias">
+            <div class="category-card" (click)="filtrarPorCategoria(categoria.id)">
+              <div class="category-icon">
+                <i [class]="categoria.icon"></i>
+              </div>
+              <h3 class="category-title">{{ categoria.titulo }}</h3>
+              <p class="category-desc">{{ categoria.descricao }}</p>
+              <span class="category-count">{{ categoria.count }} tópicos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção Para Clientes -->
+      <div id="clientes" class="help-category-section" *ngIf="!filtroAtivo || filtroAtivo === 'clientes'">
+        <div class="section-header">
+          <h2 class="text-2xl font-bold text-center mb-4">
+            <i class="pi pi-user mr-2 text-primary"></i>
+            Para Clientes
+          </h2>
+          <div class="text-center mb-4" *ngIf="filtroAtivo">
+            <p-button 
+              label="Voltar ao Início" 
+              icon="pi pi-arrow-left"
+              class="p-button-outlined p-button-sm"
+              (click)="voltarAoInicio()">
+            </p-button>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-12 lg:col-8 mx-auto">
+            <p-card class="help-section-card">
+            <div class="help-topics">
+              
+              <div class="help-topic mb-4">
+                <h4 class="text-primary mb-2">
+                  <i class="pi pi-question-circle mr-2"></i>
+                  Como criar meu primeiro processo?
+                </h4>
+                <p class="text-color-secondary mb-3">
+                  1. Faça login em sua conta<br>
+                  2. Clique em "Novo Processo" no dashboard<br>
+                  3. Preencha o título e tipo do processo<br>
+                  4. Descreva sua situação com suas próprias palavras<br>
+                  5. Clique em "Criar Processo"
+                </p>
+                <p-button 
+                  label="Ver Passo a Passo" 
+                  icon="pi pi-play"
+                  class="p-button-sm p-button-outlined"
+                  (click)="mostrarTutorial('criar-processo')">
+                </p-button>
+              </div>
+
+              <div class="help-topic mb-4">
+                <h4 class="text-primary mb-2">
+                  <i class="pi pi-comments mr-2"></i>
+                  Como conversar com meu advogado?
+                </h4>
+                <p class="text-color-secondary mb-3">
+                  Após seu processo ser atribuído a um advogado, você poderá:
+                  • Enviar mensagens diretas via chat<br>
+                  • Anexar documentos necessários<br>
+                  • Acompanhar o progresso em tempo real
+                </p>
+              </div>
+
+              <div class="help-topic mb-4">
+                <h4 class="text-primary mb-2">
+                  <i class="pi pi-shield mr-2"></i>
+                  Meus dados estão seguros?
+                </h4>
+                <p class="text-color-secondary">
+                  Sim! Utilizamos criptografia de ponta e todos os advogados são verificados pela OAB. 
+                  Seus documentos ficam protegidos e apenas você e seu advogado têm acesso.
+                </p>
+              </div>
+            </div>
+          </p-card>
+          </div>
+        </div>
+        </div>
+
+      <!-- Seção Para Advogados -->
+      <div id="advogados" class="help-category-section" *ngIf="!filtroAtivo || filtroAtivo === 'advogados'">
+        <div class="section-header">
+          <h2 class="text-2xl font-bold text-center mb-4">
+            <i class="pi pi-briefcase mr-2 text-primary"></i>
+            Para Advogados
+          </h2>
+          <div class="text-center mb-4" *ngIf="filtroAtivo">
+            <p-button 
+              label="Voltar ao Início" 
+              icon="pi pi-arrow-left"
+              class="p-button-outlined p-button-sm"
+              (click)="voltarAoInicio()">
+            </p-button>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-12 lg:col-8 mx-auto">
+            <p-card class="help-section-card">
+            <div class="help-topics">
+              
+              <div class="help-topic mb-4">
+                <h4 class="text-primary mb-2">
+                  <i class="pi pi-user-plus mr-2"></i>
+                  Como me cadastrar como advogado?
+                </h4>
+                <p class="text-color-secondary mb-3">
+                  1. Clique em "Sou Advogado" na página inicial<br>
+                  2. Preencha seus dados profissionais<br>
+                  3. Envie foto do documento da OAB<br>
+                  4. Aguarde verificação (até 24h)<br>
+                  5. Comece a receber processos!
+                </p>
+              </div>
+
+              <div class="help-topic mb-4">
+                <h4 class="text-primary mb-2">
+                  <i class="pi pi-briefcase mr-2"></i>
+                  Como aceitar processos?
+                </h4>
+                <p class="text-color-secondary mb-3">
+                  Os processos são atribuídos automaticamente pelo admin baseado em:
+                  • Sua especialidade<br>
+                  • Disponibilidade<br>
+                  • Avaliação dos clientes
+                </p>
+              </div>
+
+              <div class="help-topic mb-4">
+                <h4 class="text-primary mb-2">
+                  <i class="pi pi-dollar mr-2"></i>
+                  Como funciona o pagamento?
+                </h4>
+                <p class="text-color-secondary">
+                  O valor é acordado com o cliente no início do processo. 
+                  O pagamento é processado pela plataforma após a conclusão aprovada pelo cliente.
+                </p>
+              </div>
+
+            </div>
+          </p-card>
+        </div>
+        </div>
+      </div>
+
+      <!-- Seção Pagamentos -->
+      <div id="pagamentos" class="help-category-section" *ngIf="!filtroAtivo || filtroAtivo === 'pagamentos'">
+        <h2 class="text-2xl font-bold text-center mb-4">
+          <i class="pi pi-credit-card mr-2 text-primary"></i>
+          Pagamentos
+        </h2>
+        <div class="grid">
+          <div class="col-12 lg:col-8 mx-auto">
+            <p-card class="help-section-card">
+              <div class="help-topics">
+                
+                <div class="help-topic mb-4">
+                  <h4 class="text-primary mb-2">
+                    <i class="pi pi-dollar mr-2"></i>
+                    Como funciona o pagamento?
+                  </h4>
+                  <p class="text-color-secondary mb-3">
+                    O pagamento é processado de forma segura através da plataforma. 
+                    O valor é acordado entre cliente e advogado, e a cobrança é feita após a conclusão do serviço.
+                  </p>
+                </div>
+
+                <div class="help-topic mb-4">
+                  <h4 class="text-primary mb-2">
+                    <i class="pi pi-calendar mr-2"></i>
+                    Quando recebo o pagamento?
+                  </h4>
+                  <p class="text-color-secondary mb-3">
+                    O pagamento é liberado após a aprovação do cliente sobre a conclusão do serviço. 
+                    O prazo para liberação é de até 5 dias úteis.
+                  </p>
+                </div>
+
+                <div class="help-topic mb-4">
+                  <h4 class="text-primary mb-2">
+                    <i class="pi pi-shield mr-2"></i>
+                    Meus dados bancários estão seguros?
+                  </h4>
+                  <p class="text-color-secondary">
+                    Sim! Utilizamos criptografia de ponta para proteger seus dados bancários. 
+                    Não armazenamos informações sensíveis em nossos servidores.
+                  </p>
+                </div>
+
+              </div>
+            </p-card>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção Segurança -->
+      <div id="seguranca" class="help-category-section" *ngIf="!filtroAtivo || filtroAtivo === 'seguranca'">
+        <h2 class="text-2xl font-bold text-center mb-4">
+          <i class="pi pi-shield mr-2 text-primary"></i>
+          Segurança
+        </h2>
+        <div class="grid">
+          <div class="col-12 lg:col-8 mx-auto">
+            <p-card class="help-section-card">
+              <div class="help-topics">
+                
+                <div class="help-topic mb-4">
+                  <h4 class="text-primary mb-2">
+                    <i class="pi pi-lock mr-2"></i>
+                    Como meus dados são protegidos?
+                  </h4>
+                  <p class="text-color-secondary mb-3">
+                    Utilizamos criptografia SSL/TLS de 256 bits para proteger todos os dados em trânsito. 
+                    Os documentos são armazenados em servidores seguros com criptografia de ponta a ponta.
+                  </p>
+                </div>
+
+                <div class="help-topic mb-4">
+                  <h4 class="text-primary mb-2">
+                    <i class="pi pi-briefcase mr-2"></i>
+                    Como verifico se meu advogado é confiável?
+                  </h4>
+                  <p class="text-color-secondary mb-3">
+                    Todos os advogados são verificados pela OAB antes de serem aprovados na plataforma. 
+                    Você pode verificar o número da OAB e as avaliações de outros clientes.
+                  </p>
+                </div>
+
+                <div class="help-topic mb-4">
+                  <h4 class="text-primary mb-2">
+                    <i class="pi pi-eye-slash mr-2"></i>
+                    Quem pode ver meus documentos?
+                  </h4>
+                  <p class="text-color-secondary">
+                    Apenas você e seu advogado têm acesso aos documentos do seu processo. 
+                    A plataforma não compartilha informações com terceiros sem sua autorização.
+                  </p>
+                </div>
+
+              </div>
+            </p-card>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultados da Busca -->
+      <div class="search-results mt-6" *ngIf="filtroAtivo === 'busca'">
+        <h2 class="text-2xl font-bold text-center mb-4">
+          <i class="pi pi-search mr-2"></i>
+          Resultados da Busca
+        </h2>
+        
+        <!-- Tópicos Encontrados -->
+        <div class="grid" *ngIf="topicosFiltrados.length > 0">
+          <div class="col-12 lg:col-8 mx-auto">
+            <p-card class="search-results-card">
+              <div class="search-results-content">
+                <h3 class="mb-3">
+                  <i class="pi pi-book mr-2"></i>
+                  Tópicos Encontrados ({{ topicosFiltrados.length }})
+                </h3>
+                <div class="search-topics">
+                  <div class="search-topic mb-3" *ngFor="let topico of topicosFiltrados">
+                    <h4 class="text-primary mb-2">
+                      <i class="pi pi-info-circle mr-2"></i>
+                      {{ topico.titulo }}
+                    </h4>
+                    <p class="text-color-secondary mb-2">{{ topico.descricao }}</p>
+                    <p-tag 
+                      [value]="getCategoriaLabel(topico.categoria)"
+                      [severity]="getCategoriaSeverity(topico.categoria)"
+                      class="mr-2">
+                    </p-tag>
+                  </div>
+                </div>
+              </div>
+            </p-card>
+          </div>
+        </div>
+
+        <!-- Nenhum resultado -->
+        <div class="grid" *ngIf="topicosFiltrados.length === 0 && faqsFiltrados.length === 0">
+          <div class="col-12 lg:col-8 mx-auto">
+            <p-card class="no-results-card">
+              <div class="text-center">
+                <i class="pi pi-search text-4xl text-gray-400 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-600 mb-2">
+                  Nenhum resultado encontrado
+                </h3>
+                <p class="text-gray-500 mb-4">
+                  Não encontramos resultados para "{{ buscaTexto }}". Tente usar palavras-chave diferentes.
+                </p>
+                <p-button 
+                  label="Limpar Busca" 
+                  icon="pi pi-times"
+                  size="small"
+                  [outlined]="true"
+                  (click)="limparBusca()">
+                </p-button>
+              </div>
+            </p-card>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção de Contato -->
+      <div class="contact-section mt-6">
+        <div class="grid">
+          <div class="col-12 lg:col-8 mx-auto">
+        <p-card class="contact-card">
+          <div class="text-center">
+                <div class="contact-header">
+                  <i class="pi pi-headphones text-4xl text-primary mb-3"></i>
+                  <h3 class="text-2xl font-bold text-900 mb-2">
+              Ainda precisa de ajuda?
+            </h3>
+              <p class="text-color-secondary mb-4">
+                      Nossa equipe de suporte está disponível para ajudá-lo
+              </p>
+            </div>
+            
+            <div class="grid">
+              <div class="col-12 md:col-4">
+                <div class="contact-method">
+                      <div class="contact-icon">
+                        <i class="pi pi-envelope"></i>
+                      </div>
+                  <h5 class="mb-1">E-mail</h5>
+                  <p class="text-color-secondary">suporte&#64;plataforma.com</p>
+                      <p-button 
+                        label="Enviar E-mail" 
+                        icon="pi pi-send"
+                        size="small"
+                        class="p-button-outlined mt-2"
+                        (click)="enviarEmail()">
+                      </p-button>
+                </div>
+              </div>
+              <div class="col-12 md:col-4">
+                <div class="contact-method">
+                      <div class="contact-icon">
+                        <i class="pi pi-phone"></i>
+                      </div>
+                  <h5 class="mb-1">Telefone</h5>
+                  <p class="text-color-secondary">(11) 99999-9999</p>
+                      <p-button 
+                        label="Ligar" 
+                        icon="pi pi-phone"
+                        size="small"
+                        class="p-button-outlined mt-2"
+                        (click)="ligar()">
+                      </p-button>
+                </div>
+              </div>
+              <div class="col-12 md:col-4">
+                <div class="contact-method">
+                      <div class="contact-icon">
+                        <i class="pi pi-comments"></i>
+                      </div>
+                      <h5 class="mb-1">Chat Online</h5>
+                      <p class="text-color-secondary">Disponível agora</p>
+                      <p-button 
+                        label="Iniciar Chat" 
+                        icon="pi pi-comments"
+                        size="small"
+                        class="p-button-primary mt-2"
+                        (click)="abrirChat()">
+                      </p-button>
+                </div>
+              </div>
+            </div>
+            
+              </div>
+            </p-card>
+          </div>
+        </div>
+      </div>
+
+      <!-- Links Úteis -->
+      <div class="useful-links mt-4">
+        <div class="grid">
+          <div class="col-12 md:col-6">
+            <p-button 
+              label="Perguntas Frequentes" 
+              icon="pi pi-question"
+              class="p-button-outlined w-full"
+              (click)="navegarPara('/shared/faq')">
+            </p-button>
+          </div>
+          <div class="col-12 md:col-6">
+            <p-button 
+              label="Termos de Uso" 
+              icon="pi pi-file"
+              class="p-button-outlined w-full"
+              (click)="mostrarTermos()">
+            </p-button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

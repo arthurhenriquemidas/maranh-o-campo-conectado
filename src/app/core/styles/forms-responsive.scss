@@ -1,0 +1,288 @@
+/**
+ * Estilos Responsivos para Formulários e Diálogos - Mobile First
+ */
+
+@import './breakpoints.scss';
+
+// Formulários responsivos
+.form-responsive {
+  @include form-responsive;
+  
+  // Grupos de campos em linha no desktop
+  .field-group {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+    
+    @include respond-above('md') {
+      grid-template-columns: 1fr 1fr;
+    }
+    
+    @include respond-above('lg') {
+      gap: 1.5rem;
+    }
+  }
+  
+  // Botões de ação responsivos
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    
+    @include respond-above('md') {
+      flex-direction: row;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+    
+    .p-button {
+      @include respond-above('md') {
+        width: auto;
+        min-width: 120px;
+      }
+    }
+    
+    // Botão primário primeiro no mobile
+    .p-button:not(.p-button-text):not(.p-button-outlined) {
+      order: -1;
+      
+      @include respond-above('md') {
+        order: 0;
+      }
+    }
+  }
+}
+
+// Labels responsivos
+.p-field {
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    
+    @include respond-above('md') {
+      margin-bottom: 0.75rem;
+    }
+    
+    // Asterisco para campos obrigatórios
+    .required-asterisk {
+      color: var(--red-500, #dc3545);
+      margin-left: 0.25rem;
+    }
+  }
+  
+  // Mensagens de erro
+  small.p-error {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--red-500, #dc3545);
+  }
+  
+  // Textos de ajuda
+  small.field-help {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--text-color-secondary, #6c757d);
+  }
+}
+
+// Inputs responsivos
+.input-responsive {
+  .p-inputtext,
+  .p-dropdown,
+  .p-calendar .p-inputtext,
+  .p-inputtextarea {
+    width: 100%;
+    font-size: 1rem;
+    
+    @include respond-above('md') {
+      font-size: 0.875rem;
+    }
+  }
+  
+  // Dropdowns com melhor UX mobile
+  .p-dropdown {
+    .p-dropdown-label {
+      padding: 0.75rem;
+      
+      @include respond-above('md') {
+        padding: 0.75rem;
+      }
+    }
+  }
+}
+
+// Diálogos responsivos
+.dialog-responsive {
+  @include respond-below('md') {
+    .p-dialog {
+      width: 95vw !important;
+      max-width: 95vw !important;
+      height: auto !important;
+      max-height: 90vh !important;
+      margin: 0 !important;
+      top: 5vh !important;
+      left: 2.5vw !important;
+      border-radius: 0.5rem;
+      
+      .p-dialog-header {
+        padding: 1rem;
+        border-bottom: 1px solid var(--surface-border);
+        
+        .p-dialog-title {
+          font-size: 1.125rem;
+        }
+        
+        .p-dialog-header-close {
+          width: 2rem;
+          height: 2rem;
+        }
+      }
+      
+      .p-dialog-content {
+        padding: 1rem;
+        max-height: calc(90vh - 140px);
+        overflow-y: auto;
+      }
+      
+      .p-dialog-footer {
+        padding: 1rem;
+        border-top: 1px solid var(--surface-border);
+        flex-direction: column-reverse;
+        gap: 0.75rem;
+        
+        .p-button {
+          width: 100%;
+          order: 1;
+          
+          &.p-button-text,
+          &.p-button-outlined {
+            order: 2;
+          }
+        }
+      }
+    }
+  }
+  
+  @include respond-above('md') {
+    .p-dialog {
+      max-width: 90vw;
+      
+      .p-dialog-content {
+        max-height: 70vh;
+        overflow-y: auto;
+      }
+    }
+  }
+}
+
+// Checkboxes e Radio buttons responsivos
+.checkbox-responsive,
+.radio-responsive {
+  .p-field-checkbox,
+  .p-field-radiobutton {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    
+    .p-checkbox,
+    .p-radiobutton {
+      margin-right: 0.75rem;
+    }
+    
+    label {
+      margin: 0;
+      cursor: pointer;
+      line-height: 1.4;
+    }
+  }
+}
+
+// Upload de arquivos responsivo
+.upload-responsive {
+  .p-fileupload {
+    @include respond-below('md') {
+      .p-fileupload-buttonbar {
+        flex-direction: column;
+        gap: 0.5rem;
+        
+        .p-button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+// Calendários responsivos
+.calendar-responsive {
+  .p-calendar {
+    width: 100%;
+    
+    @include respond-below('md') {
+      .p-datepicker {
+        width: 100vw !important;
+        left: 0 !important;
+        top: auto !important;
+        bottom: 0 !important;
+        border-radius: 0;
+        border: none;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+}
+
+// Autocomplete responsivo
+.autocomplete-responsive {
+  .p-autocomplete {
+    width: 100%;
+    
+    @include respond-below('md') {
+      .p-autocomplete-panel {
+        max-height: 50vh;
+        width: 100vw !important;
+        left: 0 !important;
+        border-radius: 0;
+      }
+    }
+  }
+}
+
+// Validação visual aprimorada
+.validation-enhanced {
+  .p-field {
+    position: relative;
+    
+    &.p-invalid {
+      .p-inputtext,
+      .p-dropdown,
+      .p-calendar .p-inputtext,
+      .p-inputtextarea {
+        border-color: var(--red-500, #dc3545);
+        
+        &:focus {
+          border-color: var(--red-500, #dc3545);
+          box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+      }
+    }
+    
+    &.p-valid {
+      .p-inputtext,
+      .p-dropdown,
+      .p-calendar .p-inputtext,
+      .p-inputtextarea {
+        border-color: var(--green-500, #28a745);
+        
+        &:focus {
+          border-color: var(--green-500, #28a745);
+          box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+      }
+    }
+  }
+}

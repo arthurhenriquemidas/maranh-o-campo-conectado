@@ -1,0 +1,661 @@
+<!-- Layout Admin -->
+<div class="admin-layout">
+  
+  <!-- Header Component -->
+  <app-admin-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-admin-header>
+
+  <!-- Breadcrumb -->
+  <!-- <div class="layout-breadcrumb p-3">
+    <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome"></p-breadcrumb>
+  </div> -->
+
+  <!-- Conteúdo Principal -->
+  <div class="layout-content p-4">
+    <!-- Header da Página -->
+    <!-- <div class="welcome-section mb-4">
+      <h1 class="text-3xl font-bold text-900 mb-2">
+        🛠️ Painel de Administração
+      </h1>
+      <p class="text-xl text-color-secondary">
+        Gerencie processos, usuários e monitore a plataforma.
+      </p>
+    </div> -->
+
+    <!-- Métricas Gerais -->
+    <div class="metrics-section mb-4">
+      <div class="metrics-header mb-3">
+        <h2 class="text-2xl font-bold text-900 m-0">
+          Métricas Gerais
+        </h2>
+        <p class="text-color-secondary m-0 mt-1">
+          Visão geral da plataforma em tempo real
+        </p>
+      </div>
+      
+      <div class="metrics-grid">
+        <!-- Total de Processos -->
+        <div class="metric-card metric-primary">
+          <div class="metric-content">
+            <div class="metric-icon">
+              <i class="pi pi-briefcase"></i>
+            </div>
+            <div class="metric-info">
+              <div class="metric-value">{{ metricas.totalProcessos || 0 }}</div>
+              <div class="metric-label">Total de Processos</div>
+              <div class="metric-trend">
+                <i class="pi pi-arrow-up text-green-500 mr-1"></i>
+                <span class="text-sm text-green-500">+12% este mês</span>
+              </div>
+            </div>
+          </div>
+          <div class="metric-chart">
+            <div class="mini-chart">
+              <div class="chart-bar" style="height: 60%"></div>
+              <div class="chart-bar" style="height: 80%"></div>
+              <div class="chart-bar" style="height: 45%"></div>
+              <div class="chart-bar" style="height: 90%"></div>
+              <div class="chart-bar" style="height: 70%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aguardando Atribuição -->
+        <div class="metric-card metric-warning">
+          <div class="metric-content">
+            <div class="metric-icon">
+              <i class="pi pi-clock"></i>
+            </div>
+            <div class="metric-info">
+              <div class="metric-value">{{ metricas.processosDisponiveis || 0 }}</div>
+              <div class="metric-label">Aguardando Atribuição</div>
+              <div class="metric-trend">
+                <i class="pi pi-exclamation-triangle text-orange-500 mr-1"></i>
+                <span class="text-sm text-orange-500">Ação necessária</span>
+              </div>
+            </div>
+          </div>
+          <div class="metric-chart">
+            <div class="mini-chart">
+              <div class="chart-bar" style="height: 30%"></div>
+              <div class="chart-bar" style="height: 50%"></div>
+              <div class="chart-bar" style="height: 20%"></div>
+              <div class="chart-bar" style="height: 70%"></div>
+              <div class="chart-bar" style="height: 40%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advogados Ativos -->
+        <div class="metric-card metric-info">
+          <div class="metric-content">
+            <div class="metric-icon">
+              <i class="pi pi-users"></i>
+            </div>
+            <div class="metric-info">
+              <div class="metric-value">{{ metricas.totalAdvogados || 0 }}</div>
+              <div class="metric-label">Advogados Ativos</div>
+              <div class="metric-trend">
+                <i class="pi pi-arrow-up text-blue-500 mr-1"></i>
+                <span class="text-sm text-blue-500">+5% este mês</span>
+              </div>
+            </div>
+          </div>
+          <div class="metric-chart">
+            <div class="mini-chart">
+              <div class="chart-bar" style="height: 80%"></div>
+              <div class="chart-bar" style="height: 60%"></div>
+              <div class="chart-bar" style="height: 90%"></div>
+              <div class="chart-bar" style="height: 75%"></div>
+              <div class="chart-bar" style="height: 85%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clientes Cadastrados -->
+        <div class="metric-card metric-success">
+          <div class="metric-content">
+            <div class="metric-icon">
+              <i class="pi pi-user"></i>
+            </div>
+            <div class="metric-info">
+              <div class="metric-value">{{ metricas.totalClientes || 0 }}</div>
+              <div class="metric-label">Clientes Cadastrados</div>
+              <div class="metric-trend">
+                <i class="pi pi-arrow-up text-green-500 mr-1"></i>
+                <span class="text-sm text-green-500">+18% este mês</span>
+              </div>
+            </div>
+          </div>
+          <div class="metric-chart">
+            <div class="mini-chart">
+              <div class="chart-bar" style="height: 70%"></div>
+              <div class="chart-bar" style="height: 85%"></div>
+              <div class="chart-bar" style="height: 60%"></div>
+              <div class="chart-bar" style="height: 95%"></div>
+              <div class="chart-bar" style="height: 80%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Principal - 3 Colunas -->
+    <div class="grid mb-4">
+      <!-- Ações Rápidas -->
+      <div class="col-12 md:col-4" style="height: 100%;">
+        <p-card header="Ações Rápidas" class="quick-actions-card">
+          <div class="dashboard-section">
+            <div class="mb-3">
+              <p-button 
+                label="Processos Aguardando" 
+                icon="pi pi-clock"
+                class="p-button-warning w-full p-button-lg"
+                [badge]="metricas.processosDisponiveis > 0 ? metricas.processosDisponiveis.toString() : ''"
+                (click)="navegarPara('/admin/processos-disponiveis')">
+              </p-button>
+            </div>
+            <div class="mb-3">
+              <p-button 
+                label="Gerenciar Usuários" 
+                icon="pi pi-users"
+                class="p-button-info w-full p-button-lg"
+                (click)="navegarPara('/admin/usuarios')">
+              </p-button>
+            </div>
+          </div>
+          
+          <div class="help-text mt-3">
+            <i class="pi pi-info-circle text-primary mr-2"></i>
+            <span class="text-color-secondary">
+              Atribua processos rapidamente para manter a operação fluindo.
+            </span>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Alertas e Notificações -->
+      <div class="col-12 md:col-4">
+        <p-card header="Alertas" class="alerts-card">
+          <div *ngIf="alertas.length > 0">
+            <div *ngFor="let alerta of alertas" class="alert-item mb-3">
+              <div class="flex align-items-start">
+                <i [class]="alerta.icon" [class.text-red-500]="alerta.tipo === 'critico'" 
+                   [class.text-orange-500]="alerta.tipo === 'aviso'" class="mr-2 mt-1"></i>
+                <div class="flex-1">
+                  <p class="m-0 font-medium">{{ alerta.titulo }}</p>
+                  <small class="text-color-secondary">{{ alerta.descricao }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div *ngIf="alertas.length === 0" class="text-center text-color-secondary">
+            <i class="pi pi-check-circle text-4xl mb-2 text-green-500"></i>
+            <p>Tudo funcionando perfeitamente!</p>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Processos Aguardando Atribuição -->
+      <div class="col-12 md:col-8">
+        <p-card header="Processos Aguardando Atribuição" class="recent-processes-card">
+          <p-toolbar class="mb-3">
+            <ng-template pTemplate="left">
+              <span class="font-medium text-sm">
+                {{ processosDisponiveis.length }} processos
+              </span>
+            </ng-template>
+            <ng-template pTemplate="right">
+              <p-button 
+                label="Ver Todos" 
+                icon="pi pi-external-link"
+                class="p-button-outlined p-button-sm"
+                (click)="navegarPara('/admin/processos-disponiveis')">
+              </p-button>
+            </ng-template>
+          </p-toolbar>
+
+          <div *ngIf="loading" class="grid">
+            <div *ngFor="let item of [1,2,3]" class="col-12">
+              <div class="flex align-items-center p-2 border-bottom-1 surface-border">
+                <p-skeleton shape="circle" size="2rem" class="mr-2"></p-skeleton>
+                <div class="flex-1">
+                  <p-skeleton width="100%" height="0.8rem" class="mb-1"></p-skeleton>
+                  <p-skeleton width="75%" height="0.6rem"></p-skeleton>
+                </div>
+                <p-skeleton width="4rem" height="2rem"></p-skeleton>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!loading">
+            <div *ngIf="processosDisponiveis.length > 0">
+              <div *ngFor="let processo of processosDisponiveis.slice(0, 3)" class="processo-item p-2 border-bottom-1 surface-border">
+                <div class="flex align-items-center justify-content-between">
+                  <div class="flex-1">
+                    <h5 class="m-0 mb-1 text-sm">{{ processo.titulo }}</h5>
+                    <p class="m-0 text-color-secondary mb-1 text-xs">{{ processo.descricao }}</p>
+                    <div class="flex align-items-center">
+                      <p-tag 
+                        [value]="getTipoLabel(processo.tipo)" 
+                        severity="info"
+                        class="mr-1 text-xs">
+                      </p-tag>
+                      <span class="text-xs text-color-secondary">
+                        {{ processo.dataCriacao | date:'dd/MM' }}
+                      </span>
+                      <p-tag 
+                        [value]="getUrgenciaLabel(processo.urgencia)"
+                        [severity]="getUrgenciaSeverity(processo.urgencia)"
+                        class="ml-1 text-xs">
+                      </p-tag>
+                    </div>
+                  </div>
+                  <div class="flex align-items-center">
+                    <p-button 
+                      label="Atribuir" 
+                      icon="pi pi-user-plus"
+                      class="p-button-success p-button-sm"
+                      (click)="abrirDialogAtribuicao(processo)">
+                    </p-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="processosDisponiveis.length === 0" class="empty-state text-center p-3">
+              <i class="pi pi-check-circle text-4xl text-green-500 mb-2"></i>
+              <h4 class="text-color-secondary mb-2 text-sm">Todos atribuídos!</h4>
+              <p class="text-color-secondary text-xs">
+                Não há processos aguardando.
+              </p>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div>
+    <!-- Indicadores de Performance Financeira -->
+    <div class="financial-section mb-4">
+      <!-- <h2 class="text-2xl font-bold text-900 mb-4">
+        Indicadores de Performance Financeira
+      </h2> -->
+      
+      <div class="financial-metrics-grid mb-4">
+        <div class="financial-card revenue-card">
+          <div class="card-content">
+            <div class="card-icon">
+              <i class="pi pi-dollar"></i>
+            </div>
+            <div class="card-info">
+              <h3 class="card-value">
+                {{ formatCurrency(financialMetrics.receitaTotal) }}
+              </h3>
+              <p class="card-label">Receita Total</p>
+              <small class="card-description">
+                <i class="pi pi-arrow-up"></i>
+                {{ financialMetrics.processosConcluidos }} processos concluídos
+              </small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="financial-card current-month-card">
+          <div class="card-content">
+            <div class="card-icon">
+              <i class="pi pi-chart-bar"></i>
+            </div>
+            <div class="card-info">
+              <h3 class="card-value">
+                {{ formatCurrency(financialMetrics.receitaMesAtual) }}
+              </h3>
+              <p class="card-label">Mês Atual</p>
+              <small class="card-description">
+                <i class="pi pi-calendar"></i>
+                {{ getCurrentMonthName() }}
+              </small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="financial-card projection-card">
+          <div class="card-content">
+            <div class="card-icon">
+              <i class="pi pi-chart-line"></i>
+            </div>
+            <div class="card-info">
+              <h3 class="card-value">
+                {{ formatCurrency(financialMetrics.receitaProjetada) }}
+              </h3>
+              <p class="card-label">Projeção</p>
+              <small class="card-description">
+                <i class="pi pi-trending-up"></i>
+                Baseada em processos em andamento
+              </small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="financial-card rate-card">
+          <div class="card-content">
+            <div class="card-icon">
+              <i class="pi pi-percentage"></i>
+            </div>
+            <div class="card-info">
+              <h3 class="card-value">
+                {{ (financialMetrics.taxaPlataforma * 100) }}%
+              </h3>
+              <p class="card-label">Taxa da Plataforma</p>
+              <small class="card-description">
+                <i class="pi pi-percentage"></i>
+                Por processo finalizado
+              </small>
+            </div>
+          </div>
+        </div>
+      </div> 
+      
+      <div class="grid mb-4">
+        <div class="col-12 lg:col-8">
+          <p-card header="Receita Mensal e Projeção">
+            <p-chart 
+              type="line" 
+              [data]="chartProjecaoReceita" 
+              [options]="chartOptions"
+              [width]="'100%'"
+              [height]="'350px'">
+            </p-chart>
+          </p-card>
+        </div>
+        
+        <div class="col-12 lg:col-4">
+          <p-card header="Performance Financeira">
+            <p-chart 
+              type="doughnut" 
+              [data]="chartPerformanceFinanceira" 
+              [options]="chartOptions"
+              [width]="'100%'"
+              [height]="'350px'">
+            </p-chart>
+          </p-card>
+        </div>
+      </div>
+      <div class="col-12">
+        <p-card header="Tendência de Receita (Últimos 6 Meses)">
+          <p-chart 
+            type="line" 
+            [data]="chartReceitaMensal" 
+            [options]="chartOptions"
+            [width]="'100%'"
+            [height]="'300px'">
+          </p-chart>
+        </p-card>
+      </div> 
+      
+     <div class="processes-dashboard mb-4">
+        <div class="dashboard-header mb-4">
+          <h2 class="text-2xl font-bold text-900 m-0">
+            Análise de Processos por Data
+          </h2>
+          <p class="text-color-secondary m-0 mt-1">
+            Visão temporal dos processos por status e tipo
+          </p>
+        </div>
+        
+        <div class="dashboard-content">
+          <div class="filters-section mb-4">
+              <div class="flex align-items-center justify-content-between flex-wrap gap-3">
+                <div class="flex align-items-center gap-3">
+                  <label class="font-medium">Período:</label>
+                  <p-dropdown 
+                    [options]="periodOptions" 
+                    [(ngModel)]="selectedPeriod"
+                    (onChange)="onPeriodChange()"
+                    placeholder="Selecione o período"
+                    class="w-12rem">
+                  </p-dropdown>
+                </div>
+                
+                <div class="flex align-items-center gap-3">
+                  <label class="font-medium">Agrupar por:</label>
+                  <p-dropdown 
+                    [options]="groupByOptions" 
+                    [(ngModel)]="selectedGroupBy"
+                    (onChange)="onGroupByChange()"
+                    placeholder="Selecione o agrupamento"
+                    class="w-12rem">
+                  </p-dropdown>
+                </div>
+                
+                <p-button 
+                  label="Atualizar" 
+                  icon="pi pi-refresh"
+                  class="p-button-outlined"
+                  (click)="refreshProcessData()">
+                </p-button>
+              </div>
+          </div>
+          
+          <div class="metrics-summary mb-4">
+            <div class="grid">
+              <div class="col-12 md:col-3">
+                <div class="summary-card summary-total">
+                  <div class="summary-icon">
+                    <i class="pi pi-briefcase"></i>
+                  </div>
+                  <div class="summary-content">
+                    <div class="summary-value">{{ getTotalProcesses() }}</div>
+                    <div class="summary-label">Total de Processos</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-12 md:col-3">
+                <div class="summary-card summary-active">
+                  <div class="summary-icon">
+                    <i class="pi pi-play-circle"></i>
+                  </div>
+                  <div class="summary-content">
+                    <div class="summary-value">{{ getActiveProcesses() }}</div>
+                    <div class="summary-label">Em Andamento</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-12 md:col-3">
+                <div class="summary-card summary-completed">
+                  <div class="summary-icon">
+                    <i class="pi pi-check-circle"></i>
+                  </div>
+                  <div class="summary-content">
+                    <div class="summary-value">{{ getCompletedProcesses() }}</div>
+                    <div class="summary-label">Concluídos</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-12 md:col-3">
+                <div class="summary-card summary-pending">
+                  <div class="summary-icon">
+                    <i class="pi pi-clock"></i>
+                  </div>
+                  <div class="summary-content">
+                    <div class="summary-value">{{ getPendingProcesses() }}</div>
+                    <div class="summary-label">Pendentes</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="charts-section">
+            <div class="grid">
+              <div class="col-12">
+                <p-card header="Evolução Temporal dos Processos">
+                  <div class="chart-container">
+                    <p-chart 
+                      type="line" 
+                      [data]="chartProcessosPorData" 
+                      [options]="chartOptionsLine"
+                      [width]="'100%'"
+                      [height]="'400px'">
+                    </p-chart>
+                  </div>
+                </p-card>
+              </div>
+            </div>
+            <div class="grid mt-4">
+              <div class="col-12">
+                <p-card header="Processos por Tipo e Data">
+                  <div class="chart-container">
+                    <p-chart 
+                      type="bar" 
+                      [data]="chartProcessosTipoData" 
+                      [options]="chartOptionsBar"
+                      [width]="'100%'"
+                      [height]="'350px'">
+                    </p-chart>
+                  </div>
+                </p-card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> 
+      
+      <!-- Insights Financeiros -->
+       <div class="col-12">
+        <p-card header="Insights Financeiros" class="insights-card">
+          <div class="insights-grid">
+            <div class="insight-item">
+              <div class="insight-icon">
+                <i class="pi pi-trending-up text-green-500"></i>
+              </div>
+              <div class="insight-content">
+                <h4 class="insight-title">Crescimento Mensal</h4>
+                <p class="insight-value text-green-600">+{{ getGrowthPercentage() }}%</p>
+                <p class="insight-description">Comparado ao mês anterior</p>
+              </div>
+            </div>
+            
+            <div class="insight-item">
+              <div class="insight-icon">
+                <i class="pi pi-chart-pie text-blue-500"></i>
+              </div>
+              <div class="insight-content">
+                <h4 class="insight-title">Ticket Médio</h4>
+                <p class="insight-value text-blue-600">{{ formatCurrency(financialMetrics.valorMedioProcesso) }}</p>
+                <p class="insight-description">Por processo concluído</p>
+              </div>
+            </div>
+            
+            <div class="insight-item">
+              <div class="insight-icon">
+                <i class="pi pi-calendar text-orange-500"></i>
+              </div>
+              <div class="insight-content">
+                <h4 class="insight-title">Projeção 6 Meses</h4>
+                <p class="insight-value text-orange-600">{{ formatCurrency(getProjected6Months()) }}</p>
+                <p class="insight-description">Baseada em tendências atuais</p>
+              </div>
+            </div>
+            
+            <div class="insight-item">
+              <div class="insight-icon">
+                <i class="pi pi-percentage text-info"></i>
+              </div>
+              <div class="insight-content">
+                <h4 class="insight-title">Taxa de Conversão</h4>
+                <p class="insight-value text-primary">{{ getConversionRate() }}%</p>
+                <p class="insight-description">Processos concluídos vs. total</p>
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div>
+ 
+
+
+  </div>
+
+<!-- Dialog Atribuir Processo -->
+<p-dialog 
+  header="Atribuir Processo" 
+  [(visible)]="showAtribuicaoDialog" 
+  [modal]="true"
+  [responsive]="true" 
+  [style]="{width: '50vw', minWidth: '300px'}">
+  
+  <div *ngIf="processoSelecionado">
+    <h4 class="mb-3">{{ processoSelecionado.titulo }}</h4>
+    <p class="text-color-secondary mb-4">{{ processoSelecionado.descricao }}</p>
+    
+    <div class="field">
+      <label for="advogado" class="block text-900 font-medium mb-2">
+        Selecionar Advogado <span class="text-red-500">*</span>
+      </label>
+      <p-dropdown 
+        id="advogado"
+        [options]="advogadosDisponiveis" 
+        [(ngModel)]="advogadoSelecionado"
+        name="advogadoSelecionado"
+        placeholder="Escolha um advogado..."
+        optionLabel="nome"
+        optionValue="id"
+        class="w-full">
+        <ng-template pTemplate="selectedItem" let-advogado>
+          <div class="flex align-items-center">
+            <p-avatar 
+              [label]="getInitials(advogado.nome)" 
+              size="normal" 
+              class="mr-2">
+            </p-avatar>
+            <div>
+              <div class="font-medium">{{ advogado.nome }}</div>
+              <div class="text-sm text-color-secondary">{{ advogado.especialidades?.join(', ') }}</div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="item" let-advogado>
+          <div class="flex align-items-center">
+            <p-avatar 
+              [label]="getInitials(advogado.nome)" 
+              size="normal" 
+              class="mr-2">
+            </p-avatar>
+            <div>
+              <div class="font-medium">{{ advogado.nome }}</div>
+              <div class="text-sm text-color-secondary">
+                {{ advogado.oab }} • {{ advogado.especialidades?.join(', ') }}
+              </div>
+              <div class="text-sm text-green-600">
+                 {{ advogado.avaliacaoMedia }}/5 • {{ advogado.totalProcessos }} processos
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <p-button 
+      label="Cancelar" 
+      icon="pi pi-times" 
+      class="p-button-text"
+      (click)="cancelarAtribuicao()">
+    </p-button>
+    <p-button 
+      label="Atribuir Processo" 
+      icon="pi pi-check" 
+      [loading]="atribuindoProcesso"
+      [disabled]="!advogadoSelecionado"
+      (click)="confirmarAtribuicao()">
+    </p-button>
+  </ng-template>
+</p-dialog>

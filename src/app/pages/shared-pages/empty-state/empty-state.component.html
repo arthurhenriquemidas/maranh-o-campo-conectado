@@ -1,0 +1,20 @@
+﻿<p-card class="empty-state" role="status" aria-live="polite">
+  <div class="empty-state__icon" aria-hidden="true">
+    <i [class]="icon"></i>
+  </div>
+  <h3 class="empty-state__title">{{ titleKey }}</h3>
+  <p class="empty-state__description">{{ descriptionKey }}</p>
+  <div class="empty-state__actions" *ngIf="displayAction && actionLabelKey">
+    <p-button
+      pButton
+      type="button"
+      [label]="actionLabelKey"
+      [icon]="actionIcon"
+      [severity]="actionSeverity"
+      [routerLink]="actionRouterLink"
+      (click)="handleClick()"
+      class="empty-state__button"
+      aria-live="assertive"
+    ></p-button>
+  </div>
+</p-card>

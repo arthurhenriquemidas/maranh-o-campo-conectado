@@ -1,0 +1,321 @@
+<!-- Gerenciamento de Processos do Sindicado -->
+<div class="gerenciar-processos">
+  
+  <!-- Header -->
+  <div class="header-section mb-4">
+    <div class="flex justify-content-between align-items-center">
+      <div>
+        <h2 class="text-2xl font-bold text-900 m-0 mb-2">
+          Gerenciar Processos - {{ sindicadoNome }}
+        </h2>
+        <p class="text-600 m-0">
+          Vincule processos ao sindicado e gerencie alterações
+        </p>
+      </div>
+      <p-button 
+        label="Vincular Processo" 
+        icon="pi pi-plus"
+        class="p-button-primary"
+        (click)="abrirDialogVincular()">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters-section mb-4">
+    <p-card>
+      <div class="grid">
+        <div class="col-12 md:col-4">
+          <label for="status" class="block text-sm font-medium mb-2">Status</label>
+          <p-dropdown 
+            id="status"
+            [options]="statusOptions" 
+            [(ngModel)]="statusFiltro"
+            placeholder="Selecione o status"
+            class="w-full">
+          </p-dropdown>
+        </div>
+        <div class="col-12 md:col-4">
+          <label for="tipoProcesso" class="block text-sm font-medium mb-2">Tipo de Processo</label>
+          <p-dropdown 
+            id="tipoProcesso"
+            [options]="tipoProcessoOptions" 
+            [(ngModel)]="tipoProcessoFiltro"
+            placeholder="Selecione o tipo"
+            class="w-full">
+          </p-dropdown>
+        </div>
+        <div class="col-12 md:col-4">
+          <div class="flex gap-2 mt-4">
+            <p-button 
+              label="Filtrar" 
+              icon="pi pi-search"
+              (click)="aplicarFiltros()">
+            </p-button>
+            <p-button 
+              label="Limpar" 
+              icon="pi pi-times"
+              class="p-button-secondary"
+              (click)="limparFiltros()">
+            </p-button>
+          </div>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- Lista de Processos Vinculados -->
+  <div class="processos-section">
+    <p-card>
+      <div *ngIf="loading" class="text-center py-4">
+        <i class="pi pi-spin pi-spinner text-2xl"></i>
+        <p class="mt-2">Carregando processos...</p>
+      </div>
+
+      <div *ngIf="!loading && vinculacoes.length === 0" class="text-center py-8">
+        <i class="pi pi-file text-6xl text-300 mb-3"></i>
+        <h3 class="text-xl text-600 mb-2">Nenhum processo vinculado</h3>
+        <p class="text-500 mb-4">Comece vinculando um processo ao sindicado.</p>
+        <p-button 
+          label="Vincular Primeiro Processo" 
+          icon="pi pi-plus"
+          (click)="abrirDialogVincular()">
+        </p-button>
+      </div>
+
+      <div *ngIf="!loading && vinculacoes.length > 0" class="grid">
+        <div *ngFor="let vinculacao of vinculacoes" class="col-12 lg:col-6 xl:col-4">
+          <div class="processo-card">
+            <div class="card-header">
+              <div class="processo-info">
+                <h3 class="processo-titulo">{{ vinculacao.processo?.titulo }}</h3>
+                <p class="processo-tipo">{{ vinculacao.processo?.tipo }}</p>
+                <p class="processo-cliente">{{ vinculacao.processo?.cliente?.nome }}</p>
+              </div>
+              <div class="processo-status">
+                <i [class]="getStatusIcon(vinculacao.status)"></i>
+                <span class="status-label">{{ getStatusLabel(vinculacao.status) }}</span>
+              </div>
+            </div>
+
+            <div class="card-content">
+              <div class="processo-meta">
+                <div class="meta-item">
+                  <i class="pi pi-user"></i>
+                  <span>Cliente: {{ vinculacao.processo?.cliente?.nome }}</span>
+                </div>
+                <div class="meta-item" *ngIf="vinculacao.processo?.advogado">
+                  <i class="pi pi-briefcase"></i>
+                  <span>Advogado: {{ vinculacao.processo?.advogado?.nome }}</span>
+                </div>
+                <div class="meta-item">
+                  <i class="pi pi-calendar"></i>
+                  <span>Vinculado em: {{ formatarData(vinculacao.dataVinculacao) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <p-button 
+                icon="pi pi-pencil" 
+                class="p-button-text p-button-sm"
+                pTooltip="Alterar Advogado"
+                (click)="abrirDialogAlterarAdvogado(vinculacao)">
+              </p-button>
+              <p-button 
+                icon="pi pi-file-edit" 
+                class="p-button-text p-button-sm"
+                pTooltip="Alterar Processo"
+                (click)="abrirDialogAlterarProcesso(vinculacao)">
+              </p-button>
+              <p-button 
+                icon="pi pi-history" 
+                class="p-button-text p-button-sm"
+                pTooltip="Ver Histórico"
+                (click)="visualizarHistorico(vinculacao)">
+              </p-button>
+              <p-button 
+                icon="pi pi-times" 
+                class="p-button-text p-button-sm p-button-danger"
+                pTooltip="Desvincular"
+                (click)="desvincularProcesso(vinculacao)">
+              </p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>
+
+<!-- Dialog de Vincular Processo -->
+<p-dialog 
+  [(visible)]="showVincularDialog" 
+  header="Vincular Processo"
+  [modal]="true" 
+  [style]="{width: '600px'}"
+  [closable]="true">
+  
+  <div class="vincular-section">
+    <div *ngIf="processosDisponiveis.length === 0" class="text-center py-4">
+      <i class="pi pi-info-circle text-4xl text-blue-500 mb-3"></i>
+      <p class="text-600">Nenhum processo disponível para vinculação</p>
+    </div>
+
+    <div *ngIf="processosDisponiveis.length > 0" class="processos-disponiveis">
+      <div *ngFor="let processo of processosDisponiveis" 
+           class="processo-item"
+           [class.selected]="selectedProcesso?.id === processo.id"
+           (click)="selectedProcesso = processo">
+        <div class="processo-info">
+          <h4 class="processo-titulo">{{ processo.titulo }}</h4>
+          <p class="processo-tipo">{{ processo.tipo }}</p>
+          <p class="processo-cliente">{{ processo.cliente?.nome }}</p>
+        </div>
+        <div class="processo-status">
+          <i class="pi pi-circle-fill text-green-500"></i>
+          <span>Disponível</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times"
+        class="p-button-secondary"
+        (click)="showVincularDialog = false">
+      </p-button>
+      <p-button 
+        label="Vincular" 
+        icon="pi pi-check"
+        [disabled]="!selectedProcesso"
+        (click)="vincularProcesso()">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- Dialog de Alterar Advogado -->
+<p-dialog 
+  [(visible)]="showAlterarAdvogadoDialog" 
+  header="Alterar Advogado do Processo"
+  [modal]="true" 
+  [style]="{width: '500px'}"
+  [closable]="true">
+  
+  <div class="alterar-advogado-section">
+    <div class="mb-4">
+      <label class="block text-sm font-medium mb-2">Novo Advogado</label>
+      <p-dropdown 
+        [options]="[]" 
+        [(ngModel)]="novoAdvogadoId"
+        placeholder="Selecione o advogado"
+        class="w-full">
+      </p-dropdown>
+    </div>
+    
+    <div class="mb-4">
+      <label class="block text-sm font-medium mb-2">Motivo da Alteração *</label>
+      <textarea 
+        pInputTextarea 
+        [(ngModel)]="motivoAlteracao"
+        placeholder="Descreva o motivo da alteração..."
+        rows="3"
+        class="w-full">
+      </textarea>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times"
+        class="p-button-secondary"
+        (click)="showAlterarAdvogadoDialog = false">
+      </p-button>
+      <p-button 
+        label="Alterar" 
+        icon="pi pi-check"
+        [disabled]="!novoAdvogadoId || !motivoAlteracao"
+        (click)="alterarAdvogado()">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- Dialog de Alterar Processo -->
+<p-dialog 
+  [(visible)]="showAlterarProcessoDialog" 
+  header="Alterar Dados do Processo"
+  [modal]="true" 
+  [style]="{width: '600px'}"
+  [closable]="true">
+  
+  <div class="alterar-processo-section">
+    <div class="grid">
+      <div class="col-12">
+        <label class="block text-sm font-medium mb-2">Título do Processo</label>
+        <input 
+          type="text" 
+          pInputText 
+          [(ngModel)]="dadosAlteracao.titulo"
+          class="w-full">
+      </div>
+      <div class="col-12">
+        <label class="block text-sm font-medium mb-2">Descrição</label>
+        <textarea 
+          pInputTextarea 
+          [(ngModel)]="dadosAlteracao.descricao"
+          rows="3"
+          class="w-full">
+        </textarea>
+      </div>
+      <div class="col-12">
+        <label class="block text-sm font-medium mb-2">Motivo da Alteração *</label>
+        <textarea 
+          pInputTextarea 
+          [(ngModel)]="motivoAlteracao"
+          placeholder="Descreva o motivo da alteração..."
+          rows="3"
+          class="w-full">
+        </textarea>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times"
+        class="p-button-secondary"
+        (click)="showAlterarProcessoDialog = false">
+      </p-button>
+      <p-button 
+        label="Alterar" 
+        icon="pi pi-check"
+        [disabled]="!motivoAlteracao"
+        (click)="alterarProcesso()">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- Dialog de Histórico -->
+<p-dialog 
+  [(visible)]="showHistoricoDialog" 
+  header="Histórico de Alterações"
+  [modal]="true" 
+  [style]="{width: '700px'}"
+  [closable]="true">
+  
+  <div class="text-center py-8">
+    <i class="pi pi-history text-6xl text-300 mb-3"></i>
+    <h3 class="text-xl text-600 mb-2">Histórico de Alterações</h3>
+    <p class="text-500">Funcionalidade em desenvolvimento</p>
+  </div>
+</p-dialog>

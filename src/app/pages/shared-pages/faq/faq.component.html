@@ -1,0 +1,202 @@
+<!-- Layout de FAQ -->
+<div class="faq-layout">
+  
+  <!-- Header Component -->
+  <app-shared-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-shared-header>
+
+  <!-- Breadcrumb -->
+  <!-- <div class="layout-breadcrumb">
+    <div class="container">
+      <p-breadcrumb 
+        [model]="breadcrumbItems" 
+        [home]="breadcrumbHome">
+      </p-breadcrumb>
+    </div>
+  </div> -->
+
+  <!-- Conteúdo Principal -->
+  <div class="layout-content">
+    <div class="container">
+      
+      <!-- Header da Página -->
+      <div class="page-header mb-4">
+        <h1 class="text-3xl font-bold text-900 m-0 mb-2">
+          <i class="pi pi-question-circle mr-3 text-primary"></i>
+          Perguntas Frequentes
+        </h1>
+        <p class="text-lg text-600">
+          Respostas rápidas para as dúvidas mais comuns sobre nossa plataforma.
+        </p>
+      </div>
+
+      <!-- FAQ Accordion -->
+      <div class="faq-sections">
+        
+        <!-- Seção Geral -->
+        <p-card header="Perguntas Gerais" class="mb-4">
+          <p-accordion>
+            <p-accordionTab header="O que é a Plataforma Jurídica?">
+              <p class="line-height-3">
+                Nossa plataforma conecta clientes que precisam de serviços jurídicos com advogados qualificados e verificados. 
+                Oferecemos um ambiente seguro, transparente e fácil de usar para resolver questões legais.
+              </p>
+            </p-accordionTab>
+            
+            <p-accordionTab header="Como funciona o processo de verificação dos advogados?">
+              <p class="line-height-3">
+                Todos os advogados passam por um rigoroso processo de verificação:
+                <br>• Validação do número da OAB
+                <br>• Verificação de documentos profissionais
+                <br>• Análise do histórico profissional
+                <br>• Aprovação manual pela nossa equipe
+              </p>
+            </p-accordionTab>
+            
+            <p-accordionTab header="Quanto custa usar a plataforma?">
+              <p class="line-height-3">
+                O cadastro e uso da plataforma são gratuitos. Você paga apenas pelos serviços jurídicos contratados, 
+                com valores transparentes acordados diretamente com o advogado antes do início do trabalho.
+              </p>
+            </p-accordionTab>
+          </p-accordion>
+        </p-card>
+
+        <!-- Seção Para Clientes -->
+        <p-card header="Para Clientes" class="mb-4">
+          <p-accordion>
+            <p-accordionTab header="Como sei qual tipo de processo escolher?">
+              <p class="line-height-3">
+                Não se preocupe com termos jurídicos! Descreva sua situação naturalmente e nosso sistema 
+                ajudará a categorizar. Os tipos principais são:
+                <br>• <strong>Trabalhista:</strong> Problemas no trabalho, demissão, direitos trabalhistas
+                <br>• <strong>Civil:</strong> Contratos, cobranças, responsabilidade civil
+                <br>• <strong>Família:</strong> Divórcio, pensão, guarda dos filhos
+                <br>• <strong>Criminal:</strong> Defesa em processos criminais
+                <br>• <strong>Tributário:</strong> Impostos, multas, questões fiscais
+              </p>
+            </p-accordionTab>
+            
+            <p-accordionTab header="Quanto tempo demora para ter uma resposta?">
+              <p class="line-height-3">
+                • <strong>Atribuição do advogado:</strong> até 24 horas
+                <br>• <strong>Primeira resposta:</strong> até 48 horas após atribuição
+                <br>• <strong>Conclusão do processo:</strong> varia conforme a complexidade, mas você acompanha o progresso em tempo real
+              </p>
+            </p-accordionTab>
+            
+            <p-accordionTab header="Posso trocar de advogado se não gostar?">
+              <p class="line-height-3">
+                Sim! Sua satisfação é nossa prioridade. Se não estiver satisfeito com o atendimento, 
+                entre em contato conosco e providenciaremos a troca por outro profissional especializado.
+              </p>
+            </p-accordionTab>
+            
+            <p-accordionTab header="Como acompanho o andamento do meu processo?">
+              <p class="line-height-3">
+                Pelo seu dashboard você pode:
+                <br>• Ver o status atual do processo
+                <br>• Acompanhar a barra de progresso
+                <br>• Conversar diretamente com seu advogado via chat
+                <br>• Receber notificações de atualizações importantes
+              </p>
+            </p-accordionTab>
+          </p-accordion>
+        </p-card>
+
+        <!-- Seção Para Advogados -->
+        <p-card header="Para Advogados" class="mb-4">
+          <p-accordion>
+            <p-accordionTab header="Quais documentos preciso para me cadastrar?">
+              <p class="line-height-3">
+                Para se cadastrar como advogado você precisa:
+                <br>• Documento de identidade (RG ou CNH)
+                <br>• CPF
+                <br>• Comprovante de inscrição na OAB
+                <br>• Foto ou scan da carteira da OAB
+                <br>• Comprovante de endereço (opcional)
+              </p>
+            </p-accordionTab>
+            
+            <p-accordionTab header="Como recebo os pagamentos?">
+              <p class="line-height-3">
+                Os pagamentos são processados automaticamente após:
+                <br>• Conclusão do processo
+                <br>• Aprovação do cliente
+                <br>• Prazo de 48h para contestações
+                <br>O valor é depositado em sua conta bancária cadastrada em até 5 dias úteis.
+              </p>
+            </p-accordionTab>
+            
+            <p-accordionTab header="Posso recusar um processo atribuído?">
+              <p class="line-height-3">
+                Sim, você pode recusar processos, mas recomendamos aceitar apenas casos dentro de sua especialidade. 
+                Recusas frequentes podem afetar sua posição no sistema de atribuição automática.
+              </p>
+            </p-accordionTab>
+          </p-accordion>
+        </p-card>
+
+        <!-- Seção Técnica -->
+        <p-card header="Questões Técnicas" class="mb-4">
+          <p-accordion>
+            <p-accordionTab header="Em quais dispositivos posso usar a plataforma?">
+              <p class="line-height-3">
+                Nossa plataforma é responsiva e funciona em:
+                <br>• Computadores (Windows, Mac, Linux)
+                <br>• Tablets (iPad, Android)
+                <br>• Smartphones (iPhone, Android)
+                <br>• Qualquer navegador moderno (Chrome, Firefox, Safari, Edge)
+              </p>
+            </p-accordionTab>
+            
+            <p-accordionTab header="Meus dados ficam salvos se eu fechar o navegador?">
+              <p class="line-height-3">
+                Sim! Sua sessão fica salva e você pode continuar de onde parou. 
+                Por segurança, recomendamos fazer logout ao usar computadores públicos.
+              </p>
+            </p-accordionTab>
+            
+            <p-accordionTab header="A plataforma funciona offline?">
+              <p class="line-height-3">
+                A plataforma precisa de conexão com a internet para funcionar completamente. 
+                Algumas informações ficam em cache para melhorar a experiência, mas as funcionalidades 
+                principais requerem conexão.
+              </p>
+            </p-accordionTab>
+          </p-accordion>
+        </p-card>
+
+      </div>
+
+      <!-- Não encontrou sua resposta -->
+      <div class="not-found-section mt-6">
+        <p-card class="text-center">
+          <h3 class="text-900 mb-3">Não encontrou sua resposta?</h3>
+          <p class="text-color-secondary mb-4">
+            Entre em contato conosco e teremos prazer em ajudá-lo.
+          </p>
+          <div class="flex justify-content-center gap-3">
+            <p-button 
+              label="Falar com Suporte" 
+              icon="pi pi-comments"
+              (click)="abrirChat()">
+            </p-button>
+            <p-button 
+              label="Central de Ajuda" 
+              icon="pi pi-info-circle"
+              class="p-button-outlined"
+              (click)="navegarPara('/shared/ajuda')">
+            </p-button>
+          </div>
+        </p-card>
+      </div>
+
+    </div>
+  </div>
+</div>

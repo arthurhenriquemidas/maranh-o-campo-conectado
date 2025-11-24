@@ -1,0 +1,342 @@
+<!-- Layout com Menu e Breadcrumb -->
+<div class="cliente-layout">
+  
+  <!-- Header Component -->
+  <app-cliente-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-cliente-header>
+
+  <!-- Breadcrumb -->
+
+
+  <!-- Conteúdo Principal -->
+  <div class="layout-content p-4">
+    
+    <!-- Header da Página -->
+    <div class="page-header mb-4">
+      <div class="flex align-items-center justify-content-between">
+        <div>
+          <h1 class="text-3xl font-bold text-900 mb-2">Meus Processos</h1>
+          <p class="text-xl text-color-secondary">
+            Acompanhe todos os seus processos jurídicos em um só lugar.
+          </p>
+        </div>
+        <p-button 
+          label="Novo Processo" 
+          icon="pi pi-plus"
+          class="p-button-success p-button-lg"
+          (click)="showNewProcessDialog = true">
+        </p-button>
+      </div>
+    </div>
+
+    <!-- Filtros e Busca Elegante -->
+    <div class="search-container">
+      <div >
+        
+        <!-- Barra de Busca Principal -->
+        <div class="search-main">
+          <div class="search-input-wrapper">
+            <div class="search-icon">
+              <i class="pi pi-search"></i>
+            </div>
+            <input 
+              type="text" 
+              pInputText 
+              placeholder="Buscar processos por número, título ou descrição..." 
+              [(ngModel)]="searchTerm"
+              name="searchTerm"
+              (input)="onSearch()"
+              class="search-input">
+            <div class="search-actions">
+              <p-button 
+                *ngIf="searchTerm"
+                class="clear-btn"
+                (click)="clearSearch()"
+                pTooltip="Limpar busca"
+                tooltipPosition="top">
+                <i class="pi pi-times"></i>
+              </p-button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filtros Avançados -->
+        <div class="search-filters">
+          <div class="filter-group">
+            <label class="filter-label">Status</label>
+            <p-dropdown 
+              [options]="statusOptions" 
+              [(ngModel)]="selectedStatus"
+              name="selectedStatus"
+              placeholder="Todos os status"
+              (onChange)="onFilterChange()"
+              class="filter-dropdown">
+            </p-dropdown>
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label">Tipo</label>
+            <p-dropdown 
+              [options]="tipoOptions" 
+              [(ngModel)]="selectedTipo"
+              name="selectedTipo"
+              placeholder="Todos os tipos"
+              (onChange)="onFilterChange()"
+              class="filter-dropdown">
+            </p-dropdown>
+          </div>
+
+          <div class="filter-actions">
+            <p-button 
+              icon="pi pi-refresh" 
+              label="Atualizar"
+              severity="secondary"
+              outlined="true"
+              size="small"
+              pTooltip="Recarregar dados"
+              (click)="loadProcessos()">
+            </p-button>
+            
+            <p-button 
+              icon="pi pi-filter-slash" 
+              label="Limpar Filtros"
+              severity="secondary"
+              text="true"
+              size="small"
+              pTooltip="Remover todos os filtros"
+              (click)="clearAllFilters()">
+            </p-button>
+          </div>
+        </div>
+
+        <!-- Resultados da Busca -->
+        <div *ngIf="searchTerm || selectedStatus || selectedTipo" class="search-results-info">
+          <div class="results-count">
+            <i class="pi pi-info-circle"></i>
+            <span *ngIf="searchTerm">Buscando por: <strong>"{{ searchTerm }}"</strong></span>
+            <span *ngIf="selectedStatus" class="filter-tag">
+              <i class="pi pi-tag"></i>
+              Status: {{ getStatusLabel(selectedStatus) }}
+            </span>
+            <span *ngIf="selectedTipo" class="filter-tag">
+              <i class="pi pi-tag"></i>
+              Tipo: {{ getTipoLabel(selectedTipo) }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de Processos -->
+    <p-card>
+      
+      <!-- Loading State -->
+      <div *ngIf="loading" class="grid">
+        <div *ngFor="let item of [1,2,3,4,5]" class="col-12">
+          <div class="flex align-items-center p-3 border-bottom-1 surface-border">
+            <p-skeleton shape="circle" size="3rem" class="mr-3"></p-skeleton>
+            <div class="flex-1">
+              <p-skeleton width="100%" height="1rem" class="mb-2"></p-skeleton>
+              <p-skeleton width="75%" height="0.8rem" class="mb-2"></p-skeleton>
+              <p-skeleton width="50%" height="0.6rem"></p-skeleton>
+            </div>
+            <div class="flex align-items-center">
+              <p-skeleton width="4rem" height="2rem" class="mr-2"></p-skeleton>
+              <p-skeleton shape="circle" size="2rem"></p-skeleton>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de Processos -->
+      <div *ngIf="!loading">
+        <div *ngIf="processosFiltered.length > 0">
+          <div *ngFor="let processo of processosFiltered" class="processo-card p-4 border-bottom-1 surface-border">
+            <div class="flex align-items-start justify-content-between">
+              
+              <!-- Informações do Processo -->
+              <div class="flex-1 pr-4">
+                <div class="flex align-items-center mb-2">
+                  <h3 class="m-0 mr-3">{{ processo.titulo }}</h3>
+                  <p-tag 
+                    [value]="getStatusLabel(processo.status)" 
+                    [severity]="getStatusSeverity(processo.status)">
+                  </p-tag>
+                </div>
+                
+                <p class="text-color-secondary mb-3 line-height-3">
+                  {{ processo.descricao }}
+                </p>
+                
+                <div class="flex align-items-center text-sm text-color-secondary">
+                  <i class="pi pi-tag mr-1"></i>
+                  <span class="mr-3">{{ getTipoLabel(processo.tipo) }}</span>
+                  
+                  <i class="pi pi-calendar mr-1"></i>
+                  <span class="mr-3">{{ processo.dataCriacao | date:'dd/MM/yyyy' }}</span>
+                  
+                  <i class="pi pi-dollar mr-1" *ngIf="processo.valor > 0"></i>
+                  <span *ngIf="processo.valor > 0">{{ processo.valor | currency:'BRL' }}</span>
+                </div>
+              </div>
+
+              <!-- Ações Desktop -->
+              <div class="flex align-items-center gap-2 desktop-only">
+                <p-button 
+                  icon="pi pi-eye" 
+                  class="p-button-rounded p-button-text p-button-sm"
+                  pTooltip="Ver detalhes"
+                  (onClick)="verProcesso(processo)">
+                </p-button>
+                <p-button 
+                  icon="pi pi-comments" 
+                  class="p-button-rounded p-button-text p-button-sm"
+                  pTooltip="Chat com advogado"
+                  (onClick)="iniciarChat(processo)">
+                </p-button>
+                
+                <p-button 
+                  icon="pi pi-ellipsis-v" 
+                  class="p-button-rounded p-button-text p-button-sm"
+                  pTooltip="Mais opções"
+                  (click)="mostrarOpcoes(processo, $event)">
+                </p-button>
+              </div>
+
+              <!-- Ações Mobile -->
+              <div class="mobile-actions mobile-only">
+                <p-button 
+                  icon="pi pi-eye" 
+                  label="Ver Detalhes"
+                  size="small"
+                  severity="secondary"
+                  outlined="true"
+                  class="w-full"
+                  (onClick)="verProcesso(processo)">
+                </p-button>
+                <p-button 
+                  icon="pi pi-comments" 
+                  label="Chat"
+                  size="small"
+                  severity="secondary"
+                  outlined="true"
+                  class="w-full"
+                  (onClick)="iniciarChat(processo)">
+                </p-button>
+              </div>
+            </div>
+            
+            <!-- Barra de Progresso (se em andamento) -->
+            <div *ngIf="processo.status === 'em_andamento'" class="mt-3">
+              <div class="flex align-items-center justify-content-between mb-2">
+                <small class="text-color-secondary">Progresso estimado</small>
+                <small class="text-color-secondary">{{ getProgresso(processo) }}%</small>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="getProgresso(processo)"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado Vazio -->
+        <div *ngIf="processosFiltered.length === 0 && !loading" class="empty-state text-center p-6">
+          <i class="pi pi-briefcase text-6xl text-color-secondary mb-4"></i>
+          <h3 class="text-color-secondary mb-3">
+            {{ searchTerm || selectedStatus || selectedTipo ? 'Nenhum processo encontrado' : 'Você ainda não possui processos' }}
+          </h3>
+          <p class="text-color-secondary mb-4" *ngIf="!searchTerm && !selectedStatus && !selectedTipo">
+            Comece criando seu primeiro processo jurídico. Nossa equipe está pronta para ajudá-lo!
+          </p>
+          <p class="text-color-secondary mb-4" *ngIf="searchTerm || selectedStatus || selectedTipo">
+            Tente ajustar os filtros ou criar um novo processo.
+          </p>
+          <p-button 
+            label="Criar Primeiro Processo" 
+            icon="pi pi-plus"
+            class="p-button-success p-button-lg"
+            (click)="showNewProcessDialog = true">
+          </p-button>
+        </div>
+      </div>
+    </p-card>
+
+  </div>
+</div>
+
+<!-- Dialog Novo Processo (mesmo do dashboard) -->
+<p-dialog 
+  header="Novo Processo" 
+  [(visible)]="showNewProcessDialog" 
+  [modal]="true"
+  [responsive]="true" 
+  [style]="{width: '50vw', minWidth: '300px'}">
+  
+  <div class="grid">
+    <div class="col-12">
+      <label for="titulo" class="block text-900 font-medium mb-2">
+        Título do Processo <span class="text-red-500">*</span>
+      </label>
+      <input 
+        id="titulo" 
+        type="text" 
+        pInputText 
+        class="w-full"
+        [(ngModel)]="novoProcesso.titulo"
+        name="titulo"
+        placeholder="Ex: Rescisão trabalhista, Divórcio consensual...">
+    </div>
+    
+    <div class="col-12">
+      <label for="tipo" class="block text-900 font-medium mb-2">
+        Tipo de Processo <span class="text-red-500">*</span>
+      </label>
+      <p-dropdown 
+        id="tipo"
+        [options]="tiposProcesso" 
+        [(ngModel)]="novoProcesso.tipo"
+        name="tipo"
+        placeholder="Selecione o tipo..."
+        class="w-full">
+      </p-dropdown>
+    </div>
+    
+    <div class="col-12">
+      <label for="descricao" class="block text-900 font-medium mb-2">Descrição</label>
+      <textarea 
+        id="descricao"
+        pInputTextarea 
+        rows="4" 
+        class="w-full"
+        [(ngModel)]="novoProcesso.descricao"
+        name="descricao"
+        placeholder="Descreva sua situação com suas próprias palavras...">
+      </textarea>
+      <small class="text-color-secondary">
+        <i class="pi pi-info-circle mr-1"></i>
+        Não se preocupe com termos jurídicos, descreva naturalmente sua situação.
+      </small>
+    </div>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <p-button 
+      label="Cancelar" 
+      icon="pi pi-times" 
+      class="p-button-text"
+      (click)="cancelarNovoProcesso()">
+    </p-button>
+    <p-button 
+      label="Criar Processo" 
+      icon="pi pi-check" 
+      [loading]="salvandoProcesso"
+      [disabled]="!novoProcesso.titulo || !novoProcesso.tipo"
+      (click)="criarProcesso()">
+    </p-button>
+  </ng-template>
+</p-dialog>

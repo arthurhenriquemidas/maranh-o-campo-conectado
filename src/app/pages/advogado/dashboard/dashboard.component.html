@@ -1,0 +1,799 @@
+<!-- Layout com Menu e Breadcrumb -->
+<div class="advogado-layout">
+  
+  <!-- Header Component -->
+  <app-advogado-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-advogado-header>
+
+  <!-- Breadcrumb -->
+  <!-- <div class="layout-breadcrumb p-3">
+    <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome"></p-breadcrumb>
+  </div> -->
+
+  <!-- Conteúdo Principal -->
+  <div class="layout-content p-4">
+    <p class="text-lg text-secondary mb-4">
+      Gerencie seus processos e acompanhe o andamento dos casos atribuídos.
+    </p>
+
+      <!-- Loading State -->
+      <div *ngIf="loading" class="grid">
+        <div class="col-12 md:col-3" *ngFor="let i of [1,2,3,4]">
+          <p-card>
+            <div class="flex align-items-center">
+              <div class="mr-3">
+                <p-skeleton shape="circle" size="3rem"></p-skeleton>
+              </div>
+              <div class="flex-1">
+                <p-skeleton height="1.5rem" class="mb-2"></p-skeleton>
+                <p-skeleton height="1rem"></p-skeleton>
+              </div>
+            </div>
+          </p-card>
+        </div>
+      </div>
+
+      <!-- Dashboard Content -->
+      <div *ngIf="!loading">
+        
+        <!-- Cards de Estatísticas -->
+        <div class="grid">
+          <!-- Total de Processos -->
+          <div class="col-12 md:col-6 lg:col-3">
+            <p-card class="stats-card h-full cursor-pointer" 
+                    (click)="verTodosProcessos()">
+              <div class="flex align-items-center">
+                <div class="flex-shrink-0 mr-3">
+                  <div class="bg-blue-100 text-blue-600 border-round p-3">
+                    <i class="pi pi-briefcase text-2xl"></i>
+                  </div>
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-2xl font-bold text-900 m-0">{{ stats.total }}</h3>
+                  <p class="text-600 m-0">Total de Processos</p>
+                </div>
+              </div>
+            </p-card>
+          </div>
+
+          <!-- Processos Novos -->
+          <div class="col-12 md:col-6 lg:col-3">
+            <p-card class="stats-card h-full">
+              <div class="flex align-items-center">
+                <div class="flex-shrink-0 mr-3">
+                  <div class="bg-cyan-100 text-cyan-600 border-round p-3">
+                    <i class="pi pi-plus-circle text-2xl"></i>
+                  </div>
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-2xl font-bold text-900 m-0">{{ stats.novos }}</h3>
+                  <p class="text-600 m-0">Processos Novos</p>
+                </div>
+              </div>
+            </p-card>
+          </div>
+
+          <!-- Em Andamento -->
+          <div class="col-12 md:col-6 lg:col-3">
+            <p-card class="stats-card h-full">
+              <div class="flex align-items-center">
+                <div class="flex-shrink-0 mr-3">
+                  <div class="bg-orange-100 text-orange-600 border-round p-3">
+                    <i class="pi pi-clock text-2xl"></i>
+                  </div>
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-2xl font-bold text-900 m-0">{{ stats.emAndamento }}</h3>
+                  <p class="text-600 m-0">Em Andamento</p>
+                </div>
+              </div>
+            </p-card>
+          </div>
+
+          <!-- Aguardando Cliente -->
+          <div class="col-12 md:col-6 lg:col-3">
+            <p-card class="stats-card h-full">
+              <div class="flex align-items-center">
+                <div class="flex-shrink-0 mr-3">
+                  <div class="bg-yellow-100 text-yellow-600 border-round p-3">
+                    <i class="pi pi-hourglass text-2xl"></i>
+                  </div>
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-2xl font-bold text-900 m-0">{{ stats.aguardandoCliente }}</h3>
+                  <p class="text-600 m-0">Aguardando Cliente</p>
+                </div>
+              </div>
+            </p-card>
+          </div>
+
+        </div>
+
+        <!-- Métricas de Probabilidade de Ganho -->
+        <div class="probability-metrics-grid mb-4">
+        <!-- Processos com Provável Probabilidade -->
+        <div class="financial-card current-month-card">
+          <div class="card-content">
+            <div class="card-icon">
+              <i class="pi pi-star"></i>
+            </div>
+            <div class="card-info">
+              <h3 class="card-value">
+                {{ formatCurrency(probabilidadeMetrics.provavel) }}
+              </h3>
+              <p class="card-label">Provável</p>
+              <small class="card-description">
+                <i class="pi pi-verified"></i>
+                60% de chance
+              </small>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Processos com Possível Probabilidade -->
+        <div class="financial-card revenue-card">
+          <div class="card-content">
+            <div class="card-icon">
+              <i class="pi pi-thumbs-up"></i>
+            </div>
+            <div class="card-info">
+              <h3 class="card-value">
+                {{ formatCurrency(probabilidadeMetrics.possivel) }}
+              </h3>
+              <p class="card-label">Possível</p>
+              <small class="card-description">
+                <i class="pi pi-chart-line"></i>
+                30% de chance
+              </small>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Processos com Remoto Probabilidade -->
+        <div class="financial-card projection-card">
+          <div class="card-content">
+            <div class="card-icon">
+              <i class="pi pi-minus-circle"></i>
+            </div>
+            <div class="card-info">
+              <h3 class="card-value">
+                {{ formatCurrency(probabilidadeMetrics.remoto) }}
+              </h3>
+              <p class="card-label">Remoto</p>
+              <small class="card-description">
+                <i class="pi pi-chart-bar"></i>
+                10% de chance
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumo Total -->
+      <p-card class="mb-4 total-probability-card">
+        <div class="flex align-items-center justify-content-between">
+          <div class="flex align-items-center gap-3">
+            <div class="total-icon">
+              <i class="pi pi-wallet"></i>
+            </div>
+            <div>
+              <p class="text-600 m-0 mb-1">Valor Total em Processos Analisados</p>
+              <h2 class="text-900 font-bold m-0">{{ formatCurrency(getTotalProcessosPorProbabilidade()) }}</h2>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="text-500 text-sm m-0">Soma de todas as probabilidades</p>
+            <p class="text-primary font-semibold m-0">3 níveis de análise</p>
+          </div>
+        </div>
+      </p-card>
+
+      
+        <!-- Seção de Processos e Tarefas -->
+        <div class="grid">
+          
+          <!-- Processos Recentes -->
+          <div class="col-12 lg:col-8">
+             <!-- Processos Aguardando Aprovação -->
+             <p-card class="mt-4" >
+              <ng-template pTemplate="header" >
+                <div class="card-header-custom" style="padding-top: 0px !important;padding-bottom: 0px;">
+                  <h3 class="m-0" style="padding-top: 0px !important;color: #000;">
+                    <i class="pi pi-clock mr-2"></i>
+                    Processos Aguardando Aprovação
+                  </h3>
+                </div>
+              </ng-template>
+
+              <!-- Estado Vazio -->
+              <div *ngIf="processosAguardandoAprovacao.length === 0" class="text-center py-6">
+                <i class="pi pi-check-circle text-6xl text-green-500 mb-3"></i>
+                <h4 class="text-500 mb-2">Nenhum processo aguardando aprovação</h4>
+                <p class="text-400 mb-4">Todos os processos foram aprovados ou não há processos pendentes.</p>
+              </div>
+
+              <!-- Lista de Processos -->
+              <div *ngIf="processosAguardandoAprovacao.length > 0" style="margin-top: -50px !important;">
+                <div *ngFor="let processo of processosAguardandoAprovacao" 
+                     class="processo-item p-3 border-bottom-1 surface-border">
+                  
+                  <div class="flex align-items-center justify-content-between">
+                    
+                    <div class="flex-1">
+                      <h5 class="text-900 font-semibold m-0 mb-2">
+                        {{ processo.titulo }}
+                      </h5>
+                      
+                      <div class="flex align-items-center mb-2">
+                        <p-tag 
+                          value="Aguardando Aprovação"
+                          severity="warning"
+                          class="mr-2">
+                        </p-tag>
+                        <p-tag 
+                          [value]="getTipoLabel(processo.tipo)"
+                          severity="info"
+                          class="mr-2">
+                        </p-tag>
+                        <small class="text-500">
+                          {{ formatarData(processo.dataCriacao) }}
+                        </small>
+                      </div>
+                      
+                      <p class="text-600 text-sm m-0">
+                        {{ processo.descricao }}
+                      </p>
+                    </div>
+
+                    <div class="flex gap-2 ml-3">
+                      <p-button 
+                        label="Aceitar Processo" 
+                        icon="pi pi-check"
+                        class="p-button-success p-button-sm"
+                        (onClick)="aceitarProcesso(processo)">
+                      </p-button>
+                      <p-button 
+                        label="Rejeitar" 
+                        icon="pi pi-times"
+                        severity="warning"
+                        outlined="true"
+                        class="p-button-sm"
+                        (onClick)="rejeitarProcesso(processo)">
+                      </p-button>
+                    </div>
+
+                  </div>
+                  
+                </div>
+              </div>
+            </p-card>
+
+            <p-card>
+              <ng-template pTemplate="header">
+                <div class="card-header-custom">
+                  <h3 class="m-0" style="color: #000;">
+                    <i class="pi pi-list mr-2"></i>
+                    Processos Recentes
+                  </h3>
+                </div>
+              </ng-template>
+
+              <!-- Estado Vazio -->
+              <div *ngIf="processosRecentes.length === 0" class="text-center py-6">
+                <i class="pi pi-inbox text-6xl text-300 mb-3"></i>
+                <h4 class="text-500 mb-2">Nenhum processo encontrado</h4>
+                <p class="text-400 mb-4">Você ainda não possui processos atribuídos.</p>
+              </div>
+
+              <!-- Lista de Processos -->
+              <div *ngIf="processosRecentes.length > 0"  style="margin-top: -50px !important;">
+                <div *ngFor="let processo of processosRecentes" 
+                     class="processo-item p-3 border-bottom-1 surface-border">
+                  
+                  <div class="flex align-items-center justify-content-between">
+                    
+                    <div class="flex-1">
+                      <h5 class="text-900 font-semibold m-0 mb-2">
+                        {{ processo.titulo }}
+                      </h5>
+                      
+                      <div class="flex align-items-center mb-2">
+                        <p-tag 
+                          [value]="getStatusLabel(processo.status)"
+                          [severity]="getStatusSeverity(processo.status)"
+                          class="mr-2">
+                        </p-tag>
+                        <small class="text-500">
+                          {{ processo.tipo }}
+                        </small>
+                      </div>
+                      
+                      <p-progressBar 
+                        [value]="60"
+                        [showValue]="false"
+                        styleClass="mb-2">
+                      </p-progressBar>
+                      
+                      <small class="text-400">
+                        Criado em {{ formatarData(processo.dataCriacao) }}
+                      </small>
+                    </div>
+
+                    <div class="flex gap-2 ml-3">
+                      <p-button 
+                        icon="pi pi-eye"
+                        size="small"
+                        text="true"
+                        pTooltip="Ver Detalhes"
+                        (onClick)="verProcesso(processo)">
+                      </p-button>
+                      
+                      <p-button 
+                        icon="pi pi-comments"
+                        size="small"
+                        text="true"
+                        pTooltip="Chat com Cliente"
+                        (onClick)="iniciarChat(processo)">
+                      </p-button>
+                      
+                      <p-button 
+                        icon="pi pi-check-circle"
+                        size="small"
+                        text="true"
+                        pTooltip="Marcar como Concluído"
+                        severity="success"
+                        (onClick)="marcarComoConcluido(processo)">
+                      </p-button>
+                    </div>
+
+                  </div>
+                  
+                </div>
+
+                <!-- Ver Todos -->
+                <div class="text-center pt-3">
+                  <p-button 
+                    label="Ver Todos os Processos" 
+                    icon="pi pi-arrow-right"
+                    outlined="true"
+                    (onClick)="verTodosProcessos()">
+                  </p-button>
+                </div>
+              </div>
+            </p-card>
+
+           
+            <div class="grid">
+            
+             <!-- Gráfico de Status -->
+             <!-- <div class="col-12 md:col-6">
+              <p-card class="h-full">
+                <ng-template pTemplate="header">
+                  <div class="card-header-custom">
+                    <h3 class="m-0" style="color: #000;">
+                      <i class="pi pi-chart-pie mr-2"></i>
+                      Processos por Status
+                    </h3>
+                  </div>
+                </ng-template>
+                <div class="chart-container h-full">
+                  <p-chart 
+                    type="doughnut" 
+                    [data]="chartProcessosPorStatus" 
+                    [options]="chartOptions">
+                  </p-chart>
+                </div>
+              </p-card>
+            </div> -->
+
+              <!-- Gráfico de Tipos -->
+              <!-- <div class="col-12 md:col-6">
+                <p-card class="h-full">
+                  <ng-template pTemplate="header">
+                    <div class="card-header-custom">
+                      <h3 class="m-0" style="color: #000;">
+                        <i class="pi pi-chart-bar mr-2"></i>
+                        Processos por Tipo
+                      </h3>
+                    </div>
+                  </ng-template>
+                  <div class="chart-container" >
+                    <p-chart 
+                      type="bar" 
+                      [width]="'90%'"
+                      [data]="chartProcessosPorTipo" 
+                      [options]="chartOptions">
+                    </p-chart>
+                  </div>
+                </p-card>
+              </div> -->
+            </div>
+          </div>
+
+          <!-- Sidebar com Tarefas e Eventos -->
+          <div class="col-12 lg:col-4">
+            
+            <!-- Tarefas Pendentes -->
+            <p-card class="mb-3">
+              <ng-template pTemplate="header">
+                <div class="card-header-custom">
+                  <h4 class="m-0" style="color: #000;">
+                    <i class="pi pi-check-square mr-2"></i>
+                    Tarefas Pendentes
+                  </h4>
+                </div>
+              </ng-template>
+
+              <div *ngFor="let tarefa of tarefasPendentes" 
+                   class="tarefa-item p-2 border-bottom-1 surface-border">
+                <div class="flex align-items-start">
+                  <div class="flex-1">
+                    <h6 class="text-900 font-medium m-0 mb-1">
+                      {{ tarefa.titulo }}
+                    </h6>
+                    <small class="text-500 block mb-1">
+                      {{ tarefa.processo }}
+                    </small>
+                    <div class="flex align-items-center">
+                      <p-tag 
+                        [value]="tarefa.prioridade"
+                        [severity]="getPrioridadeSeverity(tarefa.prioridade)"
+                        size="small"
+                        class="mr-2">
+                      </p-tag>
+                      <small class="text-400">
+                        {{ formatarData(tarefa.prazo) }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </p-card>
+
+            <!-- Próximos Eventos -->
+            <!-- <p-card>
+              <ng-template pTemplate="header">
+                  <h4 class="m-0" style="color: #000;">
+                    <i class="pi pi-calendar mr-2"></i>
+                    Próximos Eventos
+                  </h4>
+              </ng-template>
+
+              <div *ngFor="let evento of proximosEventos" 
+                   class="evento-item p-2 border-bottom-1 surface-border">
+                <div class="flex align-items-start">
+                  <div class="flex-shrink-0 mr-3">
+                    <div class="bg-primary-100 text-primary-600 border-round p-2">
+                      <i class="pi pi-calendar text-sm"></i>
+                    </div>
+                  </div>
+                  <div class="flex-1">
+                    <h6 class="text-900 font-medium m-0 mb-1" style="color: #000;">
+                      {{ evento.titulo }}
+                    </h6>
+                    <small class="text-500 block mb-1">
+                      Processo: {{ evento.processo }}
+                    </small>
+                    <small class="text-400 block mb-1">
+                      {{ formatarDataHora(evento.data) }}
+                    </small>
+                    <small class="text-400">
+                      {{ evento.local }}
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+            </p-card>  -->
+
+          </div>
+
+        </div> 
+
+      </div>
+
+  </div>
+</div>
+
+<!-- Modal Aceitar Processo -->
+<p-dialog 
+  header="Aceitar Processo" 
+  [(visible)]="showAceitarProcessoDialog" 
+  [modal]="true"
+  [responsive]="true" 
+  [style]="{ width: '65vw', minWidth: '600px' }"
+  [breakpoints]="{'960px': '90vw', '640px': '95vw'}">
+  
+  <div *ngIf="processoSelecionado">
+    <!-- Informações do Processo -->
+    <div class="mb-4 p-3 surface-50 border-round border-1 surface-border">
+      <div class="flex align-items-start gap-3">
+        <i class="pi pi-briefcase text-primary text-2xl mt-1"></i>
+        <div class="flex-1">
+          <h4 class="m-0 mb-2 text-900">{{ processoSelecionado.titulo }}</h4>
+          <p class="text-600 m-0 text-sm line-height-3">{{ processoSelecionado.descricao }}</p>
+          <div class="flex gap-2 mt-2">
+            <p-tag 
+              [value]="getTipoLabel(processoSelecionado.tipo)"
+              severity="info"
+              [rounded]="true">
+            </p-tag>
+            <p-tag 
+              [value]="processoSelecionado.urgencia"
+              [severity]="getPrioridadeSeverity(processoSelecionado.urgencia)"
+              [rounded]="true">
+            </p-tag>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulário em Grid -->
+    <div class="grid">
+      <!-- Valor da Causa -->
+      <div class="col-12 md:col-6">
+        <div class="field">
+          <label for="valorCausa" class="block text-900 font-semibold mb-2">
+            <i class="pi pi-dollar mr-1"></i>
+            Valor da Causa <span class="text-red-500">*</span>
+          </label>
+          <input
+            id="valorCausa"
+            type="text"
+            pInputText
+            pInputMask
+            mask="currency"
+            [(ngModel)]="dadosAceitarProcesso.valorCausa"
+            placeholder="R$ 0,00"
+            class="w-full">
+        </div>
+      </div>
+
+      <!-- Probabilidade de Ganho -->
+      <div class="col-12 md:col-6">
+        <div class="field">
+          <label for="probabilidadeGanho" class="block text-900 font-semibold mb-2">
+            <i class="pi pi-chart-line mr-1"></i>
+            Probabilidade de Ganho <span class="text-red-500">*</span>
+          </label>
+          <p-dropdown
+            id="probabilidadeGanho"
+            [(ngModel)]="dadosAceitarProcesso.probabilidadeGanho"
+            [options]="probabilidadeOptions"
+            placeholder="Selecione a probabilidade"
+            styleClass="w-full"
+            optionLabel="label"
+            optionValue="value">
+          </p-dropdown>
+        </div>
+      </div>
+
+      <!-- Prazo Estimado -->
+      <div class="col-12 md:col-6">
+        <div class="field">
+          <label for="prazoEstimado" class="block text-900 font-semibold mb-2">
+            <i class="pi pi-calendar mr-1"></i>
+            Prazo Estimado <span class="text-red-500">*</span>
+          </label>
+          <p-calendar
+            id="prazoEstimado"
+            [(ngModel)]="dadosAceitarProcesso.prazoEstimado"
+            placeholder="Selecione a data"
+            dateFormat="dd/mm/yy"
+            [showIcon]="false"
+            styleClass="w-full">
+          </p-calendar>
+        </div>
+      </div>
+
+      <!-- Honorários Estimados (novo campo) -->
+      <div class="col-12 md:col-6">
+        <div class="field">
+          <label for="honorarios" class="block text-900 font-semibold mb-2">
+            <i class="pi pi-money-bill mr-1"></i>
+            Honorários Estimados
+          </label>
+          <input
+            id="honorarios"
+            type="text"
+            pInputText
+            [(ngModel)]="dadosAceitarProcesso.honorarios"
+            placeholder="R$ 0,00"
+            class="w-full">
+        </div>
+      </div>
+
+      <!-- Observações -->
+      <div class="col-12">
+        <div class="field mb-0">
+          <label for="observacoes" class="block text-900 font-semibold mb-2">
+            <i class="pi pi-file-edit mr-1"></i>
+            Observações e Estratégia
+          </label>
+          <textarea
+            id="observacoes"
+            [(ngModel)]="dadosAceitarProcesso.observacoes"
+            pInputTextarea
+            rows="4"
+            placeholder="Descreva sua estratégia para o caso, observações importantes ou próximos passos..."
+            class="w-full">
+          </textarea>
+          <small class="text-color-secondary">
+            Estas informações ajudarão no acompanhamento do processo.
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Aviso -->
+    <div class="mt-3 p-3 bg-blue-50 border-round border-1 border-blue-200">
+      <div class="flex align-items-start gap-2">
+        <i class="pi pi-info-circle text-blue-500 mt-1"></i>
+        <p class="m-0 text-sm text-blue-900">
+          Ao aceitar este processo, você confirma que possui disponibilidade e recursos necessários para conduzi-lo adequadamente.
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-between align-items-center w-full">
+      <small class="text-color-secondary">
+        <i class="pi pi-exclamation-circle mr-1"></i>
+        Campos marcados com * são obrigatórios
+      </small>
+      <div class="flex gap-2">
+        <p-button 
+          label="Cancelar" 
+          icon="pi pi-times" 
+          severity="secondary"
+          outlined="true"
+          (click)="cancelarAceitarProcesso()">
+        </p-button>
+        <p-button 
+          label="Aceitar Processo" 
+          icon="pi pi-check" 
+          [loading]="aceitandoProcesso"
+          [disabled]="!dadosAceitarProcesso.valorCausa || !dadosAceitarProcesso.probabilidadeGanho || !dadosAceitarProcesso.prazoEstimado"
+          (click)="confirmarAceitarProcesso()">
+        </p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- Modal Rejeitar Processo -->
+<p-dialog 
+  header="Rejeitar Processo" 
+  [(visible)]="showRejeitarProcessoDialog" 
+  [modal]="true"
+  [responsive]="true" 
+  [style]="{ width: '40vw', minWidth: '400px' }">
+  
+  <div *ngIf="processoParaRejeitar">
+    <div class="flex align-items-center mb-3 p-3 surface-100 border-round">
+      <i class="pi pi-exclamation-triangle text-orange-500 text-3xl mr-3"></i>
+      <div>
+        <h4 class="m-0 mb-1">{{ processoParaRejeitar.titulo }}</h4>
+        <p class="text-color-secondary m-0 text-sm">{{ processoParaRejeitar.descricao }}</p>
+      </div>
+    </div>
+    
+    <p class="text-color-secondary mb-4">
+      Tem certeza de que deseja rejeitar este processo? Esta ação não poderá ser desfeita.
+    </p>
+    
+    <div class="field">
+      <label for="motivoRejeicao" class="block text-900 font-medium mb-2">
+        Motivo da Rejeição (opcional)
+      </label>
+      <textarea
+        id="motivoRejeicao"
+        [(ngModel)]="motivoRejeicao"
+        pInputTextarea
+        rows="4"
+        placeholder="Descreva o motivo pelo qual você está rejeitando este processo..."
+        class="w-full">
+      </textarea>
+      <small class="text-color-secondary">
+        Este motivo será registrado e poderá ser consultado posteriormente.
+      </small>
+    </div>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <p-button 
+      label="Cancelar" 
+      icon="pi pi-times" 
+      severity="secondary"
+      outlined="true"
+      (click)="cancelarRejeitarProcesso()">
+    </p-button>
+    <p-button 
+      label="Confirmar Rejeição" 
+      icon="pi pi-check" 
+      severity="danger"
+      [loading]="rejeitandoProcesso"
+      (click)="confirmarRejeitarProcesso()">
+    </p-button>
+  </ng-template>
+</p-dialog>
+
+<!-- Toast para notificações -->
+<p-toast position="top-right"></p-toast>
+
+<!-- Estilos para inputs do mesmo tamanho -->
+<style>
+/* Garantir que todos os inputs tenham o mesmo tamanho */
+.field input,
+.field p-dropdown,
+.field p-calendar,
+.field textarea {
+  width: 100% !important;
+  min-height: 2.5rem !important;
+}
+
+.field p-dropdown .p-dropdown {
+  width: 100% !important;
+  min-height: 2.5rem !important;
+}
+
+.field p-calendar .p-calendar {
+  width: 100% !important;
+  min-height: 2.5rem !important;
+}
+
+.field p-calendar .p-inputtext {
+  width: 100% !important;
+  min-height: 2.5rem !important;
+  height: 2.5rem !important;
+}
+
+.field textarea {
+  min-height: 2.5rem !important;
+  resize: vertical;
+}
+
+/* Forçar o calendário a ter o mesmo tamanho */
+p-calendar {
+  width: 100% !important;
+  display: block !important;
+}
+
+p-calendar .p-calendar {
+  width: 100% !important;
+  display: block !important;
+}
+
+p-calendar .p-inputtext {
+  width: 100% !important;
+  height: 2.5rem !important;
+  min-height: 2.5rem !important;
+}
+
+/* Corrigir z-index do calendário no modal */
+.p-dialog .p-datepicker {
+  z-index: 10000 !important;
+  position: fixed !important;
+}
+
+.p-dialog .p-datepicker-panel {
+  z-index: 10000 !important;
+  position: fixed !important;
+}
+
+/* Garantir que o datepicker apareça acima do modal */
+.p-component-overlay {
+  z-index: 9999 !important;
+}
+
+.p-dialog {
+  z-index: 9998 !important;
+}
+</style>

@@ -1,0 +1,536 @@
+<!-- Top Navigation -->
+<app-custom-menu
+  [menuItems]="menuItems"
+  [logoText]="'4'"
+  [activeMenuItem]="activeMenuItem"
+  (menuItemClick)="onMenuItemClick($event)"
+  (logoClick)="onLogoClick()">
+</app-custom-menu>
+
+<!-- Hero Section - Seja um Advogado -->
+<!-- <div class="hero-section">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1 class="hero-title">
+        Seja um Advogado 4Jus
+      </h1>
+      <p class="hero-subtitle">
+        Junte-se à revolução da justiça digital
+      </p>
+      <p class="hero-description">
+        Faça parte da maior plataforma de justiça paralela do Brasil e tenha acesso
+        a milhares de clientes que buscam soluções jurídicas ágeis e transparentes.
+      </p>
+    </div>
+  </div>
+</div> -->
+
+
+<!-- Formulário de Cadastro Section -->
+<div class="cadastro-section">
+  <div class="container">
+    <div class="grid">
+      <div class="col-12 lg:col-8 mx-auto">
+        <div class="cadastro-card">
+          
+          <!-- Mensagem de Sucesso -->
+          <div *ngIf="registroCompleto" class="text-center">
+            <div class="success-animation mb-5">
+              <i class="pi pi-check-circle text-8xl text-green-500 mb-4"></i>
+            </div>
+            <h3 class="text-3xl font-bold text-900 mb-3">Cadastro Realizado!</h3>
+            <p class="text-600 text-lg mb-5">Sua conta foi criada com sucesso. Você será redirecionado para o login.</p>
+          </div>
+
+          <!-- Formulário de Cadastro -->
+          <div *ngIf="!registroCompleto">
+            <div class="cadastro-header">
+              <h2 class="cadastro-title">
+                Cadestre-se como Advogado na 4Jus
+              </h2>
+              <p class="cadastro-description">
+                Preencha todos os dados abaixo para criar sua conta na plataforma e começar a oferecer seus serviços jurídicos.
+              </p>
+            </div>
+
+            <form [formGroup]="dadosForm" class="cadastro-form">
+              <div class="grid">
+                
+                <!-- Nome -->
+                <div class="col-12">
+                  <div class="field mb-4">
+                    <label for="nome" class="block text-900 font-semibold mb-2">
+                      Nome Completo <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                      id="nome"
+                      type="text" 
+                      pInputText 
+                      formControlName="nome"
+                      placeholder="Digite seu nome completo"
+                      class="w-full modern-input">
+                    <p-message
+                      *ngIf="dadosForm.get('nome')?.invalid && dadosForm.get('nome')?.touched"
+                      severity="error"
+                      text="Nome é obrigatório">
+                    </p-message>
+                  </div>
+                </div>
+
+                <!-- Email e Telefone -->
+                <div class="col-12 md:col-6">
+                  <div class="field mb-4">
+                    <label for="email" class="block text-900 font-semibold mb-2">
+                      E-mail <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                      id="email"
+                      type="email" 
+                      pInputText 
+                      formControlName="email"
+                      placeholder="seu@email.com"
+                      class="w-full modern-input">
+                    <p-message
+                      *ngIf="dadosForm.get('email')?.invalid && dadosForm.get('email')?.touched"
+                      severity="error"
+                      text="E-mail é obrigatório e deve ser válido">
+                    </p-message>
+                  </div>
+                </div>
+
+                <div class="col-12 md:col-6">
+                  <div class="field mb-4">
+                    <label for="telefone" class="block text-900 font-semibold mb-2">
+                      Telefone <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                      id="telefone"
+                      type="text" 
+                      pInputMask
+                      mask="(99) 99999-9999"
+                      formControlName="telefone"
+                      placeholder="(11) 99999-9999"
+                      class="w-full modern-input">
+                    <p-message
+                      *ngIf="dadosForm.get('telefone')?.invalid && dadosForm.get('telefone')?.touched"
+                      severity="error"
+                      text="Telefone é obrigatório">
+                    </p-message>
+                  </div>
+                </div>
+
+                <!-- OAB -->
+                <div class="col-12 md:col-6">
+                  <div class="field mb-4">
+                    <label for="oab" class="block text-900 font-semibold mb-2">
+                      Número da OAB <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                      id="oab"
+                      type="text" 
+                      pInputMask
+                      mask="999.999/AA"
+                      formControlName="oab"
+                      placeholder="Ex: 450.000/SP"
+                      class="w-full modern-input oab-input">
+                    <p-message
+                      *ngIf="dadosForm.get('oab')?.invalid && dadosForm.get('oab')?.touched"
+                      severity="error"
+                      text="Número da OAB é obrigatório">
+                    </p-message>
+                  </div>
+                </div>
+
+                <!-- Especialidades -->
+                <div class="col-12 md:col-6">
+                  <div class="field mb-4">
+                    <label for="especialidades" class="block text-900 font-semibold mb-2">
+                      Especialidades <span class="text-red-500">*</span>
+                    </label>
+                    <p-multiSelect
+                      id="especialidades"
+                      formControlName="especialidades"
+                      [options]="especialidadesOptions"
+                      placeholder="Selecione suas especialidades"
+                      class="w-full"
+                      display="chip">
+                    </p-multiSelect>
+                    <p-message
+                      *ngIf="dadosForm.get('especialidades')?.invalid && dadosForm.get('especialidades')?.touched"
+                      severity="error"
+                      text="Selecione pelo menos uma especialidade">
+                    </p-message>
+                  </div>
+                </div>
+
+                <!-- Senhas -->
+                <div class="col-12 md:col-6">
+                  <div class="field mb-4">
+                    <label for="password" class="block text-900 font-semibold mb-2">
+                      Senha <span class="text-red-500">*</span>
+                    </label>
+                    <p-password 
+                      id="password"
+                      formControlName="password"
+                      [feedback]="true"
+                      [toggleMask]="true"
+                      placeholder="Mínimo 6 caracteres"
+                      class="w-full"
+                      inputStyleClass="w-full modern-input">
+                    </p-password>
+                    <p-message
+                      *ngIf="dadosForm.get('password')?.invalid && dadosForm.get('password')?.touched"
+                      severity="error"
+                      text="Senha deve ter pelo menos 6 caracteres">
+                    </p-message>
+                  </div>
+                </div>
+
+                <div class="col-12 md:col-6">
+                  <div class="field mb-4">
+                    <label for="confirmPassword" class="block text-900 font-semibold mb-2">
+                      Confirmar Senha <span class="text-red-500">*</span>
+                    </label>
+                    <p-password 
+                      id="confirmPassword"
+                      formControlName="confirmPassword"
+                      [feedback]="false"
+                      [toggleMask]="true"
+                      placeholder="Repita a senha"
+                      class="w-full"
+                      inputStyleClass="w-full modern-input">
+                    </p-password>
+                    <p-message
+                      *ngIf="dadosForm.get('confirmPassword')?.touched && dadosForm.get('password')?.value !== dadosForm.get('confirmPassword')?.value"
+                      severity="warn"
+                      text="As senhas não coincidem">
+                    </p-message>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="form-actions">
+                <p-button 
+                  label="Cadastrar como Advogado"
+                  icon="pi pi-check"
+                  [loading]="submitting"
+                  [disabled]="!canSubmit"
+                  size="large"
+                  (onClick)="cadastrarAdvogado()"
+                  class="w-full">
+                </p-button>
+                <p class="form-disclaimer text-center mt-3">
+                  * Campos obrigatórios. Seus dados estão protegidos conforme nossa Política de Privacidade.
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Benefícios para Advogados Section -->
+<div class="beneficios-section">
+  <div class="container">
+    <h2 class="section-title text-center mb-6">Por que ser um Advogado 4Jus?</h2>
+
+    <div class="grid">
+      <div class="col-12 md:col-6 lg:col-4">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="pi pi-chart-line"></i>
+          </div>
+          <h3 class="benefit-title">Renda Extra Consistente</h3>
+          <p class="benefit-description">
+            Receba processos automaticamente baseados na sua especialidade e disponibilidade.
+            Sistema inteligente garante distribuição equilibrada de casos.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6 lg:col-4">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="pi pi-building"></i>
+          </div>
+          <h3 class="benefit-title">Escritório Digital Completo</h3>
+          <p class="benefit-description">
+            Plataforma integrada com chat, gestão de documentos, agendamento e controle financeiro.
+            Tudo que você precisa em um só lugar.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6 lg:col-4">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="pi pi-star"></i>
+          </div>
+          <h3 class="benefit-title">Avaliação e Reputação</h3>
+          <p class="benefit-description">
+            Construa sua reputação com avaliações de clientes reais. Advogados bem avaliados
+            recebem prioridade na distribuição de processos.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6 lg:col-4">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="pi pi-percentage"></i>
+          </div>
+          <h3 class="benefit-title">Taxas Competitivas</h3>
+          <p class="benefit-description">
+            Comissão transparente de apenas 15% sobre os honorários. Muito menor que
+            estruturas tradicionais de escritório.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6 lg:col-4">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="pi pi-calendar"></i>
+          </div>
+          <h3 class="benefit-title">Flexibilidade de Horário</h3>
+          <p class="benefit-description">
+            Trabalhe quando quiser. Sistema disponível 24/7 permite atender clientes
+            em horários flexíveis, inclusive fins de semana.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6 lg:col-4">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="pi pi-globe"></i>
+          </div>
+          <h3 class="benefit-title">Alcance Nacional</h3>
+          <p class="benefit-description">
+            Atenda clientes de todo o Brasil sem limitações geográficas.
+            Especialize-se em áreas específicas e conquiste mercado nacional.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Justiça Paralela Section -->
+<div class="justica-paralela-section">
+  <div class="container">
+    <h2 class="section-title text-center mb-6">Como funciona a 4Jus?</h2>
+
+    <div class="grid">
+      <div class="col-12 lg:col-8 mx-auto">
+        <div class="justica-explanation">
+          <p class="lead-text">
+            A <strong>4Jus</strong> é uma alternativa inovadora ao sistema judiciário tradicional,
+            oferecendo soluções mais rápidas, acessíveis e eficientes para resolver conflitos e questões legais
+             sem a necessidade de um escritório físico ou iniciar um processo judical.
+          </p>
+
+          <div class="benefits-grid">
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="pi pi-clock"></i>
+              </div>
+              <div class="benefit-content">
+                <h4 style="margin-top: -20px;">Resolução Rápida</h4>
+                <p>Processos resolvidos em dias ou semanas, não anos como no judiciário tradicional.</p>
+              </div>
+            </div>
+
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="pi pi-dollar"></i>
+              </div>
+              <div class="benefit-content" style="margin-top: -30px;">
+                <h4>Custos Reduzidos</h4>
+                <p>Sem taxas exorbitantes de cartório, custas processuais e honorários desnecessários.</p>
+              </div>
+            </div>
+
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="pi pi-users"></i>
+              </div>
+              <div class="benefit-content">
+                <h4 style="margin-top: -20px;">Acesso Universal</h4>
+                <p>Democratiza o acesso à justiça, conectando pessoas comuns a advogados especializados.</p>
+              </div>
+            </div>
+
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="pi pi-shield"></i>
+              </div>
+              <div class="benefit-content">
+                <h4 style="margin-top: -20px;">Segurança Jurídica</h4>
+                <p>Todos os advogados são verificados pela OAB e processos seguem protocolos legais.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Processo de Cadastro Section -->
+<div class="processo-section">
+  <div class="container">
+    <h2 class="section-title text-center mb-6">Como se tornar um Advogado 4Jus?</h2>
+
+    <div class="grid">
+      <div class="col-12 lg:col-6">
+        <div class="process-timeline">
+          <div class="timeline-item">
+            <div class="timeline-number">1</div>
+            <div class="timeline-content">
+              <h1 style="margin-top: -20px;">Cadastro Inicial</h1>
+              <p>Preencha seus dados profissionais básicos: nome, OAB, especialidades e experiência.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-number">2</div>
+            <div class="timeline-content">
+              <h1 style="margin-top: -20px;">Verificação de Documentos</h1>
+              <p>Envie foto da carteira da OAB, RG e comprovante de endereço. Nossa equipe verifica em até 24h.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-number">3</div>
+            <div class="timeline-content">
+              <h1 style="margin-top: -20px;">Configuração do Perfil</h1>
+              <p>Complete seu perfil profissional com áreas de atuação, valores e disponibilidade de horário.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-number">4</div>
+            <div class="timeline-content">
+              <h1 style="margin-top: -20px;">Início das Atividades</h1>
+              <p>Comece a receber processos automaticamente baseados no seu perfil e especialidades.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 lg:col-6">
+        <div class="process-benefits">
+          <h3>Benefícios Imediatos:</h3>
+          <ul class="benefits-list">
+            <li class="benefit-item">
+              <i class="pi pi-check"></i>
+              <span>Perfil profissional personalizado</span>
+            </li>
+            <li class="benefit-item">
+              <i class="pi pi-check"></i>
+              <span>Sistema de gestão de processos integrado</span>
+            </li>
+            <li class="benefit-item">
+              <i class="pi pi-check"></i>
+              <span>Chat direto com clientes</span>
+            </li>
+            <li class="benefit-item">
+              <i class="pi pi-check"></i>
+              <span>Controle financeiro automatizado</span>
+            </li>
+            <li class="benefit-item">
+              <i class="pi pi-check"></i>
+              <span>Treinamentos e capacitações exclusivas</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="faq-section">
+  <div class="container">
+    <h2 class="section-title text-center mb-6">Tire suas Dúvidas</h2>
+
+    <div class="grid">
+      <div class="col-12 lg:col-8 mx-auto">
+        <div class="faq-container">
+          <div class="faq-item">
+            <div class="faq-question" (click)="toggleFAQ(0)">
+              <h4>Preciso pagar para me cadastrar?</h4>
+              <i class="pi pi-chevron-down" [class.rotated]="faqAberta[0]"></i>
+            </div>
+            <div class="faq-answer" [class.open]="faqAberta[0]">
+              <p><strong>Não!</strong> O cadastro na plataforma 4Jus é totalmente gratuito. Você só paga uma comissão de 15% sobre os honorários dos processos que aceitar, apenas quando receber o pagamento do cliente.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" (click)="toggleFAQ(1)">
+              <h4>Como funciona a distribuição de processos?</h4>
+              <i class="pi pi-chevron-down" [class.rotated]="faqAberta[1]"></i>
+            </div>
+            <div class="faq-answer" [class.open]="faqAberta[1]">
+              <p>Nosso sistema inteligente analisa seu perfil, especialidades e avaliações para distribuir processos automaticamente. Advogados com melhor desempenho e avaliações positivas recebem prioridade na distribuição.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" (click)="toggleFAQ(2)">
+              <h4>É seguro para minha carreira?</h4>
+              <i class="pi pi-chevron-down" [class.rotated]="faqAberta[2]"></i>
+            </div>
+            <div class="faq-answer" [class.open]="faqAberta[2]">
+              <p><strong>Absolutamente seguro!</strong> Todos os advogados são verificados pela OAB, e nossa plataforma segue rigorosamente o Código de Ética da advocacia. Muitos advogados usam o 4Jus como complemento de renda sem qualquer conflito.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" (click)="toggleFAQ(3)">
+              <h4>Quanto posso ganhar?</h4>
+              <i class="pi pi-chevron-down" [class.rotated]="faqAberta[3]"></i>
+            </div>
+            <div class="faq-answer" [class.open]="faqAberta[3]">
+              <p>O ganho varia conforme sua dedicação e especialidade. Advogados ativos chegam a faturar entre R$ 3.000 e R$ 15.000 mensalmente. Tudo depende da sua disponibilidade e qualidade do atendimento.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" (click)="toggleFAQ(4)">
+              <h4>Preciso ter escritório físico?</h4>
+              <i class="pi pi-chevron-down" [class.rotated]="faqAberta[4]"></i>
+            </div>
+            <div class="faq-answer" [class.open]="faqAberta[4]">
+              <p><strong>Não necessariamente!</strong> Nossa plataforma é 100% digital. Você pode atender clientes de qualquer lugar com acesso à internet. Muitos advogados trabalham exclusivamente online com excelente resultado.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" (click)="toggleFAQ(5)">
+              <h4>Como funciona o pagamento?</h4>
+              <i class="pi pi-chevron-down" [class.rotated]="faqAberta[5]"></i>
+            </div>
+            <div class="faq-answer" [class.open]="faqAberta[5]">
+              <p>O cliente paga através da plataforma (cartão, PIX ou boleto). Após a conclusão do serviço e aprovação do cliente, o valor é liberado para você automaticamente, descontando apenas nossa comissão de 15%.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<p-toast position="top-right"></p-toast>
+
+
+<!-- Footer Section -->
+<app-onboarding-footer></app-onboarding-footer>

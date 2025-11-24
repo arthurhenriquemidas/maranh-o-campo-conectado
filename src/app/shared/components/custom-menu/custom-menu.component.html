@@ -1,0 +1,111 @@
+<nav class="custom-menu">
+  <div class="menu-container">
+    <!-- Logo -->
+    <div class="menu-logo" (click)="handleLogoClick()">
+      <h2 class="logo-text">
+        <span class="logo-jus">4Jus</span>
+      </h2>
+    </div>
+
+    <!-- Desktop Menu -->
+    <div class="menu-nav desktop-nav">
+      <ul class="nav-links">
+        <li *ngFor="let item of menuItems" class="nav-item">
+          <a
+            *ngIf="!item.children"
+            href="javascript:void(0)"
+            class="nav-link"
+            [class.active]="activeMenuItem === item.label"
+            (click)="handleMenuItemClick(item)">
+            <i *ngIf="item.icon" [class]="'pi ' + item.icon"></i>
+            {{ item.label }}
+          </a>
+
+          <div *ngIf="item.children" class="dropdown">
+            <a href="javascript:void(0)" class="nav-link dropdown-toggle">
+              <i *ngIf="item.icon" [class]="'pi ' + item.icon"></i>
+              {{ item.label }}
+              <i class="pi pi-chevron-down dropdown-arrow"></i>
+            </a>
+            <div class="dropdown-menu">
+              <a
+                *ngFor="let child of item.children"
+                href="javascript:void(0)"
+                class="dropdown-item"
+                (click)="handleMenuItemClick(child)">
+                <i *ngIf="child.icon" [class]="'pi ' + child.icon"></i>
+                {{ child.label }}
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Action Button -->
+    <div class="menu-actions">
+      <button class="client-btn" (click)="handleClientAreaClick()">
+        <i class="pi pi-user"></i>
+        Área do Cliente
+      </button>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" [class.active]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.active]="isMobileMenuOpen">
+    <div class="mobile-menu-content">
+      <div class="mobile-menu-header">
+        <h2 class="mobile-logo">{{ logoText }}<span class="mobile-logo-jus">Jus</span></h2>
+      </div>
+
+      <ul class="mobile-nav-links">
+        <li *ngFor="let item of menuItems" class="mobile-nav-item">
+          <a
+            *ngIf="!item.children"
+            href="javascript:void(0)"
+            class="mobile-nav-link"
+            [class.active]="activeMenuItem === item.label"
+            (click)="handleMenuItemClick(item)">
+            <i *ngIf="item.icon" [class]="'pi ' + item.icon"></i>
+            {{ item.label }}
+          </a>
+
+          <div *ngIf="item.children" class="mobile-dropdown">
+            <a href="javascript:void(0)" class="mobile-nav-link mobile-dropdown-toggle">
+              <i *ngIf="item.icon" [class]="'pi ' + item.icon"></i>
+              {{ item.label }}
+              <i class="pi pi-chevron-down"></i>
+            </a>
+            <div class="mobile-dropdown-menu">
+              <a
+                *ngFor="let child of item.children"
+                href="javascript:void(0)"
+                class="mobile-dropdown-item"
+                (click)="handleMenuItemClick(child)">
+                <i *ngIf="child.icon" [class]="'pi ' + child.icon"></i>
+                {{ child.label }}
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <div class="mobile-menu-footer">
+        <button class="mobile-client-btn" (click)="handleClientAreaClick()">
+          <i class="pi pi-user"></i>
+          Área do Cliente
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>

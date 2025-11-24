@@ -1,0 +1,480 @@
+<!-- Top Navigation -->
+<app-custom-menu
+  [menuItems]="menuItems"
+  [logoText]="'4'"
+  [activeMenuItem]="activeMenuItem"
+  (menuItemClick)="onMenuItemClick($event)"
+  (logoClick)="onLogoClick()">
+</app-custom-menu>
+
+<!-- Hero Section - Ajuda Onboarding -->
+<!-- <div class="hero-section">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1 class="hero-title">
+        Central de Ajuda
+      </h1>
+      <p class="hero-subtitle">
+        Resolva suas dúvidas sobre cadastro e primeiros passos
+      </p>
+      <p class="hero-description">
+        Aqui você encontra respostas para as principais dúvidas sobre como se cadastrar,
+        problemas comuns e aspectos legais do nosso processo de onboarding.
+      </p>
+    </div>
+  </div>
+</div> -->
+
+<!-- Processo de Cadastro Section -->
+<div class="cadastro-section">
+  <div class="container">
+    <h2 class="section-title text-center mb-6">Processo de Cadastro</h2>
+
+    <div class="grid">
+      <div class="col-12 md:col-6 lg:col-4">
+        <div class="help-card">
+          <div class="help-icon">
+            <i class="pi pi-user-plus"></i>
+          </div>
+          <h3 class="help-title">Como me cadastrar?</h3>
+          <p class="help-description">
+            O cadastro é simples e rápido. Clique em "Começar Agora" na página inicial,
+            preencha seus dados básicos e siga o passo a passo. Em menos de 5 minutos você estará pronto!
+          </p>
+          <div class="help-steps">
+            <div class="step-item">
+              <span class="step-number">1</span>
+              <span class="step-text">Dados pessoais</span>
+            </div>
+            <div class="step-item">
+              <span class="step-number">2</span>
+              <span class="step-text">Tipo de usuário</span>
+            </div>
+            <div class="step-item">
+              <span class="step-number">3</span>
+              <span class="step-text">Confirmação</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6 lg:col-4">
+        <div class="help-card">
+          <div class="help-icon">
+            <i class="pi pi-shield"></i>
+          </div>
+          <h3 class="help-title">Verificação de Segurança</h3>
+          <p class="help-description">
+            Para garantir a segurança de todos os usuários, realizamos uma verificação rápida
+            dos dados fornecidos. Isso inclui validação de e-mail e telefone.
+          </p>
+          <div class="security-info">
+            <div class="security-item">
+              <i class="pi pi-envelope"></i>
+              <span>E-mail verificado</span>
+            </div>
+            <div class="security-item">
+              <i class="pi pi-mobile"></i>
+              <span>SMS de confirmação</span>
+            </div>
+            <div class="security-item">
+              <i class="pi pi-shield"></i>
+              <span>Dados protegidos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6 lg:col-4">
+        <div class="help-card">
+          <div class="help-icon">
+            <i class="pi pi-clock"></i>
+          </div>
+          <h3 class="help-title">Tempo de Aprovação</h3>
+          <p class="help-description">
+            Após o cadastro, seu perfil passa por uma análise rápida. Para advogados,
+            pode levar até 24h devido à verificação da OAB.
+          </p>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <small>Cliente: Imediato</small>
+                <p>Acesso liberado automaticamente</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <small>Advogado: Até 24h</small>
+                <p>Análise da documentação OAB</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Problemas Comuns Section -->
+<div class="problemas-section">
+  <div class="container">
+    <h2 class="section-title text-center mb-6">Problemas Comuns</h2>
+
+    <div class="grid">
+      <div class="col-12 lg:col-8 mx-auto">
+        <div class="accordion-container">
+          <div class="accordion-item">
+            <div class="accordion-header" (click)="toggleAccordion('cadastro')">
+              <i class="pi pi-user-plus mr-3"></i>
+              <span>Não consigo completar o cadastro</span>
+              <i class="pi pi-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content" id="cadastro">
+              <p>Se você está tendo problemas para completar o cadastro, verifique:</p>
+              <ul class="problem-list">
+                <li>• Se todos os campos obrigatórios estão preenchidos</li>
+                <li>• Se o e-mail informado é válido e não foi usado anteriormente</li>
+                <li>• Se a senha atende aos requisitos mínimos (8 caracteres, 1 maiúscula, 1 número)</li>
+                <li>• Se você confirmou o e-mail de verificação enviado</li>
+              </ul>
+              <p class="solution">Se o problema persistir, entre em contato conosco através do chat de suporte.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" (click)="toggleAccordion('email')">
+              <i class="pi pi-envelope mr-3"></i>
+              <span>Não recebi o e-mail de confirmação</span>
+              <i class="pi pi-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content" id="email">
+              <p>O e-mail de confirmação pode demorar até 10 minutos para chegar. Verifique:</p>
+              <ul class="problem-list">
+                <li>• Sua caixa de spam/lixo eletrônico</li>
+                <li>• Se o endereço de e-mail foi digitado corretamente</li>
+                <li>• Se há problemas com seu provedor de e-mail</li>
+              </ul>
+              <p class="solution">Se não encontrar o e-mail, você pode solicitar um novo através da opção "Reenviar confirmação" na página de login.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" (click)="toggleAccordion('login')">
+              <i class="pi pi-sign-in mr-3"></i>
+              <span>Erro ao fazer login</span>
+              <i class="pi pi-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content" id="login">
+              <p>Problemas comuns de login:</p>
+              <ul class="problem-list">
+                <li>• Senha incorreta (verifique se Caps Lock está ativado)</li>
+                <li>• E-mail não confirmado</li>
+                <li>• Conta ainda em análise (para advogados)</li>
+                <li>• Problemas de conexão com a internet</li>
+              </ul>
+              <p class="solution">Use a opção "Esqueci minha senha" para recuperar o acesso ou aguarde a aprovação se for advogado.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <div class="accordion-header" (click)="toggleAccordion('documentos')">
+              <i class="pi pi-file mr-3"></i>
+              <span>Dificuldade para enviar documentos</span>
+              <i class="pi pi-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content" id="documentos">
+              <p>Para advogados que precisam enviar documentação:</p>
+              <ul class="problem-list">
+                <li>• Certifique-se de que os arquivos estão nos formatos aceitos (PDF, JPG, PNG)</li>
+                <li>• Verifique o tamanho dos arquivos (máximo 5MB por arquivo)</li>
+                <li>• Use fotos nítidas e legíveis dos documentos</li>
+                <li>• Certifique-se de que todos os dados estão visíveis</li>
+              </ul>
+              <p class="solution">Se continuar com problemas, nossa equipe pode ajudar através do chat de suporte.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Aspectos Legais Section -->
+<div class="legal-section">
+  <div class="container">
+    <h2 class="section-title text-center mb-6">Aspectos Legais</h2>
+
+    <div class="grid">
+      <div class="col-12 lg:col-6">
+        <div class="legal-card">
+          <div class="legal-icon">
+            <i class="pi pi-file"></i>
+          </div>
+          <h3 class="legal-title">Termos de Uso</h3>
+          <p class="legal-description">
+            Ao se cadastrar na plataforma, você concorda com nossos termos de uso que regem
+            o relacionamento entre usuários, advogados e a plataforma.
+          </p>
+          <div class="legal-highlights">
+            <div class="highlight-item">
+              <i class="pi pi-check"></i>
+              <span>Uso responsável da plataforma</span>
+            </div>
+            <div class="highlight-item">
+              <i class="pi pi-check"></i>
+              <span>Respeito às leis vigentes</span>
+            </div>
+            <div class="highlight-item">
+              <i class="pi pi-check"></i>
+              <span>Proteção de dados pessoais</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 lg:col-6">
+        <div class="legal-card">
+          <div class="legal-icon">
+            <i class="pi pi-shield"></i>
+          </div>
+          <h3 class="legal-title">Política de Privacidade</h3>
+          <p class="legal-description">
+            Seus dados estão protegidos conforme a LGPD (Lei Geral de Proteção de Dados).
+            Apenas informações necessárias são coletadas e utilizadas.
+          </p>
+          <div class="legal-highlights">
+            <div class="highlight-item">
+              <i class="pi pi-check"></i>
+              <span>Dados criptografados</span>
+            </div>
+            <div class="highlight-item">
+              <i class="pi pi-check"></i>
+              <span>Uso exclusivo para serviços</span>
+            </div>
+            <div class="highlight-item">
+              <i class="pi pi-check"></i>
+              <span>Direito à exclusão de dados</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-12 lg:col-6">
+        <div class="legal-card">
+          <div class="legal-icon">
+            <i class="pi pi-briefcase"></i>
+          </div>
+          <h3 class="legal-title">Verificação de Advogados</h3>
+          <p class="legal-description">
+            Todos os advogados passam por verificação da OAB antes de serem aprovados.
+            Isso garante que apenas profissionais habilitados atuem na plataforma.
+          </p>
+          <div class="verification-process">
+            <div class="process-item">
+              <span class="process-number">1</span>
+              <div class="process-content">
+                <strong>Envio de documentos</strong>
+                <p>OAB, RG, CPF e comprovante de endereço</p>
+              </div>
+            </div>
+            <div class="process-item">
+              <span class="process-number">2</span>
+              <div class="process-content">
+                <strong>Análise documental</strong>
+                <p>Verificação de autenticidade e validade</p>
+              </div>
+            </div>
+            <div class="process-item">
+              <span class="process-number">3</span>
+              <div class="process-content">
+                <strong>Aprovação</strong>
+                <p>Liberado acesso à plataforma</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 lg:col-6">
+        <div class="legal-card">
+          <div class="legal-icon">
+            <i class="pi pi-exclamation-triangle"></i>
+          </div>
+          <h3 class="legal-title">Responsabilidades</h3>
+          <p class="legal-description">
+            É importante entender suas responsabilidades ao usar nossa plataforma,
+            tanto como cliente quanto como advogado.
+          </p>
+          <div class="responsibilities">
+            <div class="responsibility-item">
+              <strong>Clientes:</strong> Fornecer informações verdadeiras e manter sigilo sobre casos
+            </div>
+            <div class="responsibility-item">
+              <strong>Advogados:</strong> Manter conduta ética e respeitar prazos acordados
+            </div>
+            <div class="responsibility-item">
+              <strong>Plataforma:</strong> Garantir segurança e mediação imparcial de conflitos
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Primeiros Passos Section -->
+<div class="primeiros-passos-section">
+  <div class="container">
+    <h2 class="section-title text-center mb-6">Primeiros Passos Após o Cadastro</h2>
+
+    <div class="grid">
+      <div class="col-12 md:col-6">
+        <div class="steps-card">
+          <h3 class="steps-title">
+            <i class="pi pi-user mr-2"></i>
+            Para Clientes
+          </h3>
+          <div class="steps-list">
+            <div class="step-item">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>Complete seu perfil</h4>
+                <p>Adicione informações pessoais e preferências</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>Explore advogados</h4>
+                <p>Navegue pelos perfis e especialidades disponíveis</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>Crie seu primeiro processo</h4>
+                <p>Descreva seu caso e aguarde um advogado aceitar</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <h4>Acompanhe o progresso</h4>
+                <p>Use o chat para se comunicar com seu advogado</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-6">
+        <div class="steps-card">
+          <h3 class="steps-title">
+            <i class="pi pi-briefcase mr-2"></i>
+            Para Advogados
+          </h3>
+          <div class="steps-list">
+            <div class="step-item">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>Complete seu perfil profissional</h4>
+                <p>Adicione especialidades, experiência e áreas de atuação</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>Configure sua disponibilidade</h4>
+                <p>Defina horários de atendimento e tipos de casos aceitos</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>Aguarde processos</h4>
+                <p>Sistema automático atribui casos baseados no seu perfil</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <h4>Gerencie seus casos</h4>
+                <p>Use ferramentas para acompanhar processos e clientes</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="faq-section">
+  <div class="container">
+    <h2 class="section-title text-center mb-6">Perguntas Frequentes</h2>
+
+    <div class="grid">
+      <div class="col-12 lg:col-8 mx-auto">
+        <div class="faq-container">
+          <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+            <div class="faq-question" (click)="toggleFAQ(i)">
+              <h4>{{ faq.pergunta }}</h4>
+              <i class="pi pi-chevron-down" [class.rotated]="faqAberta[i]"></i>
+            </div>
+            <div class="faq-answer" [class.open]="faqAberta[i]">
+              <p>{{ faq.resposta }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Suporte Section -->
+<div class="suporte-section">
+  <div class="container text-center">
+    <h2 class="suporte-title">Ainda precisa de ajuda?</h2>
+    <p class="suporte-description">
+      Nossa equipe está disponível para esclarecer qualquer dúvida sobre o processo de cadastro e uso da plataforma.
+    </p>
+
+    <div class="suporte-info">
+      <div class="info-item">
+        <i class="pi pi-envelope"></i>
+        <div>
+          <strong>E-mail:</strong>
+          <div style="margin-left: 33%;">
+            <a  href="mailto:suporte&#64;4jus.com.br">suporte&#64;4jus.com.br</a>
+          </div>
+        </div>
+      </div>
+      <div class="info-item">
+        <i class="pi pi-phone"></i>
+        <div>
+          <strong>Telefone:</strong>
+          <div style="margin-left: 33%;width: 100%;">
+            <a href="tel:+5511999999999">(11) 99999-9999</a>
+          </div>
+        </div>
+      </div>
+      <div class="info-item">
+        <i class="pi pi-clock"></i>
+        <div>
+          <strong>Horário:</strong>
+          <div style="margin-left: 28%;width: 100%;">
+            Seg-Sex, 8h às 18h
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer Section -->
+<app-onboarding-footer></app-onboarding-footer>

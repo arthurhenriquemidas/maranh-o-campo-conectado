@@ -1,0 +1,221 @@
+/* === VARIÁVEIS LOCAIS === */
+:host {
+  --primary-color: var(--primary-600);
+  --primary-light: #e6f2ff;
+  --text-primary: #2d3748;
+  --text-secondary: #718096;
+  --background-light: #ffffff;
+  --background-gray: #f8fafc;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
+  --border-radius: 12px;
+  --transition: all 0.3s ease;
+}
+
+// Hero Section
+.hero-section {
+  background:
+    linear-gradient(140deg, rgba(44, 95, 124, 0.8) 0%, rgba(30, 58, 79, 0.9) 20%, rgba(44, 95, 124, 0.8) 80%),
+    url('https://images.unsplash.com/photo-1559526324-4b87b5e36e44?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: white;
+  padding: 8rem 2rem 6rem;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+
+  .hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    line-height: 1.1;
+    color: white;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+
+    @media (max-width: 768px) {
+      font-size: 2.8rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+    opacity: 0.95;
+    color: white;
+
+    @media (max-width: 768px) {
+      font-size: 1.3rem;
+    }
+  }
+
+  .hero-description {
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+    line-height: 1.7;
+    color: white;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media (max-width: 768px) {
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+    }
+  }
+}
+
+// LGPD Section
+.lgpd-section {
+  padding: 4rem 2rem;
+  background: var(--background-light);
+
+  .lgpd-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .lgpd-header {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    .lgpd-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+
+      @media (max-width: 768px) {
+        font-size: 1.8rem;
+      }
+    }
+
+    .lgpd-subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+  }
+
+  .lgpd-content {
+    .lgpd-introducao {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+
+      p {
+        font-size: 1.2rem;
+        color: var(--text-primary);
+        line-height: 1.6;
+      }
+    }
+
+    .lgpd-simples {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 3rem;
+      box-shadow: var(--shadow-sm);
+
+      @media (max-width: 768px) {
+        padding: 2rem;
+      }
+
+      h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin: 2rem 0 1rem 0;
+        border-bottom: 2px solid var(--primary-light);
+        padding-bottom: 0.5rem;
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+
+      h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 1.5rem 0 0.5rem 0;
+        font-style: italic;
+      }
+
+      p {
+        color: var(--text-secondary);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        strong {
+          color: var(--text-primary);
+          font-weight: 600;
+        }
+      }
+
+      ul {
+        margin: 1rem 0;
+        padding-left: 2rem;
+
+        li {
+          margin-bottom: 0.5rem;
+          color: var(--text-secondary);
+          line-height: 1.6;
+        }
+      }
+    }
+  }
+}
+
+// Container utility
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+// Responsive adjustments
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding-top: 8rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 3rem;
+    min-height: 50vh;
+  }
+
+  .lgpd-section {
+    padding: 2.5rem 1rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+}

@@ -1,0 +1,115 @@
+<!-- Header Elegante com Menu -->
+<div class="elegant-header">
+  <div class="header-container">
+    
+    <!-- Mobile Menu Button -->
+    <button 
+      class="mobile-menu-btn"
+      pButton 
+      type="button" 
+      icon="pi pi-bars"
+      (click)="toggleMobileMenu()"
+      pTooltip="Menu"
+      tooltipPosition="bottom"
+      title="Menu">
+    </button>
+    
+    <!-- Logo e Nome da Aplicação -->
+    <div class="header-brand">
+      <div class="brand-logo">
+        <i class="pi pi-balance-scale brand-icon"></i>
+        <div class="brand-text">
+          <h1 class="brand-title">4Jus</h1>
+          <span class="brand-subtitle">Plataforma Jurídica</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu de Navegação Desktop -->
+    <div class="header-nav desktop-only">
+      <p-menubar [model]="menuItems" styleClass="elegant-menubar">
+        <ng-template pTemplate="start" >
+          <!-- Menu items serão renderizados aqui -->
+        </ng-template>
+      </p-menubar>
+    </div>
+
+    <!-- Área do Usuário -->
+    <div class="header-user">
+      <div class="user-info" (click)="irParaPerfil()"> <!--  -->
+        <div class="user-avatar">
+          <i class="pi pi-user"></i>
+        </div>
+        <div class="user-details">
+          <span class="user-name">{{ currentUser?.nome }}</span>
+          <span class="user-role">Cliente</span>
+        </div>
+      </div>
+      
+      <div class="user-actions">
+        <p-button 
+          icon="pi pi-bell" 
+          class="action-btn notification-btn"
+          pTooltip="Notificações"
+          tooltipPosition="bottom"
+          (click)="openNotifications()">
+          <span class="notification-badge" *ngIf="hasNotifications">3</span>
+        </p-button>
+        
+        <p-button 
+          icon="pi pi-sign-out" 
+          class="action-btn logout-btn"
+          pTooltip="Sair"
+          tooltipPosition="bottom"
+          (click)="logout()">
+        </p-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" [class.active]="mobileMenuOpen" (click)="closeMobileMenu()">
+    <div class="mobile-menu" (click)="$event.stopPropagation()">
+      <div class="mobile-menu-header">
+        <div class="user-info-mobile">
+          <div class="user-avatar">
+            <i class="pi pi-user"></i>
+          </div>
+          <div class="user-details">
+            <span class="user-name">{{ currentUser?.nome }}</span>
+            <span class="user-role">Cliente</span>
+          </div>
+        </div>
+        <button 
+          class="close-menu-btn"
+          pButton 
+          type="button" 
+          icon="pi pi-times"
+          (click)="closeMobileMenu()"
+          title="Fechar Menu">
+        </button>
+      </div>
+      <div class="mobile-menu-items">
+        <a 
+          *ngFor="let item of menuItems" 
+          [routerLink]="item.routerLink"
+          class="mobile-menu-item"
+          (click)="closeMobileMenu()">
+          <i [class]="item.icon" class="menu-icon"></i>
+          <span class="menu-label">{{ item.label }}</span>
+        </a>
+      </div>
+      <div class="mobile-menu-footer">
+        <button 
+          class="mobile-logout-btn"
+          pButton 
+          type="button" 
+          icon="pi pi-sign-out"
+          label="Sair"
+          title="Sair"
+          (click)="logout()">
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

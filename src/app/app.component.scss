@@ -1,0 +1,88 @@
+// Estilos específicos do componente principal
+
+.main-container {
+  min-height: calc(100vh - 80px);
+  background-color: #f8f9fa;
+}
+
+.dashboard-card {
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+.legal-menubar {
+  // Usar estilos padrão do tema PrimeNG
+  border: none !important;
+}
+
+.agenda-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e9ecef;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.task-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e9ecef;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.line-through {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .main-container {
+    padding: 1rem !important;
+  }
+  
+  ::ng-deep .p-dialog {
+    width: 95vw !important;
+  }
+}
+
+// Custom table styles - usar cores padrão
+::ng-deep .p-datatable {
+  .p-datatable-tbody > tr:hover {
+    background-color: #f8f9fa;
+  }
+}
+
+// Toast customization
+::ng-deep .p-toast {
+  z-index: 9999;
+}
+
+// Button customizations
+::ng-deep .p-button {
+  &.p-button-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+  }
+  
+  &.p-button-help {
+    background-color: var(--info-color);
+    border-color: var(--info-color);
+  }
+}
+
+// Card header customization
+::ng-deep .p-card .p-card-header {
+  background: linear-gradient(135deg, var(--legal-neutral), var(--legal-accent));
+  color: white;
+  font-weight: bold;
+  border-radius: 6px 6px 0 0;
+}

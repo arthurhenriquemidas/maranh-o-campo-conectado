@@ -1,0 +1,716 @@
+<!-- Layout Admin -->
+<div class="admin-layout">
+  
+  <!-- Header Component -->
+  <app-admin-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-admin-header>
+
+   <!-- Breadcrumb -->
+   <!-- <div class="layout-breadcrumb p-3">
+    <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome"></p-breadcrumb>
+  </div> -->
+    
+  <!-- Conteúdo Principal -->
+  <div class="layout-content p-4">
+
+    <!-- Header da Página -->
+    <div class="page-header mb-4">
+      <div class="flex align-items-center justify-content-between">
+        <div>
+          <h1 class="text-3xl font-bold text-900 mb-2">Processos Disponíveis</h1>
+          <p class="text-xl text-color-secondary">
+            Gerencie a fila de processos e atribua advogados disponíveis.
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <p-button 
+            label="Ver Fila de Atribuição" 
+            icon="pi pi-list"
+            disabled="true"
+            class="p-button-info p-button-lg"
+            (click)="verFilaAtribuicao()">
+          </p-button>
+          <p-button 
+            label="Revisar Verificações" 
+            icon="pi pi-check-circle"
+            disabled="true"
+            class="p-button-warning p-button-lg"
+            (click)="revisarVerificacoes()">
+          </p-button>
+          <p-button 
+            label="Exportar Relatório" 
+            icon="pi pi-download"
+            disabled="true"
+            class="p-button-success p-button-lg"
+            (click)="exportarRelatorio()">
+          </p-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção: Fila de Processos -->
+    <div class="queue-section mb-4">
+      <p-card header="Fila de Processos" class="queue-card">
+        <div class="queue-metrics">
+          <div class="metric-item">
+            <div class="metric-value">{{ metricas.processosAtivos }}</div>
+            <div class="metric-label">Processos Ativos</div>
+            <div class="metric-icon">
+              <i class="pi pi-briefcase"></i>
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-value">{{ metricas.aguardandoAtribuicao }}</div>
+            <div class="metric-label">Aguardando Atribuição</div>
+            <div class="metric-icon">
+              <i class="pi pi-clock"></i>
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-value">{{ metricas.advogadosDisponiveis }}</div>
+            <div class="metric-label">Advogados Disponíveis</div>
+            <div class="metric-icon">
+              <i class="pi pi-users"></i>
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-value">{{ metricas.clientesAtivos }}</div>
+            <div class="metric-label">Clientes Ativos</div>
+            <div class="metric-icon">
+              <i class="pi pi-user"></i>
+            </div>
+          </div>
+          
+          <div class="metric-item">
+            <div class="metric-value">{{ metricas.tempoMedioAnalise }}h</div>
+            <div class="metric-label">Tempo Médio de Análise</div>
+            <div class="metric-icon">
+              <i class="pi pi-stopwatch"></i>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Seção: Processos Recentes -->
+    <div class="processos-section">
+      <p-card header="Processos Recentes">
+        <div class="search-container mb-4" >
+            <div class="search-filters">
+              <div class="filter-group" >
+                <label class="filter-label">Status</label>
+                <p-dropdown 
+                  [options]="statusOptions" 
+                  [(ngModel)]="selectedStatus"
+                  name="selectedStatus"
+                  placeholder="Todos os status"
+                  (onChange)="onFilterChange()"
+                  class="filter-dropdown">
+                </p-dropdown>
+              </div>
+              
+              <div class="filter-group">
+                <label class="filter-label">Tipo</label>
+                <p-dropdown 
+                  [options]="tipoOptions" 
+                  [(ngModel)]="selectedTipo"
+                  name="selectedTipo"
+                  placeholder="Todos os tipos"
+                  (onChange)="onFilterChange()"
+                  class="filter-dropdown">
+                </p-dropdown>
+              </div>
+    
+              <div class="filter-group">
+                <label class="filter-label">Urgência</label>
+                <p-dropdown 
+                  [options]="urgenciaOptions" 
+                  [(ngModel)]="selectedUrgencia"
+                  name="selectedUrgencia"
+                  placeholder="Todas as urgências"
+                  (onChange)="onFilterChange()"
+                  class="filter-dropdown">
+                </p-dropdown>
+              </div>
+    
+              <div class="filter-actions">
+                <p-button 
+                  icon="pi pi-refresh" 
+                  label="Atualizar"
+                  severity="secondary"
+                  outlined="true"
+                  size="small"
+                  pTooltip="Recarregar dados"
+                  (click)="loadProcessos()">
+                </p-button>
+                
+                <p-button 
+                  icon="pi pi-filter-slash" 
+                  label="Limpar Filtros"
+                  severity="secondary"
+                  text="true"
+                  size="small"
+                  pTooltip="Remover todos os filtros"
+                  (click)="clearAllFilters()">
+                </p-button>
+              </div>
+            </div>
+    
+            <!-- Barra de Busca -->
+            <div class="search-main mt-3">
+              <div class="search-input-wrapper">
+                <div class="search-icon">
+                  <i class="pi pi-search"></i>
+                </div>
+                <input 
+                  type="text" 
+                  pInputText 
+                  placeholder="Buscar por referência, título ou cliente..." 
+                  [(ngModel)]="searchTerm"
+                  name="searchTerm"
+                  (input)="onSearch()"
+                  class="search-input">
+                <div class="search-actions">
+                  <p-button 
+                    *ngIf="searchTerm"
+                    class="clear-btn"
+                    (click)="clearSearch()"
+                    pTooltip="Limpar busca"
+                    tooltipPosition="top">
+                    <i class="pi pi-times"></i>
+                  </p-button>
+                </div>
+              </div>
+            </div>
+        </div>
+        
+        <p-toolbar class="mb-3">
+          <ng-template pTemplate="left">
+            <span class="font-medium">
+              {{ processosFiltered.length }} processos encontrados
+            </span>
+          </ng-template>
+          <ng-template pTemplate="right">
+            <p-button 
+              label="Atribuir em Lote" 
+              icon="pi pi-users"
+              class="p-button-success p-button-sm"
+              [disabled]="processosSelecionados.length === 0"
+              (click)="atribuirEmLote()">
+            </p-button>
+          </ng-template>
+        </p-toolbar>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="grid">
+          <div *ngFor="let item of [1,2,3,4,5]" class="col-12">
+            <div class="flex align-items-center p-3 border-bottom-1 surface-border">
+              <p-skeleton shape="circle" size="3rem" class="mr-3"></p-skeleton>
+              <div class="flex-1">
+                <p-skeleton width="100%" height="1rem" class="mb-2"></p-skeleton>
+                <p-skeleton width="75%" height="0.8rem" class="mb-2"></p-skeleton>
+                <p-skeleton width="50%" height="0.6rem"></p-skeleton>
+              </div>
+              <div class="flex align-items-center">
+                <p-skeleton width="4rem" height="2rem" class="mr-2"></p-skeleton>
+                <p-skeleton shape="circle" size="2rem"></p-skeleton>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabela de Processos -->
+        <div *ngIf="!loading">
+          <p-table 
+            [value]="processosFiltered" 
+            [paginator]="true" 
+            [rows]="10"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} processos"
+            [rowsPerPageOptions]="[5, 10, 25, 50]"
+            [selectionMode]="'multiple'"
+            [(selection)]="processosSelecionados"
+            dataKey="id"
+            styleClass="p-datatable-sm">
+            
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 3rem">
+                  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th>Referência</th>
+                <th>Título</th>
+                <th>Cliente</th>
+                <th>Status</th>
+                <th>Tipo</th>
+                <th>Urgência</th>
+                <th>Data Criação</th>
+                <th>Dias em Análise</th>
+                <th style="width: 4rem">Ações</th>
+              </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="body" let-processo>
+              <tr>
+                <td>
+                  <p-tableCheckbox [value]="processo"></p-tableCheckbox>
+                </td>
+                <td>
+                  <span class="font-mono font-bold text-primary">{{ processo.referencia }}</span>
+                </td>
+                <td>
+                  <div class="processo-titulo">
+                    <div class="font-medium">{{ processo.titulo }}</div>
+                    <div class="text-sm text-color-secondary">{{ processo.descricao | slice:0:60 }}{{ processo.descricao.length > 60 ? '...' : '' }}</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex align-items-center">
+                    <p-avatar 
+                      [label]="getInitials(processo.cliente)" 
+                      size="normal" 
+                      class="mr-2">
+                    </p-avatar>
+                    <span class="font-medium">{{ processo.cliente }}</span>
+                  </div>
+                </td>
+                <td>
+                  <p-tag 
+                    [value]="getStatusLabel(processo.status)" 
+                    [severity]="getStatusSeverity(processo.status)">
+                  </p-tag>
+                </td>
+                <td>
+                  <p-tag 
+                    [value]="getTipoLabel(processo.tipo)" 
+                    severity="info">
+                  </p-tag>
+                </td>
+                <td>
+                  <p-tag 
+                    [value]="getUrgenciaLabel(processo.urgencia)"
+                    [severity]="getUrgenciaSeverity(processo.urgencia)">
+                  </p-tag>
+                </td>
+                <td>
+                  <span class="text-sm">{{ processo.dataCriacao | date:'dd/MM/yyyy' }}</span>
+                </td>
+                <td>
+                  <span class="dias-analise" [ngClass]="getDiasAnaliseClass(processo.dataCriacao)">
+                    {{ getDiasAnalise(processo.dataCriacao) }} dias
+                  </span>
+                </td>
+                <td>
+                  <div class="flex gap-1">
+                    <p-button 
+                      icon="pi pi-eye" 
+                      class="p-button-rounded p-button-text p-button-sm"
+                      pTooltip="Ver detalhes"
+                      (onClick)="verDetalhes(processo)">
+                    </p-button>
+                    <p-button 
+                      icon="pi pi-user-plus" 
+                      class="p-button-rounded p-button-text p-button-sm"
+                      pTooltip="Atribuir advogado"
+                      (onClick)="atribuirAdvogado(processo)">
+                    </p-button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="10" class="text-center p-4">
+                  <div class="empty-state">
+                    <i class="pi pi-briefcase text-6xl text-color-secondary mb-4"></i>
+                    <h3 class="text-color-secondary mb-3">
+                      {{ searchTerm || selectedStatus || selectedTipo || selectedUrgencia ? 'Nenhum processo encontrado' : 'Nenhum processo disponível' }}
+                    </h3>
+                    <p class="text-color-secondary mb-4" *ngIf="!searchTerm && !selectedStatus && !selectedTipo && !selectedUrgencia">
+                      Todos os processos foram atribuídos ou não há processos cadastrados.
+                    </p>
+                    <p class="text-color-secondary mb-4" *ngIf="searchTerm || selectedStatus || selectedTipo || selectedUrgencia">
+                      Tente ajustar os filtros de busca.
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </p-card>
+    </div>
+
+  </div>
+</div>
+
+<!-- Dialog Atribuir Processo -->
+<p-dialog 
+  header="Atribuir Processo" 
+  [(visible)]="showAtribuicaoDialog" 
+  [modal]="true"
+  [responsive]="true" 
+  [style]="{width: '50vw', minWidth: '300px'}">
+  
+  <div *ngIf="processoSelecionado">
+    <h4 class="mb-3">{{ processoSelecionado.titulo }}</h4>
+    <p class="text-color-secondary mb-4">{{ processoSelecionado.descricao }}</p>
+    
+    <div class="field">
+      <label for="advogado" class="block text-900 font-medium mb-2">
+        Selecionar Advogado <span class="text-red-500">*</span>
+      </label>
+      <p-dropdown 
+        id="advogado"
+        [options]="advogadosDisponiveis" 
+        [(ngModel)]="advogadoSelecionado"
+        name="advogadoSelecionado"
+        placeholder="Escolha um advogado..."
+        optionLabel="nome"
+        optionValue="id"
+        [appendTo]="'body'"
+        [showClear]="true"
+        class="w-full">
+        <ng-template pTemplate="selectedItem" let-advogado>
+          <div class="flex align-items-center">
+            <p-avatar 
+              [label]="getInitials(advogado.nome)" 
+              size="normal" 
+              class="mr-2">
+            </p-avatar>
+            <div>
+              <div class="font-medium">{{ advogado.nome }}</div>
+              <div class="text-sm text-color-secondary">{{ advogado.especialidades?.join(', ') }}</div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="item" let-advogado>
+          <div class="flex align-items-center">
+            <p-avatar 
+              [label]="getInitials(advogado.nome)" 
+              size="normal" 
+              class="mr-2">
+            </p-avatar>
+            <div>
+              <div class="font-medium">{{ advogado.nome }}</div>
+              <div class="text-sm text-color-secondary">
+                {{ advogado.oab }} • {{ advogado.especialidades?.join(', ') }}
+              </div>
+              <div class="text-sm text-green-600">
+                 {{ advogado.avaliacaoMedia }}/5 • {{ advogado.totalProcessos }} processos
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <p-button 
+      label="Cancelar" 
+      icon="pi pi-times" 
+      class="p-button-text"
+      (click)="cancelarAtribuicao()">
+    </p-button>
+    <p-button 
+      label="Atribuir Processo" 
+      icon="pi pi-check" 
+      [loading]="atribuindoProcesso"
+      [disabled]="!advogadoSelecionado"
+      (click)="confirmarAtribuicao()">
+    </p-button>
+  </ng-template>
+</p-dialog>
+
+<!-- Dialog Atribuir em Lote -->
+<p-dialog 
+  header="Atribuir em Lote" 
+  [(visible)]="showAtribuicaoLoteDialog" 
+  [modal]="true"
+  [responsive]="true" 
+  [style]="{width: '60vw', minWidth: '400px'}">
+  
+  <div>
+   
+
+    <!-- Modos de Atribuição -->
+    <div class="field mb-4">
+      <label class="block text-900 font-medium mb-3">Modo de Atribuição</label>
+      <div class="modo-atribuicao-container">
+        <div
+          class="modo-atribuicao-option"
+          [class.selected]="atribuicaoModo === 'unico'"
+          (click)="selecionarModoAtribuicao('unico')">
+          <div class="modo-atribuicao-icon">
+            <i class="pi pi-user"></i>
+          </div>
+          <div class="modo-atribuicao-content">
+            <div class="modo-atribuicao-title">Um Advogado</div>
+            <div class="modo-atribuicao-description">
+              Atribuir todos os processos para um único advogado
+            </div>
+          </div>
+          <div class="modo-atribuicao-check">
+            <i class="pi pi-check-circle"></i>
+          </div>
+        </div>
+
+        <div
+          class="modo-atribuicao-option"
+          [class.selected]="atribuicaoModo === 'multiplos'"
+          (click)="selecionarModoAtribuicao('multiplos')">
+          <div class="modo-atribuicao-icon">
+            <i class="pi pi-users"></i>
+          </div>
+          <div class="modo-atribuicao-content">
+            <div class="modo-atribuicao-title">Múltiplos Advogados</div>
+            <div class="modo-atribuicao-description">
+              Escolher vários advogados específicos manualmente
+            </div>
+          </div>
+          <div class="modo-atribuicao-check">
+            <i class="pi pi-check-circle"></i>
+          </div>
+        </div>
+
+        <div
+          class="modo-atribuicao-option"
+          [class.selected]="atribuicaoModo === 'todos'"
+          (click)="selecionarModoAtribuicao('todos')">
+          <div class="modo-atribuicao-icon">
+            <i class="pi pi-sitemap"></i>
+          </div>
+          <div class="modo-atribuicao-content">
+            <div class="modo-atribuicao-title">Todos Disponíveis</div>
+            <div class="modo-atribuicao-description">
+              Distribuição automática inteligente entre todos
+            </div>
+          </div>
+          <div class="modo-atribuicao-check">
+            <i class="pi pi-check-circle"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campo único advogado (quando modo = 'unico') -->
+    <div class="field" *ngIf="atribuicaoModo === 'unico'">
+      <label for="advogadoLote" class="block text-900 font-medium mb-2">
+        Selecionar Advogado <span class="text-red-500">*</span>
+      </label>
+      <p-dropdown
+        id="advogadoLote"
+        [options]="advogadosDisponiveisAtivos"
+        [(ngModel)]="advogadoSelecionadoLote"
+        name="advogadoSelecionadoLote"
+        placeholder="Escolha um advogado..."
+        optionLabel="nome"
+        optionValue="id"
+        [appendTo]="'body'"
+        [showClear]="true"
+        class="w-full">
+        <ng-template pTemplate="selectedItem" let-advogado>
+          <div class="flex align-items-center">
+            <p-avatar
+              [label]="getInitials(advogado.nome)"
+              size="normal"
+              class="mr-2">
+            </p-avatar>
+            <div>
+              <div class="font-medium">{{ advogado.nome }}</div>
+              <div class="text-sm text-color-secondary">{{ advogado.especialidades?.join(', ') }}</div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="item" let-advogado>
+          <div class="flex align-items-center">
+            <p-avatar
+              [label]="getInitials(advogado.nome)"
+              size="normal"
+              class="mr-2">
+            </p-avatar>
+            <div>
+              <div class="font-medium">{{ advogado.nome }}</div>
+              <div class="text-sm text-color-secondary">
+                {{ advogado.oab }} • {{ advogado.especialidades?.join(', ') }}
+              </div>
+              <div class="text-sm text-green-600">
+                 {{ advogado.avaliacaoMedia }}/5 • {{ advogado.totalProcessos }} processos • Carga: {{ advogado.cargaAtual }}
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+
+    <!-- Seleção múltipla de advogados (quando modo = 'multiplos') -->
+    <div class="field" *ngIf="atribuicaoModo === 'multiplos'">
+      <div class="flex justify-content-between align-items-center mb-3">
+        <label class="text-900 font-medium">Selecionar Advogados <span class="text-red-500">*</span></label>
+        <div class="flex gap-2">
+          <p-button
+            label="Selecionar Todos"
+            icon="pi pi-check-square"
+            class="p-button-sm p-button-text"
+            (click)="selecionarTodosAdvogados()">
+          </p-button>
+          <p-button
+            label="Limpar"
+            icon="pi pi-times"
+            class="p-button-sm p-button-text p-button-secondary"
+            (click)="limparSelecaoAdvogados()">
+          </p-button>
+        </div>
+      </div>
+
+      <!-- Loading placeholder -->
+      <div *ngIf="!advogadosDisponiveis || advogadosDisponiveis.length === 0" class="text-center py-5">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <p class="mt-3 text-color-secondary">Carregando advogados...</p>
+      </div>
+
+      <div class="grid" *ngIf="advogadosDisponiveis && advogadosDisponiveis.length > 0">
+        <div *ngFor="let advogado of advogadosDisponiveis; trackBy: trackByAdvogadoId" class="col-12 md:col-6 lg:col-4">
+          <div
+            class="advogado-card p-3 border-1 border-round cursor-pointer transition-all"
+            [class.selected]="isAdvogadoSelecionado(advogado.id)"
+            [class.disabled]="!advogado.disponivel"
+            (click)="advogado.disponivel && onAdvogadoToggle(advogado.id)">
+            <div class="flex align-items-center">
+              <p-checkbox
+                [ngModel]="isAdvogadoSelecionado(advogado.id)"
+                [disabled]="!advogado.disponivel"
+                class="mr-3">
+              </p-checkbox>
+              <p-avatar
+                [label]="getInitials(advogado.nome)"
+                size="normal"
+                class="mr-3">
+              </p-avatar>
+              <div class="flex-1">
+                <div class="font-medium">{{ advogado.nome }}</div>
+                <div class="text-sm text-color-secondary">{{ advogado.oab }}</div>
+                <div class="text-sm text-color-secondary">{{ advogado.especialidades?.join(', ') }}</div>
+                <div class="text-sm">
+                  <span class="text-green-600">{{ advogado.avaliacaoMedia }}/5</span>
+                  <span class="text-color-secondary"> • {{ advogado.totalProcessos }} processos</span>
+                  <span class="text-blue-600"> • Carga: {{ advogado.cargaAtual }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3 p-3 border-round bg-blue-50">
+        <div class="flex justify-content-between align-items-center">
+          <div>
+            <small class="text-blue-900 font-medium">
+              <i class="pi pi-users mr-2"></i>
+              {{ advogadosDisponiveis.length }} advogado(s) disponível(is)
+            </small>
+          </div>
+          <div *ngIf="advogadosSelecionadosCount > 0">
+            <small class="text-blue-600 font-semibold">
+              <i class="pi pi-check-circle mr-1"></i>
+              {{ advogadosSelecionadosCount }} selecionado(s)
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Todos os advogados (quando modo = 'todos') -->
+    <div class="field" *ngIf="atribuicaoModo === 'todos'">
+      <div class="flex align-items-center mb-3">
+        <p-checkbox
+          inputId="distribuicaoAutomatica"
+          [(ngModel)]="distribuicaoAutomatica"
+          [binary]="true"
+          class="mr-2">
+        </p-checkbox>
+        <label for="distribuicaoAutomatica" class="text-900 font-medium cursor-pointer">
+          Distribuição Automática Inteligente
+        </label>
+      </div>
+
+      <div *ngIf="!distribuicaoAutomatica" class="p-3 border-1 border-round surface-100">
+        <p class="text-color-secondary mb-3">
+          <i class="pi pi-info-circle mr-2"></i>
+          Será usada distribuição simples (round-robin) entre todos os advogados disponíveis.
+        </p>
+      </div>
+
+      <div *ngIf="distribuicaoAutomatica" class="p-3 border-1 border-round surface-100">
+        <p class="text-color-secondary mb-3">
+          <i class="pi pi-star mr-2"></i>
+          Distribuição inteligente baseada em especialidades, carga de trabalho atual e avaliações.
+        </p>
+        <div class="grid">
+          <div class="col-12 md:col-4">
+            <div class="text-center">
+              <i class="pi pi-briefcase text-blue-600 text-2xl mb-2"></i>
+              <div class="font-medium">Especialidades</div>
+              <small class="text-color-secondary">Match com tipo de processo</small>
+            </div>
+          </div>
+          <div class="col-12 md:col-4">
+            <div class="text-center">
+              <i class="pi pi-chart-line text-green-600 text-2xl mb-2"></i>
+              <div class="font-medium">Carga Balanceada</div>
+              <small class="text-color-secondary">Menor carga primeiro</small>
+            </div>
+          </div>
+          <div class="col-12 md:col-4">
+            <div class="text-center">
+              <i class="pi pi-star text-yellow-600 text-2xl mb-2"></i>
+              <div class="font-medium">Performance</div>
+              <small class="text-color-secondary">Advogados mais bem avaliados</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3 p-3 border-1 border-round bg-blue-50">
+        <div class="flex align-items-center">
+          <i class="pi pi-users text-blue-600 mr-3"></i>
+          <div>
+            <div class="font-medium text-blue-900">Advogados Disponíveis</div>
+            <small class="text-blue-700">
+              {{ totalAdvogadosDisponiveis }} advogados receberão os processos
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mb-4">
+      Você selecionou <strong>{{ processosSelecionados.length }}</strong> processos para atribuir.
+    </p>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <p-button 
+      label="Cancelar" 
+      icon="pi pi-times" 
+      class="p-button-text"
+      (click)="cancelarAtribuicaoLote()">
+    </p-button>
+    <p-button
+      label="Atribuir Processos"
+      icon="pi pi-check"
+      [loading]="atribuindoProcesso"
+      [disabled]="!isAtribuicaoValida()"
+      (click)="confirmarAtribuicaoLote()">
+    </p-button>
+  </ng-template>
+</p-dialog>

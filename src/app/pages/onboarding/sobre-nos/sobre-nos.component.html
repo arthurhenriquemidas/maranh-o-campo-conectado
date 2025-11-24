@@ -1,0 +1,1008 @@
+<!-- Top Navigation -->
+<app-custom-menu
+  [menuItems]="menuItems"
+  [logoText]="'4'"
+  [activeMenuItem]="activeMenuItem"
+  (menuItemClick)="onMenuItemClick($event)"
+  (logoClick)="onLogoClick()"
+></app-custom-menu>
+
+<!-- Hero Section - Nossa História -->
+<section
+  class="pt-20 sm:pt-24 md:pt-28 lg:pt-32 pb-1 px-4 sm:px-6 md:px-8 bg-gradient-to-br from-[var(--background-light)] via-[var(--primary-light)] to-[var(--background-gray)]"
+>
+  <div class="max-w-5xl mx-auto text-center">
+    <!-- Badge -->
+    <div
+      class="inline-block mb-3 mt-10 md:mt-0 sm:mb-4 px-3 sm:px-4 py-1.5 sm:py-2 bg-[var(--primary-color)] bg-opacity-10 rounded-full"
+    >
+      <span
+        class="text-xs sm:text-sm font-semibold text-[var(--primary-light)] uppercase tracking-wide"
+        >Nossa História</span
+      >
+    </div>
+
+    <!-- Título -->
+    <h1
+      class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-5 md:mb-6 text-[var(--text-primary)] leading-tight px-2"
+    >
+      Justiça ao alcance<br />de cada um
+    </h1>
+
+    <!-- Descrição -->
+    <p
+      class="text-base sm:text-lg md:text-xl text-[var(--text-secondary)] mb-6 sm:mb-7 md:mb-8 max-w-3xl mx-auto leading-relaxed px-2"
+    >
+      A 4Jus nasceu em 2025 com um propósito claro: tornar o acesso à justiça
+      simples, rápido e verdadeiramente acessível para todos.
+    </p>
+  </div>
+</section>
+
+<!-- História Detalhada -->
+<section class="py-16 px-4 bg-[var(--background-light)]">
+  <div class="max-w-4xl mx-auto">
+    <div class="prose prose-lg max-w-none">
+      <p class="text-lg text-[var(--text-secondary)] leading-relaxed mb-6">
+        Observamos de perto um cenário em que milhares de pessoas enfrentavam
+        dificuldades para encontrar orientação jurídica confiável, sofriam com
+        burocracia excessiva e, muitas vezes, desistem de buscar seus direitos
+        por não saberem por onde começar. Ao mesmo tempo, advogados qualificados
+        tinham dificuldade em se conectar com quem realmente precisava de seus
+        serviços.
+      </p>
+      <p class="text-lg text-[var(--text-secondary)] leading-relaxed mb-6">
+        Foi desse encontro entre necessidade e oportunidade que surgiu a 4Jus
+        uma plataforma criada para reduzir distâncias, simplificar processos e
+        aproximar pessoas do apoio jurídico certo no momento em que mais
+        precisam. Inspirados pelo modelo de trocas rápidas e práticas de grandes
+        plataformas digitais, desenvolvemos uma experiência onde o cliente
+        encontra orientação imediata, escolhe seu advogado com autonomia e
+        acompanha toda a jornada jurídica em um único ambiente.
+      </p>
+      <div
+        class="mt-10 p-4 bg-[var(--primary-light)] border-l-4 border-[var(--primary-color)] rounded-[var(--border-radius)]"
+      >
+        <p class="text-xl font-medium text-[var(--text-primary)] italic">
+          "Um direito que é de todos, mas que agora está verdadeiramente ao
+          alcance de cada um."
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Diferenciais em Grid Moderno -->
+<section class="py-20 px-4 bg-[var(--background-gray)]">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <h2
+        class="text-3xl md:text-4xl font-bold mb-4 text-[var(--text-primary)]"
+      >
+        Por que escolher a 4Jus
+      </h2>
+      <p class="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+        Combinamos tecnologia, transparência e humanização para transformar sua
+        experiência jurídica
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Item 1 -->
+      <div
+        class="group bg-[var(--background-light)] rounded-2xl p-6 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-1"
+      >
+        <div
+          class="w-12 h-12 mb-4 rounded-xl bg-[var(--primary-light)] flex items-center justify-center group-hover:bg-[var(--primary-color)] transition-colors duration-300"
+        >
+          <i
+            class="pi pi-check-circle text-2xl text-[var(--primary-color)] group-hover:text-white"
+          ></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-3 text-[var(--text-primary)]">
+          Curadoria de Advogados
+        </h3>
+        <p class="text-[var(--text-secondary)] leading-relaxed">
+          Advogados validados individualmente para garantir qualidade e
+          segurança no atendimento.
+        </p>
+      </div>
+
+      <!-- Item 2 -->
+      <div
+        class="group bg-[var(--background-light)] rounded-2xl p-6 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-1"
+      >
+        <div
+          class="w-12 h-12 mb-4 rounded-xl bg-[var(--primary-light)] flex items-center justify-center group-hover:bg-[var(--primary-color)] transition-colors duration-300"
+        >
+          <i
+            class="pi pi-wallet text-2xl text-[var(--primary-color)] group-hover:text-white"
+          ></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-3 text-[var(--text-primary)]">
+          Atendimento Acessível
+        </h3>
+        <p class="text-[var(--text-secondary)] leading-relaxed">
+          Possibilidade de encontrar apoio jurídico adequado ao seu orçamento e
+          necessidade.
+        </p>
+      </div>
+
+      <!-- Item 3 -->
+      <div
+        class="group bg-[var(--background-light)] rounded-2xl p-6 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-1"
+      >
+        <div
+          class="w-12 h-12 mb-4 rounded-xl bg-[var(--primary-light)] flex items-center justify-center group-hover:bg-[var(--primary-color)] transition-colors duration-300"
+        >
+          <i
+            class="pi pi-bolt text-2xl text-[var(--primary-color)] group-hover:text-white"
+          ></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-3 text-[var(--text-primary)]">
+          Processo Simplificado
+        </h3>
+        <p class="text-[var(--text-secondary)] leading-relaxed">
+          Plataforma que reduz burocracias e facilita cada etapa da comunicação
+          com o advogado.
+        </p>
+      </div>
+
+      <!-- Item 4 -->
+      <div
+        class="group bg-[var(--background-light)] rounded-2xl p-6 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-1"
+      >
+        <div
+          class="w-12 h-12 mb-4 rounded-xl bg-[var(--primary-light)] flex items-center justify-center group-hover:bg-[var(--primary-color)] transition-colors duration-300"
+        >
+          <i
+            class="pi pi-eye text-2xl text-[var(--primary-color)] group-hover:text-white"
+          ></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-3 text-[var(--text-primary)]">
+          Acompanhamento Transparente
+        </h3>
+        <p class="text-[var(--text-secondary)] leading-relaxed">
+          Atualizações claras e organizadas sobre o andamento do seu caso.
+        </p>
+      </div>
+
+      <!-- Item 5 -->
+      <div
+        class="group bg-[var(--background-light)] rounded-2xl p-6 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-1"
+      >
+        <div
+          class="w-12 h-12 mb-4 rounded-xl bg-[var(--primary-light)] flex items-center justify-center group-hover:bg-[var(--primary-color)] transition-colors duration-300"
+        >
+          <i
+            class="pi pi-shield text-2xl text-[var(--primary-color)] group-hover:text-white"
+          ></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-3 text-[var(--text-primary)]">
+          Segurança e Privacidade
+        </h3>
+        <p class="text-[var(--text-secondary)] leading-relaxed">
+          Seus dados e documentos protegidos com protocolos modernos de
+          segurança.
+        </p>
+      </div>
+
+      <!-- Item 6 -->
+      <div
+        class="group bg-[var(--background-light)] rounded-2xl p-6 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-1"
+      >
+        <div
+          class="w-12 h-12 mb-4 rounded-xl bg-[var(--primary-light)] flex items-center justify-center group-hover:bg-[var(--primary-color)] transition-colors duration-300"
+        >
+          <i
+            class="pi pi-clock text-2xl text-[var(--primary-color)] group-hover:text-white"
+          ></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-3 text-[var(--text-primary)]">
+          Respostas Rápidas
+        </h3>
+        <p class="text-[var(--text-secondary)] leading-relaxed">
+          Conexão mais ágil entre cliente e advogado, reduzindo tempo de espera.
+        </p>
+      </div>
+
+      <!-- Item 7 -->
+      <div
+        class="group bg-[var(--background-light)] rounded-2xl p-6 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-1"
+      >
+        <div
+          class="w-12 h-12 mb-4 rounded-xl bg-[var(--primary-light)] flex items-center justify-center group-hover:bg-[var(--primary-color)] transition-colors duration-300"
+        >
+          <i
+            class="pi pi-briefcase text-2xl text-[var(--primary-color)] group-hover:text-white"
+          ></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-3 text-[var(--text-primary)]">
+          Diversas Áreas do Direito
+        </h3>
+        <p class="text-[var(--text-secondary)] leading-relaxed">
+          Especialistas em Direito do Consumidor, Trabalhista, Família,
+          Empresarial e mais.
+        </p>
+      </div>
+
+      <!-- Item 8 -->
+      <div
+        class="group bg-[var(--background-light)] rounded-2xl p-6 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-1"
+      >
+        <div
+          class="w-12 h-12 mb-4 rounded-xl bg-[var(--primary-light)] flex items-center justify-center group-hover:bg-[var(--primary-color)] transition-colors duration-300"
+        >
+          <i
+            class="pi pi-sync text-2xl text-[var(--primary-color)] group-hover:text-white"
+          ></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-3 text-[var(--text-primary)]">
+          Plataforma em Evolução
+        </h3>
+        <p class="text-[var(--text-secondary)] leading-relaxed">
+          Atualizações constantes para melhorar sua experiência e entregar novas
+          funcionalidades.
+        </p>
+      </div>
+
+      <!-- Item 9 -->
+      <div
+        class="group bg-[var(--background-light)] rounded-2xl p-6 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-1"
+      >
+        <div
+          class="w-12 h-12 mb-4 rounded-xl bg-[var(--primary-light)] flex items-center justify-center group-hover:bg-[var(--primary-color)] transition-colors duration-300"
+        >
+          <i
+            class="pi pi-heart text-2xl text-[var(--primary-color)] group-hover:text-white"
+          ></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-3 text-[var(--text-primary)]">
+          Suporte Humanizado
+        </h3>
+        <p class="text-[var(--text-secondary)] leading-relaxed">
+          Atendimento acolhedor para orientar e acompanhar você durante o
+          processo.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Benefícios Comerciais (Destaque Visual) -->
+<section class="py-20 px-4" style="background-color: var(--primary-color)">
+  <div class="max-w-6xl mx-auto">
+    <!-- Cabeçalho -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold mb-4" style="color: white">
+        Simples. Rápido. Eficiente.
+      </h2>
+      <p class="text-xl" style="color: white">
+        Tudo em um único lugar: comunicação, documentos e acompanhamento
+      </p>
+    </div>
+
+    <!-- Grid de Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Card 1 -->
+      <div class="bg-white p-5 rounded-xl shadow-lg">
+        <div class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div
+              class="w-14 h-14 flex items-center justify-center rounded-lg"
+              style="background-color: var(--primary-light)"
+            >
+              <i
+                class="pi pi-search text-2xl"
+                style="color: var(--primary-color)"
+              ></i>
+            </div>
+          </div>
+          <div>
+            <h3
+              class="text-xl font-bold mb-3"
+              style="color: var(--text-primary)"
+            >
+              Encontre um advogado em minutos
+            </h3>
+            <p
+              class="text-base leading-relaxed"
+              style="color: var(--text-secondary)"
+            >
+              Busca rápida e inteligente para conectar você ao profissional
+              ideal
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bg-white p-5 rounded-xl shadow-lg">
+        <div class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div
+              class="w-14 h-14 flex items-center justify-center rounded-lg"
+              style="background-color: var(--primary-light)"
+            >
+              <i
+                class="pi pi-check-square text-2xl"
+                style="color: var(--primary-color)"
+              ></i>
+            </div>
+          </div>
+          <div>
+            <h3
+              class="text-xl font-bold mb-3"
+              style="color: var(--text-primary)"
+            >
+              Resolva seu problema sem complicação
+            </h3>
+            <p
+              class="text-base leading-relaxed"
+              style="color: var(--text-secondary)"
+            >
+              Processo descomplicado do início ao fim
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bg-white p-5 rounded-xl shadow-lg">
+        <div class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div
+              class="w-14 h-14 flex items-center justify-center rounded-lg"
+              style="background-color: var(--primary-light)"
+            >
+              <i
+                class="pi pi-folder text-2xl"
+                style="color: var(--primary-color)"
+              ></i>
+            </div>
+          </div>
+          <div>
+            <h3
+              class="text-xl font-bold mb-3"
+              style="color: var(--text-primary)"
+            >
+              Tudo em um único lugar
+            </h3>
+            <p
+              class="text-base leading-relaxed"
+              style="color: var(--text-secondary)"
+            >
+              Comunicação, documentos e acompanhamento centralizados
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="bg-white p-5 rounded-xl shadow-lg">
+        <div class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div
+              class="w-14 h-14 flex items-center justify-center rounded-lg"
+              style="background-color: var(--primary-light)"
+            >
+              <i
+                class="pi pi-star text-2xl"
+                style="color: var(--primary-color)"
+              ></i>
+            </div>
+          </div>
+          <div>
+            <h3
+              class="text-xl font-bold mb-3"
+              style="color: var(--text-primary)"
+            >
+              Comece gratuito
+            </h3>
+            <p
+              class="text-base leading-relaxed"
+              style="color: var(--text-secondary)"
+            >
+              Só avance quando fizer sentido para você
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Missão e Visão (Layout Moderno) -->
+<section class="py-20 px-4 bg-[var(--background-light)]">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <!-- Missão -->
+      <div class="relative">
+        <div
+          class="absolute -top-4 -left-4 w-20 h-20 bg-[var(--primary-light)] rounded-2xl opacity-50"
+        ></div>
+        <div
+          class="relative bg-[var(--background-gray)] rounded-2xl p-8 lg:p-10"
+        >
+          <div
+            class="inline-flex items-center gap-2 mb-4 px-3 py-1 bg-[var(--primary-color)] bg-opacity-10 rounded-full"
+          >
+            <i class="pi pi-compass text-sm text-[var(--primary-light)]"></i>
+            <span
+              class="text-sm font-semibold text-[var(--primary-light)] uppercase tracking-wide"
+              >Missão</span
+            >
+          </div>
+          <h3
+            class="text-2xl md:text-3xl font-bold mb-4 text-[var(--text-primary)]"
+          >
+            Democratizar o acesso à justiça
+          </h3>
+          <p class="text-lg text-[var(--text-secondary)] leading-relaxed mb-3">
+            Democratizar o acesso à justiça no Brasil, conectando pessoas a
+            advogados especializados por meio de uma experiência simples, humana
+            e acessível.
+          </p>
+          <p class="text-base text-[var(--text-secondary)] leading-relaxed">
+            Nosso compromisso é garantir que qualquer pessoa consiga orientação
+            jurídica confiável, com clareza, agilidade e total transparência.
+          </p>
+        </div>
+      </div>
+
+      <!-- Visão -->
+      <div class="relative">
+        <div
+          class="absolute -top-4 -right-4 w-20 h-20 bg-yellow-100 rounded-2xl opacity-50"
+        ></div>
+        <div
+          class="relative bg-[var(--background-gray)] rounded-2xl p-8 lg:p-10"
+        >
+          <div
+            class="inline-flex items-center gap-2 mb-4 px-3 py-1 bg-yellow-400 bg-opacity-10 rounded-full"
+          >
+            <i class="pi pi-eye text-sm text-[var(--text-primary)]"></i>
+            <span
+              class="text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wide"
+              >Visão</span
+            >
+          </div>
+          <h3
+            class="text-2xl md:text-3xl font-bold mb-4 text-[var(--text-primary)]"
+          >
+            Ser a plataforma mais confiável
+          </h3>
+          <p class="text-lg text-[var(--text-secondary)] leading-relaxed">
+            Ser a plataforma jurídica mais confiável e acessível do Brasil,
+            reconhecida por simplificar a relação entre pessoas e advogados,
+            oferecendo uma experiência segura e apoiada por tecnologia que
+            realmente facilita a vida de quem precisa de ajuda jurídica.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Seção de Valores -->
+<section class="py-16 md:py-20 px-4 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <!-- Cabeçalho -->
+    <div class="text-center mb-12 md:mb-16">
+      <h2
+        class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-[var(--text-primary)]"
+      >
+        Nossos Valores
+      </h2>
+      <p
+        class="text-base md:text-lg text-[var(--text-secondary)] max-w-2xl mx-auto px-4"
+      >
+        Os princípios que norteiam nossa atuação e relacionamento
+      </p>
+    </div>
+
+    <!-- Grid de Valores -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+      <!-- Valor 1: Transparência -->
+      <div
+        class="text-center p-4 transition-transform duration-300 hover:scale-105"
+      >
+        <div
+          class="w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 rounded-2xl bg-[var(--primary-light)] flex items-center justify-center shadow-[var(--shadow-md)]"
+        >
+          <i
+            class="pi pi-eye text-2xl md:text-3xl text-[var(--primary-color)]"
+          ></i>
+        </div>
+        <h3
+          class="text-lg md:text-xl font-semibold mb-3 text-[var(--text-primary)]"
+        >
+          Transparência
+        </h3>
+        <p
+          class="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed"
+        >
+          Clareza em todas as informações, processos e comunicações, construindo
+          confiança através da honestidade.
+        </p>
+      </div>
+
+      <!-- Valor 2: Empatia -->
+      <div
+        class="text-center p-4 transition-transform duration-300 hover:scale-105"
+      >
+        <div
+          class="w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 rounded-2xl bg-[var(--primary-light)] flex items-center justify-center shadow-[var(--shadow-md)]"
+        >
+          <i
+            class="pi pi-heart text-2xl md:text-3xl text-[var(--primary-color)]"
+          ></i>
+        </div>
+        <h3
+          class="text-lg md:text-xl font-semibold mb-3 text-[var(--text-primary)]"
+        >
+          Empatia
+        </h3>
+        <p
+          class="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed"
+        >
+          Compreensão genuína das necessidades de clientes e advogados,
+          colocando as pessoas em primeiro lugar.
+        </p>
+      </div>
+
+      <!-- Valor 3: Inovação -->
+      <div
+        class="text-center p-4 transition-transform duration-300 hover:scale-105"
+      >
+        <div
+          class="w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 rounded-2xl bg-[var(--primary-light)] flex items-center justify-center shadow-[var(--shadow-md)]"
+        >
+          <i
+            class="pi pi-sparkles text-2xl md:text-3xl text-[var(--primary-color)]"
+          ></i>
+        </div>
+        <h3
+          class="text-lg md:text-xl font-semibold mb-3 text-[var(--text-primary)]"
+        >
+          Inovação
+        </h3>
+        <p
+          class="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed"
+        >
+          Busca constante por soluções criativas e tecnológicas que transformem
+          a experiência jurídica.
+        </p>
+      </div>
+
+      <!-- Valor 4: Colaboração -->
+      <div
+        class="text-center p-4 transition-transform duration-300 hover:scale-105"
+      >
+        <div
+          class="w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 rounded-2xl bg-[var(--primary-light)] flex items-center justify-center shadow-[var(--shadow-md)]"
+        >
+          <i
+            class="pi pi-users text-2xl md:text-3xl text-[var(--primary-color)]"
+          ></i>
+        </div>
+        <h3
+          class="text-lg md:text-xl font-semibold mb-3 text-[var(--text-primary)]"
+        >
+          Colaboração
+        </h3>
+        <p
+          class="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed"
+        >
+          Trabalho em conjunto para alcançar resultados extraordinários,
+          fortalecendo toda a comunidade jurídica.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Seção de Pilares -->
+<section class="py-16 md:py-20 px-4 bg-[var(--background-gray)]">
+  <div class="max-w-7xl mx-auto">
+    <!-- Cabeçalho -->
+    <div class="text-center mb-12 md:mb-16">
+      <h2
+        class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-[var(--text-primary)]"
+      >
+        Nossos Pilares
+      </h2>
+      <p
+        class="text-base md:text-lg text-[var(--text-secondary)] max-w-2xl mx-auto px-4"
+      >
+        Valores que guiam cada decisão e moldam nossa plataforma
+      </p>
+    </div>
+
+    <!-- Grid de Pilares -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+      <!-- Pilar 1 -->
+      <div
+        class="text-center p-4 transition-transform duration-300 hover:scale-105"
+      >
+        <div
+          class="w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 rounded-2xl bg-[var(--primary-light)] flex items-center justify-center shadow-[var(--shadow-md)]"
+        >
+          <i
+            class="pi pi-lightbulb text-2xl md:text-3xl text-[var(--primary-color)]"
+          ></i>
+        </div>
+        <h3
+          class="text-lg md:text-xl font-semibold mb-3 text-[var(--text-primary)]"
+        >
+          Inovação que Simplifica
+        </h3>
+        <p
+          class="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed"
+        >
+          Tecnologia pensada para facilitar a comunicação e o acompanhamento
+          jurídico sem complexidade.
+        </p>
+      </div>
+
+      <!-- Pilar 2 -->
+      <div
+        class="text-center p-4 transition-transform duration-300 hover:scale-105"
+      >
+        <div
+          class="w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 rounded-2xl bg-[var(--primary-light)] flex items-center justify-center shadow-[var(--shadow-md)]"
+        >
+          <i
+            class="pi pi-map-marker text-2xl md:text-3xl text-[var(--primary-color)]"
+          ></i>
+        </div>
+        <h3
+          class="text-lg md:text-xl font-semibold mb-3 text-[var(--text-primary)]"
+        >
+          Presença em Todo o Brasil
+        </h3>
+        <p
+          class="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed"
+        >
+          Atuação digital que permite conectar clientes a advogados de qualquer
+          região do país.
+        </p>
+      </div>
+
+      <!-- Pilar 3 -->
+      <div
+        class="text-center p-4 transition-transform duration-300 hover:scale-105"
+      >
+        <div
+          class="w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 rounded-2xl bg-[var(--primary-light)] flex items-center justify-center shadow-[var(--shadow-md)]"
+        >
+          <i
+            class="pi pi-users text-2xl md:text-3xl text-[var(--primary-color)]"
+          ></i>
+        </div>
+        <h3
+          class="text-lg md:text-xl font-semibold mb-3 text-[var(--text-primary)]"
+        >
+          Fortalecimento da Comunidade
+        </h3>
+        <p
+          class="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed"
+        >
+          Ferramentas e recursos que ajudam advogados a atender melhor, crescer
+          e se modernizar.
+        </p>
+      </div>
+
+      <!-- Pilar 4 -->
+      <div
+        class="text-center p-4 transition-transform duration-300 hover:scale-105"
+      >
+        <div
+          class="w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 rounded-2xl bg-[var(--primary-light)] flex items-center justify-center shadow-[var(--shadow-md)]"
+        >
+          <i
+            class="pi pi-book text-2xl md:text-3xl text-[var(--primary-color)]"
+          ></i>
+        </div>
+        <h3
+          class="text-lg md:text-xl font-semibold mb-3 text-[var(--text-primary)]"
+        >
+          Educação Jurídica Acessível
+        </h3>
+        <p
+          class="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed"
+        >
+          Conteúdos claros e práticos para que qualquer pessoa entenda melhor
+          seus direitos.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Equipe -->
+<section class="py-20 px-4 bg-[var(--background-light)]">
+  <div class="max-w-7xl mx-auto">
+    <!-- Cabeçalho -->
+    <div class="text-center mb-12">
+      <div
+        class="inline-block mb-4 px-4 py-2 bg-[var(--primary-light)] rounded-full"
+      >
+        <span
+          class="text-sm font-semibold text-[var(--primary-color)] uppercase tracking-wide"
+        >
+          Nosso Time
+        </span>
+      </div>
+      <h2
+        class="text-3xl md:text-4xl font-bold mb-4 text-[var(--text-primary)]"
+      >
+        Conheça Quem Está <br />
+        Por Trás da 4Jus
+      </h2>
+      <p class="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+        Profissionais dedicados que tornam tudo isso possível
+      </p>
+    </div>
+
+    <!-- Grid de Membros -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <!-- Membro 1 -->
+      <div
+        class="group bg-[var(--background-gray)] rounded-2xl overflow-hidden shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-2"
+      >
+        <div
+          class="relative overflow-hidden bg-[var(--primary-color)] h-48 flex items-center justify-center"
+        >
+          <div
+            class="w-28 h-28 rounded-full bg-[var(--primary-light)] flex items-center justify-center border-4 border-white group-hover:scale-110 transition-transform duration-300"
+          >
+            <i class="pi pi-user text-5xl text-[var(--primary-color)]"></i>
+          </div>
+        </div>
+        <div class="p-6 text-center">
+          <h4 class="text-xl font-bold mb-1 text-[var(--text-primary)]">
+            Carlos Silva
+          </h4>
+          <p
+            class="text-sm font-semibold mb-3 text-[var(--primary-color)] uppercase tracking-wide"
+          >
+            CEO & Fundador
+          </p>
+          <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+            Advogado com 15 anos de experiência, visionário que acredita na
+            transformação digital do direito.
+          </p>
+        </div>
+      </div>
+
+      <!-- Membro 2 -->
+      <div
+        class="group bg-[var(--background-gray)] rounded-2xl overflow-hidden shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-2"
+      >
+        <div
+          class="relative overflow-hidden bg-[var(--primary-color)] h-48 flex items-center justify-center"
+        >
+          <div
+            class="w-28 h-28 rounded-full bg-[var(--primary-light)] flex items-center justify-center border-4 border-white group-hover:scale-110 transition-transform duration-300"
+          >
+            <i class="pi pi-user text-5xl text-[var(--primary-color)]"></i>
+          </div>
+        </div>
+        <div class="p-6 text-center">
+          <h4 class="text-xl font-bold mb-1 text-[var(--text-primary)]">
+            Ana Santos
+          </h4>
+          <p
+            class="text-sm font-semibold mb-3 text-[var(--primary-color)] uppercase tracking-wide"
+          >
+            CTO
+          </p>
+          <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+            Especialista em tecnologia e inovação, responsável pelo
+            desenvolvimento da plataforma.
+          </p>
+        </div>
+      </div>
+
+      <!-- Membro 3 -->
+      <div
+        class="group bg-[var(--background-gray)] rounded-2xl overflow-hidden shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-2"
+      >
+        <div
+          class="relative overflow-hidden bg-[var(--primary-color)] h-48 flex items-center justify-center"
+        >
+          <div
+            class="w-28 h-28 rounded-full bg-[var(--primary-light)] flex items-center justify-center border-4 border-white group-hover:scale-110 transition-transform duration-300"
+          >
+            <i class="pi pi-user text-5xl text-[var(--primary-color)]"></i>
+          </div>
+        </div>
+        <div class="p-6 text-center">
+          <h4 class="text-xl font-bold mb-1 text-[var(--text-primary)]">
+            Roberto Costa
+          </h4>
+          <p
+            class="text-sm font-semibold mb-3 text-[var(--primary-color)] uppercase tracking-wide"
+          >
+            Diretor Jurídico
+          </p>
+          <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+            Advogado especialista em direito digital, garante que todos os
+            processos estejam em conformidade.
+          </p>
+        </div>
+      </div>
+
+      <!-- Membro 4 -->
+      <div
+        class="group bg-[var(--background-gray)] rounded-2xl overflow-hidden shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-2"
+      >
+        <div
+          class="relative overflow-hidden bg-[var(--primary-color)] h-48 flex items-center justify-center"
+        >
+          <div
+            class="w-28 h-28 rounded-full bg-[var(--primary-light)] flex items-center justify-center border-4 border-white group-hover:scale-110 transition-transform duration-300"
+          >
+            <i class="pi pi-user text-5xl text-[var(--primary-color)]"></i>
+          </div>
+        </div>
+        <div class="p-6 text-center">
+          <h4 class="text-xl font-bold mb-1 text-[var(--text-primary)]">
+            Mariana Oliveira
+          </h4>
+          <p
+            class="text-sm font-semibold mb-3 text-[var(--primary-color)] uppercase tracking-wide"
+          >
+            Head de Operações
+          </p>
+          <p class="text-[var(--text-secondary)] text-sm leading-relaxed">
+            Responsável pela experiência do usuário e pelo relacionamento com
+            advogados parceiros.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Estatísticas -->
+<section
+  class="py-12 sm:py-16 md:py-20 px-4 sm:px-6"
+  style="background-color: var(--primary-color)"
+>
+  <div class="max-w-7xl mx-auto">
+    <!-- Cabeçalho -->
+    <div class="text-center mb-8 sm:mb-10 md:mb-12 px-2">
+      <h2
+        class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4"
+        style="color: white"
+      >
+        Números que falam por si
+      </h2>
+      <p class="text-base sm:text-lg md:text-xl" style="color: white">
+        Resultados reais de quem já confia na 4Jus
+      </p>
+    </div>
+
+    <!-- Grid de Estatísticas -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6"
+    >
+      <!-- Estatística 1 -->
+      <div
+        class="bg-white text-center p-6 sm:p-7 md:p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
+      >
+        <div
+          class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-2 sm:mb-3"
+          style="color: var(--primary-color)"
+        >
+          10.000+
+        </div>
+        <div
+          class="text-xs sm:text-sm font-semibold uppercase tracking-wide"
+          style="color: var(--text-secondary)"
+        >
+          Famílias Atendidas
+        </div>
+      </div>
+
+      <!-- Estatística 2 -->
+      <div
+        class="bg-white text-center p-6 sm:p-7 md:p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
+      >
+        <div
+          class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-2 sm:mb-3"
+          style="color: var(--primary-color)"
+        >
+          500+
+        </div>
+        <div
+          class="text-xs sm:text-sm font-semibold uppercase tracking-wide"
+          style="color: var(--text-secondary)"
+        >
+          Advogados Parceiros
+        </div>
+      </div>
+
+      <!-- Estatística 3 -->
+      <div
+        class="bg-white text-center p-6 sm:p-7 md:p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
+      >
+        <div
+          class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-2 sm:mb-3"
+          style="color: var(--primary-color)"
+        >
+          98%
+        </div>
+        <div
+          class="text-xs sm:text-sm font-semibold uppercase tracking-wide"
+          style="color: var(--text-secondary)"
+        >
+          Clientes Satisfeitos
+        </div>
+      </div>
+
+      <!-- Estatística 4 -->
+      <div
+        class="bg-white text-center p-6 sm:p-7 md:p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300"
+      >
+        <div
+          class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-2 sm:mb-3"
+          style="color: var(--primary-color)"
+        >
+          24h
+        </div>
+        <div
+          class="text-xs sm:text-sm font-semibold uppercase tracking-wide"
+          style="color: var(--text-secondary)"
+        >
+          Atendimento Rápido
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Final -->
+<section class="py-24 px-4 bg-[var(--background-gray)]">
+  <div class="max-w-4xl mx-auto text-center">
+    <div
+      class="inline-block mb-4 px-4 py-2 bg-[var(--primary-light)] rounded-full"
+    >
+      <span
+        class="text-sm font-semibold text-[var(--primary-color)] uppercase tracking-wide"
+      >
+        Comece Agora
+      </span>
+    </div>
+
+    <h2
+      class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-[var(--text-primary)] leading-tight"
+    >
+      Pronto para resolver seu problema jurídico com rapidez e segurança?
+    </h2>
+    <p
+      class="text-lg md:text-xl text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto"
+    >
+      Encontre o advogado ideal para seu caso em poucos minutos.
+    </p>
+
+    <button
+      class="group inline-flex items-center gap-3 px-8 py-4 rounded-full font-bold text-lg bg-[var(--primary-color)] text-white shadow-[var(--shadow-lg)] hover:shadow-[var(--shadow-xl)] hover:scale-105 transition-all duration-300"
+      (click)="navegarPara('/auth/register')"
+    >
+      <i
+        class="pi pi-arrow-right group-hover:translate-x-1 transition-transform"
+      ></i>
+      Começar Agora - Sou Cliente
+    </button>
+
+    <p class="mt-6 text-sm text-[var(--text-secondary)]">
+      ✓ Sem compromisso inicial ✓ Atendimento em minutos ✓ 100% seguro
+    </p>
+  </div>
+</section>
+
+<!-- Footer -->
+<app-onboarding-footer></app-onboarding-footer>

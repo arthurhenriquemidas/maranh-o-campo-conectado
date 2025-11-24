@@ -1,0 +1,207 @@
+<!-- Layout de Gestão de Documentos -->
+<div class="documentos-layout">
+
+  <!-- Header -->
+  <div class="documentos-header">
+    <div class="container">
+      
+      <!-- Breadcrumb -->
+      <div class="mb-3">
+        <p-breadcrumb 
+          [model]="breadcrumbItems" 
+          [home]="breadcrumbHome">
+        </p-breadcrumb>
+      </div>
+
+      <!-- Título e Ações -->
+      <div class="flex align-items-center justify-content-between">
+        <div>
+          <h1 class="text-3xl font-bold text-white m-0 mb-2">
+            <i class="pi pi-folder mr-3"></i>
+            Documentos do Processo
+          </h1>
+          <p *ngIf="processo" class="text-white-alpha-80 m-0">
+            {{ processo.titulo }}
+          </p>
+        </div>
+
+        <div class="flex gap-2">
+          <p-button 
+            icon="pi pi-upload"
+            label="Upload"
+            severity="secondary"
+            outlined="true"
+            (onClick)="abrirUpload()">
+          </p-button>
+          
+          <p-button 
+            icon="pi pi-arrow-left"
+            label="Voltar"
+            severity="secondary"
+            outlined="true"
+            (onClick)="voltar()">
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div class="documentos-content">
+    <div class="container">
+
+      <!-- Estatísticas -->
+      <div *ngIf="estatisticas" class="grid mb-4">
+        <div class="col-12 md:col-3">
+          <p-card class="stats-card text-center">
+            <i class="pi pi-file text-4xl text-primary mb-2"></i>
+            <h3 class="text-2xl font-bold m-0">{{ estatisticas.total }}</h3>
+            <p class="text-500 m-0">Total de Documentos</p>
+          </p-card>
+        </div>
+        
+        <div class="col-12 md:col-3">
+          <p-card class="stats-card text-center">
+            <i class="pi pi-cloud text-4xl text-blue-500 mb-2"></i>
+            <h3 class="text-2xl font-bold m-0">{{ estatisticas.tamanhoTotalFormatado }}</h3>
+            <p class="text-500 m-0">Espaço Utilizado</p>
+          </p-card>
+        </div>
+        
+        <div class="col-12 md:col-3">
+          <p-card class="stats-card text-center">
+            <i class="pi pi-upload text-4xl text-green-500 mb-2"></i>
+            <h3 class="text-2xl font-bold m-0">{{ estatisticas.uploadsRecentes }}</h3>
+            <p class="text-500 m-0">Uploads Recentes</p>
+          </p-card>
+        </div>
+        
+        <div class="col-12 md:col-3">
+          <p-card class="stats-card text-center">
+            <i class="pi pi-chart-bar text-4xl text-orange-500 mb-2"></i>
+            <h3 class="text-2xl font-bold m-0">{{ estatisticas.limitesUsados.espaco.toFixed(0) }}%</h3>
+            <p class="text-500 m-0">Limite de Espaço</p>
+          </p-card>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loading" class="grid">
+        <div class="col-12 md:col-6 lg:col-4" *ngFor="let i of [1,2,3,4,5,6]">
+          <p-card>
+            <div class="text-center">
+              <p-skeleton shape="circle" size="4rem" class="mb-3"></p-skeleton>
+              <p-skeleton height="1.5rem" class="mb-2"></p-skeleton>
+              <p-skeleton height="1rem" width="60%"></p-skeleton>
+            </div>
+          </p-card>
+        </div>
+      </div>
+
+      <!-- Estado Vazio -->
+      <div *ngIf="!loading && documentos.length === 0" class="empty-state">
+        <p-card class="text-center py-6">
+          <i class="pi pi-folder-open text-6xl text-300 mb-4"></i>
+          <h3 class="text-500 mb-3">Nenhum documento encontrado</h3>
+          <p class="text-400 mb-4">Este processo ainda não possui documentos anexados.</p>
+          <p-button 
+            icon="pi pi-plus"
+            label="Adicionar Primeiro Documento"
+            (onClick)="abrirUpload()">
+          </p-button>
+        </p-card>
+      </div>
+
+      <!-- Lista de Documentos -->
+      <div *ngIf="!loading && documentos.length > 0" class="grid">
+        <div *ngFor="let documento of documentos" class="col-12 md:col-6 lg:col-4">
+          <p-card class="documento-card h-full">
+            
+            <!-- Conteúdo -->
+            <div class="document-content text-center">
+              <i [class]="documentoService.getTipoIcon(documento.tipo)" 
+                 class="text-4xl text-primary mb-3"></i>
+              
+              <h4 class="text-900 font-semibold m-0 mb-2">
+                {{ documento.nomeOriginal }}
+              </h4>
+              
+              <div class="document-meta mb-3">
+                <p-tag 
+                  [value]="documentoService.getCategoriaLabel(documento.categoria)"
+                  severity="info"
+                  size="small"
+                  class="mb-2">
+                </p-tag>
+                <br>
+                <small class="text-500 block">{{ documento.tamanhoFormatado }}</small>
+                <small class="text-500 block">{{ formatarData(documento.dataUpload) }}</small>
+                <small class="text-500 block">{{ documento.uploadedBy.nome }}</small>
+              </div>
+
+              <!-- Ações -->
+              <div class="flex justify-content-center gap-2">
+                <p-button 
+                  icon="pi pi-download"
+                  size="small"
+                  text="true"
+                  pTooltip="Download"
+                  (onClick)="downloadDocumento(documento)">
+                </p-button>
+                
+                <p-button 
+                  *ngIf="canDeleteDocument(documento)"
+                  icon="pi pi-trash"
+                  size="small"
+                  text="true"
+                  severity="danger"
+                  pTooltip="Excluir"
+                  (onClick)="excluirDocumento(documento)">
+                </p-button>
+              </div>
+            </div>
+
+          </p-card>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Dialog de Upload -->
+<p-dialog 
+  header="Upload de Documentos" 
+  [(visible)]="showUploadDialog"
+  [modal]="true"
+  [style]="{width: '50vw'}"
+  [closable]="true">
+  
+  <div class="upload-dialog">
+    <p-fileUpload 
+      name="documentos[]"
+      url="./upload"
+      [multiple]="true"
+      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+      [maxFileSize]="10000000"
+      (onSelect)="onFileSelect($event)"
+      [auto]="false"
+      chooseLabel="Selecionar Arquivos"
+      [showUploadButton]="false"
+      [showCancelButton]="false">
+      
+      <ng-template pTemplate="content">
+        <div class="upload-drop-area text-center py-4">
+          <i class="pi pi-cloud-upload text-6xl text-400 mb-3"></i>
+          <h4 class="text-500 mb-2">Arraste arquivos aqui</h4>
+          <p class="text-400">PDF, Word, Imagens até 10MB</p>
+        </div>
+      </ng-template>
+    </p-fileUpload>
+  </div>
+</p-dialog>
+
+<!-- Toast -->
+<p-toast position="top-right"></p-toast>
+<p-confirmDialog></p-confirmDialog>

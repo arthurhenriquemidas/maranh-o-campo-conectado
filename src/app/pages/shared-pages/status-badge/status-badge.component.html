@@ -1,0 +1,6 @@
+﻿<p-tag
+  *ngIf="status && mapping[status] as info"
+  [value]="info.labelKey"
+  [severity]="info.severity"
+  [icon]="info.icon"
+></p-tag>

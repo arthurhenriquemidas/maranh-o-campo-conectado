@@ -1,0 +1,206 @@
+<!-- Layout com Menu e Breadcrumb -->
+<div class="cliente-layout">
+  
+  <!-- Header Component -->
+  <app-cliente-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-cliente-header>
+
+  <!-- Conteúdo Principal -->
+  <div class="layout-content p-4">
+    <p class="text-xl text-color-secondary">
+      Gerencie seus processos jurídicos de forma simples e eficiente.
+    </p>
+   
+
+    <!-- Cards de Estatísticas -->
+    <div class="grid mb-4">
+      <div class="col-12 md:col-6 lg:col-3">
+        <p-card class="stats-card">
+          <div class="flex align-items-center">
+            <div class="flex-1">
+              <h3 class="m-0 text-2xl font-bold text-primary">{{ stats.total || 0 }}</h3>
+              <p class="m-0 text-color-secondary">Total de Processos</p>
+            </div>
+            <i class="pi pi-briefcase text-4xl text-primary"></i>
+          </div>
+        </p-card>
+      </div>
+      
+      <div class="col-12 md:col-6 lg:col-3">
+        <p-card class="stats-card">
+          <div class="flex align-items-center">
+            <div class="flex-1">
+              <h3 class="m-0 text-2xl font-bold text-orange-500">{{ stats.ativos || 0 }}</h3>
+              <p class="m-0 text-color-secondary">Em Andamento</p>
+            </div>
+            <i class="pi pi-clock text-4xl text-orange-500"></i>
+          </div>
+        </p-card>
+      </div>
+      
+      <div class="col-12 md:col-6 lg:col-3">
+        <p-card class="stats-card">
+          <div class="flex align-items-center">
+            <div class="flex-1">
+              <h3 class="m-0 text-2xl font-bold text-green-500">{{ stats.concluidos || 0 }}</h3>
+              <p class="m-0 text-color-secondary">Concluídos</p>
+            </div>
+            <i class="pi pi-check-circle text-4xl text-green-500"></i>
+          </div>
+        </p-card>
+      </div>
+      
+      <div class="col-12 md:col-6 lg:col-3">
+        <p-card class="stats-card">
+          <div class="flex align-items-center">
+            <div class="flex-1">
+              <h3 class="m-0 text-2xl font-bold text-red-500">{{ stats.pendentes || 0 }}</h3>
+              <p class="m-0 text-color-secondary">Aguardando</p>
+            </div>
+            <i class="pi pi-exclamation-triangle text-4xl text-red-500"></i>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Ações Rápidas -->
+    <div class="grid mb-4">
+      <div class="col-12 lg:col-8">
+        <p-card header="Ações Rápidas" class="quick-actions-card">
+          <div class="grid">
+            <div class="col-12 md:col-6">
+              <p-button 
+                label="Novo Processo" 
+                icon="pi pi-plus"
+                class="p-button-success w-full p-button-lg mb-3"
+                (click)="showNewProcessDialog = true">
+              </p-button>
+            </div>
+            <div class="col-12 md:col-6">
+              <p-button 
+                label="Ver Todos os Processos" 
+                icon="pi pi-list"
+                class="p-button-outlined w-full p-button-lg mb-3"
+                (click)="navegarPara('/cliente/processos')">
+              </p-button>
+            </div>
+          </div>
+          
+          <div class="help-text mt-3">
+            <i class="pi pi-info-circle text-primary mr-2"></i>
+            <span class="text-color-secondary">
+              Precisa de ajuda? Nossa equipe está pronta para orientá-lo em cada etapa.
+            </span>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Próximos Compromissos -->
+      <div class="col-12 lg:col-4">
+        <p-card header="Próximos Compromissos" class="agenda-card">
+          <div *ngIf="proximosCompromissos.length > 0">
+            <div *ngFor="let compromisso of proximosCompromissos" class="agenda-item mb-3">
+              <div class="flex align-items-center">
+                <i class="pi pi-calendar text-primary mr-2"></i>
+                <div class="flex-1">
+                  <p class="m-0 font-medium">{{ compromisso.titulo }}</p>
+                  <small class="text-color-secondary">{{ compromisso.data | date:'dd/MM/yyyy' }} - {{ compromisso.hora }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div *ngIf="proximosCompromissos.length === 0" class="text-center text-color-secondary">
+            <i class="pi pi-calendar-plus text-4xl mb-2"></i>
+            <p>Nenhum compromisso agendado</p>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Processos Recentes -->
+    <div class="recent-processes">
+      <p-card header="Processos Recentes">
+        
+        <!-- Loading State -->
+        <div *ngIf="loading" class="grid">
+          <div *ngFor="let item of [1,2,3]" class="col-12">
+            <div class="flex align-items-center p-3 border-bottom-1 surface-border">
+              <p-skeleton shape="circle" size="3rem" class="mr-3"></p-skeleton>
+              <div class="flex-1">
+                <p-skeleton width="100%" height="1rem" class="mb-2"></p-skeleton>
+                <p-skeleton width="75%" height="0.8rem"></p-skeleton>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Processos -->
+        <div *ngIf="!loading">
+          <div *ngIf="processosRecentes.length > 0">
+            <div *ngFor="let processo of processosRecentes" class="processo-item p-3 border-bottom-1 surface-border">
+              <div class="flex align-items-center justify-content-between">
+                <div class="flex-1">
+                  <h4 class="m-0 mb-1">{{ processo.titulo }}</h4>
+                  <p class="m-0 text-color-secondary mb-2">{{ processo.descricao }}</p>
+                  <div class="flex align-items-center">
+                    <p-tag 
+                      [value]="getStatusLabel(processo.status)" 
+                      [severity]="getStatusSeverity(processo.status)"
+                      class="mr-2">
+                    </p-tag>
+                    <span class="text-sm text-color-secondary">
+                      {{ processo.tipo | titlecase }} • {{ processo.dataCriacao | date:'dd/MM/yyyy' }}
+                    </span>
+                  </div>
+                </div>
+                <div class="flex align-items-center gap-2">
+                  <p-button 
+                    icon="pi pi-eye" 
+                    class="p-button-rounded p-button-text"
+                    pTooltip="Visualizar detalhes"
+                    (onClick)="verProcesso(processo)">
+                  </p-button>
+                  <p-button 
+                    icon="pi pi-comments" 
+                    class="p-button-rounded p-button-text"
+                    pTooltip="Chat com advogado"
+                    (onClick)="iniciarChat(processo)">
+                  </p-button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Estado Vazio -->
+          <div *ngIf="processosRecentes.length === 0" class="empty-state text-center p-5">
+            <i class="pi pi-briefcase text-6xl text-color-secondary mb-3"></i>
+            <h3 class="text-color-secondary mb-3">Nenhum processo encontrado</h3>
+            <p class="text-color-secondary mb-4">
+              Comece criando seu primeiro processo jurídico. Nossa equipe está pronta para ajudá-lo!
+            </p>
+            <p-button 
+              label="Criar Primeiro Processo" 
+              icon="pi pi-plus"
+              class="p-button-success"
+              (click)="showNewProcessDialog = true">
+            </p-button>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+  </div>
+</div>
+
+<!-- Dialog Novo Processo -->
+<app-novo-processo-dialog 
+  [(visible)]="showNewProcessDialog"
+  [currentUser]="currentUser"
+  (processoCriado)="onProcessoCriado()">
+</app-novo-processo-dialog>

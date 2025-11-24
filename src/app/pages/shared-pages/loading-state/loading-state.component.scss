@@ -1,0 +1,14 @@
+﻿.loading-state {
+  display: grid;
+  gap: 0.75rem;
+  &--card {
+    padding: 1.5rem;
+    background: var(--surface-card);
+    border-radius: var(--border-radius);
+    border: 1px dashed var(--surface-border);
+  }
+
+  &__line {
+    border-radius: 999px;
+  }
+}

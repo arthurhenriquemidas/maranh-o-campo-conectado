@@ -1,0 +1,524 @@
+<!-- Layout de Gestão de Usuários -->
+<div class="usuarios-layout">
+  
+  <!-- Header Component -->
+  <app-admin-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-admin-header>
+
+  <!-- Conteúdo Principal -->
+  <div class="layout-content">
+    <div class="container">
+
+      <!-- Header da Página -->
+      <div class="page-header mb-4">
+        <div class="header-content">
+          <div class="header-info">
+            <h1 class="text-3xl font-bold text-900 m-0 mb-2">
+              Gestão de Usuários
+            </h1>
+            <p class="text-lg text-600">
+              Gerencie clientes, advogados e administradores da plataforma.
+            </p>
+          </div>
+          <!-- <div class="header-actions">
+            <p-button 
+              label="Novo Usuário" 
+              icon="pi pi-user-plus"
+              class="p-button-primary"
+              (click)="criarNovoUsuario()">
+            </p-button>
+          </div> -->
+        </div>
+      </div>
+
+      <!-- Navegação Rápida -->
+      <!-- <div class="quick-nav-section mb-4">
+        <div class="flex gap-2">
+          <p-button 
+            label="Gerenciar Sindicados/Cooperativas" 
+            icon="pi pi-building"
+            class="p-button-outlined"
+            (click)="navegarParaSindicados()">
+          </p-button>
+        </div>
+      </div> -->
+
+      <!-- Estatísticas -->
+      <div *ngIf="estatisticas" class="stats-section mb-4">
+        <div class="stats-grid">
+          <!-- Total de Clientes -->
+          <div class="stat-card stat-clients">
+            <div class="stat-icon">
+              <i class="pi pi-user"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">{{ estatisticas.totalClientes }}</div>
+              <div class="stat-label">Clientes</div>
+              <div class="stat-trend">
+                <i class="pi pi-arrow-up text-green-500 mr-1"></i>
+                <span class="text-sm text-green-500">+12% este mês</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total de Advogados -->
+          <div class="stat-card stat-lawyers">
+            <div class="stat-icon">
+              <i class="pi pi-briefcase"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">{{ estatisticas.totalAdvogados }}</div>
+              <div class="stat-label">Advogados</div>
+              <div class="stat-trend">
+                <i class="pi pi-arrow-up text-blue-500 mr-1"></i>
+                <span class="text-sm text-blue-500">+8% este mês</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pendentes -->
+          <div class="stat-card stat-pending">
+            <div class="stat-icon">
+              <i class="pi pi-clock"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">{{ estatisticas.advogadosPendentes }}</div>
+              <div class="stat-label">Pendentes</div>
+              <div class="stat-trend">
+                <i class="pi pi-exclamation-triangle text-orange-500 mr-1"></i>
+                <span class="text-sm text-orange-500">Ação necessária</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sindicados -->
+          <!-- <div class="stat-card stat-sindicados">
+            <div class="stat-icon">
+              <i class="pi pi-building"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">{{ estatisticas.totalSindicados }}</div>
+              <div class="stat-label">Sindicados</div>
+              <div class="stat-trend">
+                <i class="pi pi-check-circle text-green-500 mr-1"></i>
+                <span class="text-sm text-green-500">{{ estatisticas.sindicadosVerificados }} verificados</span>
+              </div>
+            </div>
+          </div> -->
+
+          <!-- Recentes -->
+          <div class="stat-card stat-recent">
+            <div class="stat-icon">
+              <i class="pi pi-user-plus"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">{{ estatisticas.usuariosRecentes }}</div>
+              <div class="stat-label">Recentes</div>
+              <div class="stat-trend">
+                <i class="pi pi-arrow-up text-info mr-1"></i>
+                <span class="text-sm text-info">+15% este mês</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtros e Busca -->
+      <div class="filters-section mb-4" style="padding: 10px;">
+          <div class="filters-content">
+            <div class="filters-row">
+              <div class="filter-group">
+                <label class="filter-label">Buscar:</label>
+                <input 
+                  type="text"
+                  pInputText
+                  [(ngModel)]="buscaTexto"
+                  placeholder="Nome, email ou telefone..."
+                  class="w-full"
+                  (input)="aplicarFiltros()">
+              </div>
+              
+              <div class="filter-group">
+                <label class="filter-label">Tipo:</label>
+                <p-dropdown 
+                  [options]="tiposUsuario" 
+                  [(ngModel)]="tipoFiltro"
+                  (onChange)="aplicarFiltros()"
+                  placeholder="Todos os tipos"
+                  class="w-full">
+                </p-dropdown>
+              </div>
+              
+              <div class="filter-group">
+                <label class="filter-label">Status:</label>
+                <p-dropdown 
+                  [options]="statusOptions" 
+                  [(ngModel)]="statusFiltro"
+                  (onChange)="aplicarFiltros()"
+                  placeholder="Todos os status"
+                  class="w-full">
+                </p-dropdown>
+              </div>
+              
+              <div class="filter-group">
+                <label class="filter-label">Verificação:</label>
+                <p-dropdown 
+                  [options]="verificacaoOptions" 
+                  [(ngModel)]="verificadoFiltro"
+                  (onChange)="aplicarFiltros()"
+                  placeholder="Todos"
+                  class="w-full">
+                </p-dropdown>
+              </div>
+              
+              <div class="filter-actions">
+                <p-button 
+                  label="Limpar" 
+                  icon="pi pi-times"
+                  class="p-button-outlined p-button-sm"
+                  (click)="limparFiltros()">
+                </p-button>
+                <p-button 
+                  label="Aplicar" 
+                  icon="pi pi-filter"
+                  class="p-button-primary p-button-sm"
+                  (click)="aplicarFiltros()">
+                </p-button>
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-section">
+        <div class="grid">
+          <div class="col-12">
+            <p-card>
+              <div class="flex align-items-center">
+                <p-skeleton shape="circle" size="3rem" class="mr-3"></p-skeleton>
+                <div class="flex-1">
+                  <p-skeleton height="1.5rem" class="mb-2"></p-skeleton>
+                  <p-skeleton height="1rem" width="60%"></p-skeleton>
+                </div>
+              </div>
+            </p-card>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de Usuários -->
+      <div *ngIf="!loading && usuarios.length > 0" class="users-section">
+        <p-card class="users-table-card">
+          <div class="table-header">
+            <div class="table-title">
+              <h3 class="m-0">Usuários Cadastrados</h3>
+              <p class="text-color-secondary m-0 mt-1">{{ usuarios.length }} usuários encontrados</p>
+            </div>
+            <!-- <div class="table-actions">
+              <p-button 
+                label="Exportar" 
+                icon="pi pi-download"
+                class="p-button-outlined p-button-sm"
+                (click)="exportarUsuarios()">
+              </p-button>
+            </div> -->
+          </div>
+          
+          <div class="users-grid">
+            <div *ngFor="let usuario of usuarios" class="user-card">
+              <div class="user-card-header">
+                <div class="user-avatar">
+                  <i [class]="getUsuarioIcon(usuario.tipo)"></i>
+                </div>
+                <div class="user-info">
+                  <h4 class="user-name">{{ usuario.nome }}</h4>
+                  <p class="user-type">{{ getTipoLabel(usuario.tipo) }}</p>
+                </div>
+                <div class="user-status">
+                  <p-tag 
+                    [value]="getStatusLabel(usuario.status || 'ativo')"
+                    [severity]="getStatusSeverity(usuario.status || 'ativo')"
+                    size="small">
+                  </p-tag>
+                </div>
+              </div>
+              
+              <div class="user-card-body">
+                <div class="user-details">
+                  <div class="detail-item">
+                    <i class="pi pi-envelope"></i>
+                    <span>{{ usuario.email }}</span>
+                  </div>
+                  <div class="detail-item">
+                    <i class="pi pi-calendar"></i>
+                    <span>{{ formatarData(usuario.dataCadastro || '') }}</span>
+                  </div>
+                  <div *ngIf="usuario.tipo === 'advogado'" class="detail-item">
+                    <i [class]="usuario.verificado ? 'pi pi-check-circle text-green-500' : 'pi pi-times-circle text-red-500'"></i>
+                    <span [class]="usuario.verificado ? 'text-green-600' : 'text-red-600'">
+                      {{ usuario.verificado ? 'Verificado' : 'Pendente' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="user-card-actions">
+                <p-button 
+                  icon="pi pi-eye"
+                  size="small"
+                  text="true"
+                  pTooltip="Ver Detalhes"
+                  (onClick)="verUsuario(usuario)">
+                </p-button>
+                
+                <p-button 
+                  icon="pi pi-pencil"
+                  size="small"
+                  text="true"
+                  pTooltip="Editar"
+                  (onClick)="editarUsuario(usuario)">
+                </p-button>
+                
+                <p-button 
+                  *ngIf="usuario.tipo === 'advogado'"
+                  [icon]="usuario.verificado ? 'pi pi-times-circle' : 'pi pi-check-circle'"
+                  size="small"
+                  text="true"
+                  severity="success"
+                  [pTooltip]="usuario.verificado ? 'Remover Verificação' : 'Verificar'"
+                  (onClick)="verificarAdvogado(usuario)">
+                </p-button>
+                
+                <p-button 
+                  icon="pi pi-trash"
+                  size="small"
+                  text="true"
+                  severity="danger"
+                  pTooltip="Excluir"
+                  (onClick)="excluirUsuario(usuario)">
+                </p-button>
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Estado Vazio -->
+      <div *ngIf="!loading && usuarios.length === 0" class="empty-state">
+        <p-card>
+          <div class="text-center p-5">
+            <i class="pi pi-users text-6xl text-color-secondary mb-3"></i>
+            <h3 class="text-color-secondary mb-3">Nenhum usuário encontrado</h3>
+            <p class="text-color-secondary mb-4">
+              Não há usuários que correspondam aos filtros aplicados.
+            </p>
+            <p-button 
+              label="Limpar Filtros" 
+              icon="pi pi-times"
+              class="p-button-outlined"
+              (click)="limparFiltros()">
+            </p-button>
+          </div>
+        </p-card>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Dialog do Usuário -->
+<p-dialog
+  [(visible)]="showUserDialog"
+  [modal]="true"
+  [style]="{width: '800px'}"
+  [header]="userDialogMode === 'view' ? 'Visualizar Usuário' : 'Editar Usuário'"
+  [closable]="true"
+  (onHide)="showUserDialog = false">
+
+  <div *ngIf="selectedUser && selectedUser.nome" class="user-dialog-content">
+    <!-- Informações Básicas -->
+    <div class="dialog-section">
+      <div class="info-header">
+        <div class="user-avatar-large">
+          <i [class]="getUsuarioIcon(selectedUser.tipo)" class="text-3xl"></i>
+        </div>
+        <div class="user-header-info">
+          <h3 class="user-name">{{ selectedUser.nome }}</h3>
+          <div class="user-meta">
+            <span class="user-type">
+              <i [class]="getUsuarioIcon(selectedUser.tipo)" class="mr-1"></i>
+              {{ getTipoLabel(selectedUser.tipo) }}
+            </span>
+            <p-tag
+              [value]="getStatusLabel(selectedUser.status || 'ativo')"
+              [severity]="getStatusSeverity(selectedUser.status || 'ativo')"
+              class="status-tag">
+            </p-tag>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <!-- Nome Principal -->
+        <div class="field-main">
+          <label class="field-label">Nome Completo:</label>
+          <p *ngIf="userDialogMode === 'view'" class="field-value">{{ selectedUser.nome }}</p>
+          <input
+            *ngIf="userDialogMode === 'edit'"
+            pInputText
+            [(ngModel)]="selectedUser.nome"
+            class="w-full"
+            placeholder="Nome completo do usuário">
+        </div>
+
+        <!-- Contato em linha -->
+        <div class="contact-inline">
+          <div class="field-inline">
+            <label class="field-label">Email:</label>
+            <p *ngIf="userDialogMode === 'view'" class="field-value">{{ selectedUser.email }}</p>
+            <input
+              *ngIf="userDialogMode === 'edit'"
+              pInputText
+              [(ngModel)]="selectedUser.email"
+              class="w-full"
+              placeholder="Email do usuário"
+              type="email">
+          </div>
+          <div class="field-inline">
+            <label class="field-label">Telefone:</label>
+            <p *ngIf="userDialogMode === 'view'" class="field-value">{{ selectedUser.telefone || 'Não informado' }}</p>
+            <input
+              *ngIf="userDialogMode === 'edit'"
+              pInputText
+              [(ngModel)]="selectedUser.telefone"
+              class="w-full"
+              placeholder="Telefone do usuário">
+          </div>
+        </div>
+
+        <!-- Status e Cadastro em linha -->
+        <div class="status-inline">
+          <div class="field-inline">
+            <label class="field-label">Data de Cadastro:</label>
+            <p class="field-value">
+              <i class="pi pi-calendar mr-1"></i>
+              {{ selectedUser.dataCadastro ? formatarData(selectedUser.dataCadastro) : 'Não informado' }}
+            </p>
+          </div>
+          <div class="field-inline">
+            <label class="field-label">Última Atualização:</label>
+            <p class="field-value">
+              <i class="pi pi-clock mr-1"></i>
+              {{ selectedUser.dataCadastro ? formatarData(selectedUser.dataCadastro) : 'Nunca' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Informações Específicas por Tipo -->
+    <div class="dialog-section">
+      <h4 class="section-title">Informações Específicas</h4>
+
+      <!-- Cliente -->
+      <div *ngIf="selectedUser.tipo === 'cliente'" class="specific-info">
+        <div class="cliente-fields">
+          <div class="field-inline">
+            <label class="field-label">CPF:</label>
+            <p *ngIf="userDialogMode === 'view'">{{ selectedUser.cpf || 'Não informado' }}</p>
+            <input
+              *ngIf="userDialogMode === 'edit'"
+              pInputText
+              [(ngModel)]="selectedUser.cpf"
+              class="w-full"
+              placeholder="CPF">
+          </div>
+          <div class="field-inline">
+            <label class="field-label">CNPJ:</label>
+            <p *ngIf="userDialogMode === 'view'">{{ selectedUser.cnpj || 'Não informado' }}</p>
+            <input
+              *ngIf="userDialogMode === 'edit'"
+              pInputText
+              [(ngModel)]="selectedUser.cnpj"
+              class="w-full"
+              placeholder="CNPJ">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Tipo de Cliente:</label>
+          <p>{{ selectedUser.tipoCliente || 'Não informado' }}</p>
+        </div>
+      </div>
+
+      <!-- Advogado -->
+      <div *ngIf="selectedUser.tipo === 'advogado'" class="specific-info">
+        <div class="advogado-fields">
+          <div class="field-inline">
+            <label class="field-label">OAB:</label>
+            <p *ngIf="userDialogMode === 'view'">{{ selectedUser.oab || 'Não informado' }}</p>
+            <input
+              *ngIf="userDialogMode === 'edit'"
+              pInputText
+              [(ngModel)]="selectedUser.oab"
+              class="w-full"
+              placeholder="Número da OAB">
+          </div>
+          <div class="field-inline">
+            <label class="field-label">Especialidades:</label>
+            <p *ngIf="userDialogMode === 'view'">
+              {{ selectedUser.especialidades?.join(', ') || 'Não informado' }}
+            </p>
+            <input
+              *ngIf="userDialogMode === 'edit'"
+              pInputText
+              [(ngModel)]="selectedUser.especialidades"
+              class="w-full"
+              placeholder="Especialidades (separadas por vírgula)">
+          </div>
+        </div>
+        <div class="advogado-stats">
+          <div class="field-inline">
+            <label class="field-label">Avaliação Média:</label>
+            <p>{{ selectedUser.avaliacaoMedia || 'Não avaliado' }}</p>
+          </div>
+          <div class="field-inline">
+            <label class="field-label">Total de Processos:</label>
+            <p>{{ selectedUser.totalProcessos || 0 }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin -->
+      <div *ngIf="selectedUser.tipo === 'admin'" class="specific-info">
+        <p class="text-center text-color-secondary">Administradores não possuem informações específicas adicionais.</p>
+      </div>
+    </div>
+
+    <!-- Ações do Dialog -->
+    <div class="dialog-actions">
+      <p-button
+        *ngIf="userDialogMode === 'edit'"
+        label="Salvar"
+        icon="pi pi-check"
+        class="p-button-primary"
+        (click)="salvarUsuario()">
+      </p-button>
+      <p-button
+        label="Fechar"
+        icon="pi pi-times"
+        class="p-button-outlined"
+        (click)="showUserDialog = false">
+      </p-button>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- Toast -->
+<p-toast position="top-right"></p-toast>
+<p-confirmDialog></p-confirmDialog>

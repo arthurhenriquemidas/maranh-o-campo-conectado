@@ -1,0 +1,281 @@
+<!-- Login Page -->
+<!-- Top Navigation -->
+<app-custom-menu
+  [menuItems]="menuItems"
+  [logoText]="'4'"
+  [activeMenuItem]="activeMenuItem"
+  (menuItemClick)="onMenuItemClick($event)"
+  (logoClick)="onLogoClick()">
+</app-custom-menu>
+
+<div class="login-wrapper">
+  <!-- Hero Section -->
+  <!-- <div class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          <i class="pi pi-sign-in text-white mr-3"></i>
+          Acesso à Plataforma 4Jus
+        </h1>
+        <p class="hero-subtitle">
+          Entre em sua conta e tenha acesso completo aos nossos serviços jurídicos
+        </p>
+        <p class="hero-description">
+          Conecte-se com advogados especializados, acompanhe seus processos e resolva suas questões jurídicas de forma rápida e segura.
+        </p>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Login Form Section -->
+  <div class="login-form-section">
+    <div class="container">
+      <div class="grid">
+        <div class="col-12">
+          <!-- Login Form Card -->
+          <p-card class="auth-card">
+            <div class="grid">
+              <!-- Linha divisória vertical -->
+              <div class="vertical-divider" *ngIf="isDesktop"></div>
+
+              <!-- Login Form Column -->
+              <div class="col-12 lg:col-6" >
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-responsive input-responsive validation-enhanced"  style="margin: 15px;">
+
+                  <!-- Email -->
+                  <div class="field mb-4">
+                    <label for="email" class="block text-900 font-medium mb-2">E-mail</label>
+                    <span class="p-input-icon-left w-full">
+                      <i class="pi pi-envelope" style="padding-top: 1rem;"></i>
+                      <input
+                        id="email"
+                        type="email"
+                        style="padding-left: 2rem;"
+                        pInputText
+                        formControlName="email"
+                        placeholder="Digite seu e-mail"
+                        class="w-full modern-input"
+                        [class.ng-invalid]="isFieldInvalid('email')"
+                        autocomplete="email">
+                    </span>
+                    <small
+                      class="p-error"
+                      *ngIf="isFieldInvalid('email')">
+                      E-mail é obrigatório e deve ser válido
+                    </small>
+                  </div>
+
+                  <!-- Password -->
+                  <div class="field mb-4">
+                    <label for="password" class="block text-900 font-medium mb-2">Senha</label>
+                    <span class="p-input-icon-left w-full">
+                      <i class="pi pi-lock"></i>
+                      <p-password
+                        id="password"
+                        formControlName="password"
+                        placeholder="Digite sua senha"
+                        styleClass="w-full"
+                        inputStyleClass="w-full"
+                        [toggleMask]="true"
+                        [feedback]="false"
+                        autocomplete="current-password">
+                      </p-password>
+                    </span>
+                    <small
+                      class="p-error"
+                      *ngIf="isFieldInvalid('password')">
+                      Senha é obrigatória
+                    </small>
+                  </div>
+
+                  <!-- User Type -->
+                  <!-- <div class="field mb-4">
+                    <label for="tipoUsuario" class="block text-900 font-medium mb-2">Tipo de usuário</label>
+                    <p-dropdown
+                      id="tipoUsuario"
+                      formControlName="tipoUsuario"
+                      [options]="tiposUsuario"
+                      placeholder="Selecione seu perfil"
+                      styleClass="w-full">
+                    </p-dropdown>
+                    <small
+                      class="p-error"
+                      *ngIf="isFieldInvalid('tipoUsuario')">
+                      Selecione o tipo de usuário
+                    </small>
+                  </div> -->
+
+                  <!-- Remember Me -->
+                  <div class="field-checkbox mb-4">
+                    <p-checkbox
+                      id="lembrarMe"
+                      formControlName="lembrarMe"
+                      [binary]="true">
+                    </p-checkbox>
+                    <label for="lembrarMe" class="ml-2">Lembrar de mim</label>
+                  </div>
+
+                  <!-- Error Messages -->
+                  <p-messages
+                    *ngIf="errorMessage"
+                    severity="error"
+                    [value]="[{severity:'error', summary:'Erro', detail: errorMessage}]"
+                    class="mb-4">
+                  </p-messages>
+
+                  <!-- Submit Button -->
+                  <p-button
+                    type="submit"
+                    label="Entrar"
+                    icon="pi pi-sign-in"
+                    styleClass="w-full p-button-lg"
+                    [loading]="isLoading"
+                    [disabled]="loginForm.invalid">
+                  </p-button>
+
+                 
+
+                </form>
+              </div>
+
+              <!-- Quick Access Column -->
+              <div class="col-12 lg:col-6" >
+                <div class="quick-access-container" style="margin: 15px;">
+                  <!-- Divider -->
+                  <div class="divider-container mb-4">
+                    <div class="divider-line"></div>
+                    <span class="divider-text">Acesso rápido</span>
+                    <div class="divider-line"></div>
+                  </div>
+
+                  <!-- Social Login Buttons -->
+                  <div class="social-login-container">
+                    <p-button
+                      label="Continuar com Google"
+                      icon="pi pi-google"
+                      severity="secondary"
+                      outlined="true"
+                      styleClass="w-full social-btn google-btn"
+                      (onClick)="loginWithGoogle()">
+                    </p-button>
+
+                    <p-button
+                      label="Continuar com Microsoft"
+                      icon="pi pi-microsoft"
+                      severity="secondary"
+                      outlined="true"
+                      styleClass="w-full social-btn microsoft-btn"
+                      (onClick)="loginWithMicrosoft()">
+                    </p-button>
+
+                    <p-button
+                      label="Continuar com Apple"
+                      icon="pi pi-apple"
+                      severity="secondary"
+                      outlined="true"
+                      styleClass="w-full social-btn apple-btn"
+                      (onClick)="loginWithApple()">
+                    </p-button>
+                  </div>
+
+                   <!-- Forgot Password -->
+                   <div class="text-center mt-4">
+                    <a
+                      href="javascript:void(0)"
+                      (click)="esqueceuSenha()"
+                      class="text-primary font-medium text-sm">
+                      Esqueceu sua senha?
+                    </a>
+                  </div>
+
+                    <!-- Register Link -->
+                  <div class="text-center mt-4">
+                    <p class="text-color-secondary">
+                      Ainda não tem uma conta?
+                      <a
+                        href="javascript:void(0)"
+                        (click)="navegarPara('/auth/register')"
+                        class="text-primary font-medium">
+                        Cadastre-se aqui
+                      </a>
+                    </p>
+                  </div>  
+
+              
+
+                </div>
+              </div>
+
+            </div>
+          </p-card>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Benefits Section -->
+  <div class="benefits-section">
+    <div class="container">
+      <h2 class="section-title text-center mb-6">Por que escolher a plataforma 4Jus?</h2>
+
+      <div class="grid">
+        <div class="col-12 md:col-6 lg:col-3">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="pi pi-shield"></i>
+            </div>
+            <h3 class="benefit-title">Segurança Total</h3>
+            <p class="benefit-description">
+              Seus dados e documentos protegidos com criptografia de ponta.
+              Advogados verificados e certificados pela OAB.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-6 lg:col-3">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="pi pi-clock"></i>
+            </div>
+            <h3 class="benefit-title">Rapidez no Atendimento</h3>
+            <p class="benefit-description">
+              Processos atribuídos em até 24h. Comunicação direta via chat
+              com seu advogado. Acompanhe tudo em tempo real.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-6 lg:col-3">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="pi pi-dollar"></i>
+            </div>
+            <h3 class="benefit-title">Preços Transparentes</h3>
+            <p class="benefit-description">
+              Sem surpresas ou taxas ocultas. Valores transparentes
+              desde o primeiro contato. Pague apenas pelo que usar.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-6 lg:col-3">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="pi pi-bolt"></i>
+            </div>
+            <h3 class="benefit-title">Processos Ágeis</h3>
+            <p class="benefit-description">
+              Resolução muito mais rápida que no judiciário tradicional.
+              Acordos realizados sem necessidade de adjudicação.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <app-onboarding-footer></app-onboarding-footer>
+
+</div>

@@ -1,0 +1,578 @@
+<!-- Register Page -->
+<!-- Top Navigation -->
+<app-custom-menu
+  [menuItems]="menuItems"
+  [logoText]="'4'"
+  [activeMenuItem]="activeMenuItem"
+  (menuItemClick)="onMenuItemClick($event)"
+  (logoClick)="onLogoClick()">
+</app-custom-menu>
+
+<div class="register-wrapper">
+
+  <!-- Register Form Section -->
+  <div class="register-form-section">
+    <div class="container">
+      <div class="grid">
+        <div class="col-12">
+          
+          <!-- Header Section - Outside Card -->
+          <div *ngIf="!registroCompleto" class="register-header text-center mb-4">
+            <h1 class="register-title text-4xl font-bold text-900 mb-2">
+              <i class="pi pi-user-plus text-primary mr-2"></i>
+              Criar Conta
+            </h1>
+            <p class="register-subtitle text-xl text-600 mb-3">
+              Cadastre-se na Plataforma 4Jus
+            </p>
+            <div class="text-center">
+              <p class="text-color-secondary">
+                Já possui uma conta?
+                <a
+                  href="javascript:void(0)"
+                  (click)="irParaLogin()"
+                  class="text-primary font-medium">
+                  Faça login aqui
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <!-- Register Form Card -->
+          <p-card class="auth-card">
+
+      <!-- Steps Progress -->
+      <div *ngIf="!registroCompleto" class="mb-4">
+        <p-steps 
+          [model]="steps" 
+          [activeIndex]="currentStep">
+        </p-steps>
+      </div>
+
+      <!-- Etapa 1: Tipo de Pessoa (PF ou PJ) -->
+      <div *ngIf="currentStep === 0 && !registroCompleto">
+        <form [formGroup]="tipoForm">
+          
+          <div class="text-center mb-5">
+            <h3 class="text-2xl font-bold text-900 mb-2">Tipo de Pessoa</h3>
+            <p class="text-600 text-lg">Selecione se você é uma pessoa física ou jurídica</p>
+          </div>
+          
+          <!-- Seleção PF/PJ -->
+          <div class="grid mb-4">
+            <div class="col-12 md:col-6">
+              <div class="tipo-option p-4 border-round cursor-pointer text-center transition-all transition-duration-300"
+                   [class.selected]="tipoCliente === 'PF'"
+                   (click)="tipoForm.patchValue({tipoCliente: 'PF'}); onTipoClienteChange()">
+                <div class="tipo-icon mb-3">
+                  <i class="pi pi-user text-5xl" 
+                     [class.text-primary]="tipoCliente === 'PF'"
+                     [class.text-400]="tipoCliente !== 'PF'"></i>
+                </div>
+                <h4 class="font-bold text-xl mb-2">Pessoa Física</h4>
+                <p class="text-600 mb-3">Sou uma pessoa física</p>
+                <p class="text-sm text-500">Para indivíduos que buscam assistência jurídica pessoal</p>
+              </div>
+            </div>
+            <div class="col-12 md:col-6">
+              <div class="tipo-option p-4 border-round cursor-pointer text-center transition-all transition-duration-300"
+                   [class.selected]="tipoCliente === 'PJ'"
+                   (click)="tipoForm.patchValue({tipoCliente: 'PJ'}); onTipoClienteChange()">
+                <div class="tipo-icon mb-3">
+                  <i class="pi pi-building text-5xl"
+                     [class.text-primary]="tipoCliente === 'PJ'"
+                     [class.text-400]="tipoCliente !== 'PJ'"></i>
+                </div>
+                <h4 class="font-bold text-xl mb-2">Pessoa Jurídica</h4>
+                <p class="text-600 mb-3">Represento uma empresa</p>
+                <p class="text-sm text-500">Para empresas que precisam de serviços jurídicos corporativos</p>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Etapa 2: Dados Pessoais -->
+      <div *ngIf="currentStep === 1 && !registroCompleto">
+        <form [formGroup]="dadosForm">
+          
+          <div class="text-center mb-5">
+            <h3 class="text-2xl font-bold text-900 mb-2">Informações Pessoais</h3>
+            <p class="text-600 text-lg">Preencha seus dados para criar sua conta</p>
+          </div>
+          
+          <div class="grid">
+            
+            <!-- Nome para Pessoa Física -->
+            <div class="col-12" *ngIf="tipoCliente === 'PF'">
+              <div class="field mb-4">
+                <label for="nome" class="block text-900 font-semibold mb-2">
+                  Nome Completo <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  id="nome"
+                  type="text" 
+                  pInputText 
+                  formControlName="nome"
+                  placeholder="Digite seu nome completo"
+                  class="w-full modern-input">
+                <p-message
+                  *ngIf="dadosForm.get('nome')?.invalid && dadosForm.get('nome')?.touched"
+                  severity="error"
+                  text="Nome é obrigatório">
+                </p-message>
+              </div>
+            </div>
+
+            <!-- Razão Social para Pessoa Jurídica -->
+            <div class="col-12" *ngIf="tipoCliente === 'PJ'">
+              <div class="field mb-4">
+                <label for="razaoSocial" class="block text-900 font-semibold mb-2">
+                  Razão Social <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  id="razaoSocial"
+                  type="text" 
+                  pInputText
+                  formControlName="razaoSocial"
+                  placeholder="Nome da empresa"
+                  class="w-full modern-input">
+                <p-message
+                  *ngIf="dadosForm.get('razaoSocial')?.invalid && dadosForm.get('razaoSocial')?.touched"
+                  severity="error"
+                  text="Razão Social é obrigatória">
+                </p-message>
+              </div>
+            </div>
+
+            <!-- Email e Telefone -->
+            <div class="col-12 md:col-6">
+              <div class="field mb-4">
+                <label for="email" class="block text-900 font-semibold mb-2">
+                  E-mail <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  id="email"
+                  type="email" 
+                  pInputText 
+                  formControlName="email"
+                  placeholder="seu@email.com"
+                  class="w-full modern-input">
+                <p-message
+                  *ngIf="dadosForm.get('email')?.invalid && dadosForm.get('email')?.touched"
+                  severity="error"
+                  text="E-mail é obrigatório e deve ser válido">
+                </p-message>
+              </div>
+            </div>
+
+            <div class="col-12 md:col-6">
+              <div class="field mb-4">
+                <label for="telefone" class="block text-900 font-semibold mb-2">
+                  Telefone <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  id="telefone"
+                  type="text" 
+                  pInputMask
+                  mask="(99) 99999-9999"
+                  formControlName="telefone"
+                  placeholder="(11) 99999-9999"
+                  class="w-full modern-input">
+                <p-message
+                  *ngIf="dadosForm.get('telefone')?.invalid && dadosForm.get('telefone')?.touched"
+                  severity="error"
+                  text="Telefone é obrigatório">
+                </p-message>
+              </div>
+            </div>
+
+            <!-- CPF para Pessoa Física -->
+            <div class="col-12 md:col-6" *ngIf="tipoCliente === 'PF'">
+              <div class="field mb-4">
+                <label for="cpf" class="block text-900 font-semibold mb-2">
+                  CPF <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  id="cpf"
+                  type="text" 
+                  pInputMask
+                  mask="999.999.999-99"
+                  formControlName="cpf"
+                  placeholder="000.000.000-00"
+                  class="w-full modern-input">
+                <p-message
+                  *ngIf="dadosForm.get('cpf')?.invalid && dadosForm.get('cpf')?.touched"
+                  severity="error"
+                  text="CPF é obrigatório">
+                </p-message>
+              </div>
+            </div>
+
+            <!-- CNPJ para Pessoa Jurídica -->
+            <div class="col-12 md:col-6" *ngIf="tipoCliente === 'PJ'">
+              <div class="field mb-4">
+                <label for="cnpj" class="block text-900 font-semibold mb-2">
+                  CNPJ <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  id="cnpj"
+                  type="text" 
+                  pInputMask
+                  mask="99.999.999/9999-99"
+                  formControlName="cnpj"
+                  placeholder="00.000.000/0000-00"
+                  class="w-full modern-input">
+                <p-message
+                  *ngIf="dadosForm.get('cnpj')?.invalid && dadosForm.get('cnpj')?.touched"
+                  severity="error"
+                  text="CNPJ é obrigatório">
+                </p-message>
+              </div>
+            </div>
+
+            <!-- Nome do Responsável para Pessoa Jurídica -->
+            <div class="col-12 md:col-6" *ngIf="tipoCliente === 'PJ'">
+              <div class="field mb-4">
+                <label for="nomeResponsavel" class="block text-900 font-semibold mb-2">
+                  Nome do Responsável <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  id="nomeResponsavel"
+                  type="text" 
+                  pInputText
+                  formControlName="nomeResponsavel"
+                  placeholder="Nome completo do responsável"
+                  class="w-full modern-input">
+                <p-message
+                  *ngIf="dadosForm.get('nomeResponsavel')?.invalid && dadosForm.get('nomeResponsavel')?.touched"
+                  severity="error"
+                  text="Nome do Responsável é obrigatório">
+                </p-message>
+              </div>
+            </div>
+
+             <!-- Senhas -->
+             <div class="col-12 md:col-6">
+              <div class="field mb-4">
+                <label for="password" class="block text-900 font-medium mb-2">
+                  Senha <span class="text-red-500">*</span>
+                </label>
+                <p-password 
+                  id="password"
+                  formControlName="password"
+                  [feedback]="true"
+                  [toggleMask]="true"
+                  placeholder="Mínimo 6 caracteres"
+                  class="w-full"
+                  inputStyleClass="w-full modern-input">
+                </p-password>
+                <p-message
+                  *ngIf="dadosForm.get('password')?.invalid && dadosForm.get('password')?.touched"
+                  severity="error"
+                  inputStyleClass="w-full"
+                  text="Senha deve ter pelo menos 6 caracteres">
+                </p-message>
+              </div>
+            </div>
+
+            <div class="col-12 md:col-6">
+              <div class="field mb-4">
+                <label for="confirmPassword" class="block text-900 font-medium mb-2">
+                  Confirmar Senha <span class="text-red-500">*</span>
+                </label>
+                <p-password 
+                  id="confirmPassword"
+                  formControlName="confirmPassword"
+                  [feedback]="false"
+                  [toggleMask]="true"
+                  placeholder="Repita a senha"
+                  class="w-full"
+                  inputStyleClass="w-full modern-input">
+                </p-password>
+                <p-message
+                  *ngIf="dadosForm.get('confirmPassword')?.touched && dadosForm.get('password')?.value !== dadosForm.get('confirmPassword')?.value"
+                  severity="warn"
+                  text="As senhas não coincidem">
+                </p-message>
+              </div>
+            </div>
+
+           </div>
+
+        </form>
+      </div>
+
+      <!-- Etapa 3: Confirmação -->
+      <div *ngIf="currentStep === 2 && !registroCompleto">
+        <form [formGroup]="confirmacaoForm">
+          
+          <div class="text-center mb-5">
+            <h3 class="text-2xl font-bold text-900 mb-2">Confirmação Final</h3>
+            <p class="text-600 text-lg">Revise seus dados e aceite os termos para finalizar</p>
+          </div>
+          
+          <!-- Resumo dos dados -->
+          <div class="grid mb-5">
+            <div class="col-12">
+              <p-panel header="Resumo do Cadastro" [toggleable]="true" [collapsed]="false">
+                <div class="grid">
+                  <div class="col-12 md:col-6">
+                    <div class="summary-section">
+                      <h6 class="text-primary mb-3 flex align-items-center">
+                        <i class="pi pi-user mr-2"></i>
+                        Dados Pessoais
+                      </h6>
+                      <div class="summary-item mb-2" *ngIf="tipoCliente === 'PF'">
+                        <span class="text-600">Nome:</span>
+                        <span class="font-semibold ml-2">{{ dadosForm.get('nome')?.value }}</span>
+                      </div>
+                      <div class="summary-item mb-2">
+                        <span class="text-600">E-mail:</span>
+                        <span class="font-semibold ml-2">{{ dadosForm.get('email')?.value }}</span>
+                      </div>
+                      <div class="summary-item mb-2">
+                        <span class="text-600">Telefone:</span>
+                        <span class="font-semibold ml-2">{{ dadosForm.get('telefone')?.value }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 md:col-6">
+                    <div class="summary-section">
+                      <h6 class="text-primary mb-3 flex align-items-center">
+                        <i class="pi pi-id-card mr-2"></i>
+                        Informações Específicas
+                      </h6>
+                      <div class="summary-item mb-2" *ngIf="tipoCliente === 'PF'">
+                        <span class="text-600">Tipo:</span>
+                        <span class="font-semibold ml-2">Pessoa Física</span>
+                      </div>
+                      <div class="summary-item mb-2" *ngIf="tipoCliente === 'PF'">
+                        <span class="text-600">CPF:</span>
+                        <span class="font-semibold ml-2">{{ dadosForm.get('cpf')?.value }}</span>
+                      </div>
+                      <div class="summary-item mb-2" *ngIf="tipoCliente === 'PJ'">
+                        <span class="text-600">Tipo:</span>
+                        <span class="font-semibold ml-2">Pessoa Jurídica</span>
+                      </div>
+                      <div class="summary-item mb-2" *ngIf="tipoCliente === 'PJ'">
+                        <span class="text-600">CNPJ:</span>
+                        <span class="font-semibold ml-2">{{ dadosForm.get('cnpj')?.value }}</span>
+                      </div>
+                      <div class="summary-item mb-2" *ngIf="tipoCliente === 'PJ'">
+                        <span class="text-600">Razão Social:</span>
+                        <span class="font-semibold ml-2">{{ dadosForm.get('razaoSocial')?.value }}</span>
+                      </div>
+                      <div class="summary-item mb-2" *ngIf="tipoCliente === 'PJ'">
+                        <span class="text-600">Responsável:</span>
+                        <span class="font-semibold ml-2">{{ dadosForm.get('nomeResponsavel')?.value }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+              </p-panel>
+            </div>
+          </div>
+
+          <!-- Termos e Newsletter -->
+          <div class="grid">
+            <div class="col-12">
+              <p-fieldset legend="Termos e Condições" [toggleable]="true" [collapsed]="false">
+                
+                <!-- Termos -->
+                <div class="field mb-4">
+                  <div class="flex align-items-start">
+                    <p-checkbox 
+                      formControlName="termos"
+                      [binary]="true"
+                      inputId="termos"
+                      class="mt-1">
+                    </p-checkbox>
+                    <label for="termos" class="ml-3 text-900">
+                      Aceito os <a href="#" class="text-primary font-semibold">termos de uso</a> e <a href="#" class="text-primary font-semibold">política de privacidade</a> <span class="text-red-500">*</span>
+                    </label>
+                  </div>
+                  <p-message
+                    *ngIf="confirmacaoForm.get('termos')?.invalid && confirmacaoForm.get('termos')?.touched"
+                    severity="warn"
+                    text="Você deve aceitar os termos de uso">
+                  </p-message>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="field mb-2">
+                  <div class="flex align-items-start">
+                    <p-checkbox 
+                      formControlName="newsletter"
+                      [binary]="true"
+                      inputId="newsletter"
+                      class="mt-1">
+                    </p-checkbox>
+                    <label for="newsletter" class="ml-3 text-900">
+                      Desejo receber atualizações e novidades por e-mail
+                    </label>
+                  </div>
+                </div>
+                
+              </p-fieldset>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Registro Completo -->
+      <div *ngIf="registroCompleto" class="text-center">
+        <div class="success-animation mb-5">
+          <i class="pi pi-check-circle text-8xl text-green-500 mb-4"></i>
+        </div>
+        <h3 class="text-3xl font-bold text-900 mb-3">Cadastro Realizado!</h3>
+        <p class="text-600 text-lg mb-5">Sua conta foi criada com sucesso. Você pode fazer login agora.</p>
+        <div class="flex flex-column align-items-center gap-3">
+          <p-button 
+            label="Fazer Login"
+            icon="pi pi-sign-in"
+            size="large"
+            (onClick)="irParaLogin()">
+          </p-button>
+          <p class="text-sm text-500">
+            <i class="pi pi-info-circle mr-1"></i>
+            Verifique seu e-mail para ativar sua conta
+          </p>
+        </div>
+      </div>
+
+      <!-- Footer com Navegação -->
+      <ng-template pTemplate="footer">
+        <div *ngIf="!registroCompleto" class="register-footer">
+          
+          <!-- Texto da Etapa - Centralizado no mobile, oculto no desktop -->
+          <div class="step-indicator text-center mb-3">
+            <p class="text-600 text-sm m-0">
+              Etapa {{ currentStep + 1 }} de {{ steps.length }}
+            </p>
+          </div>
+
+          <!-- Botões de Navegação -->
+          <div class="flex justify-content-between align-items-center gap-2 buttons-container">
+            
+            <!-- Grupo: Botão Voltar + Etapa (desktop) -->
+            <div class="flex align-items-center gap-2 left-group">
+              <p-button 
+                *ngIf="currentStep === 0"
+                label="Voltar"
+                icon="pi pi-arrow-left"
+                severity="secondary"
+                outlined="true"
+                size="large"
+                (onClick)="voltarLogin()">
+              </p-button>
+              
+              <p-button 
+                *ngIf="currentStep > 0"
+                label="Voltar"
+                icon="pi pi-arrow-left"
+                severity="secondary"
+                outlined="true"
+                size="large"
+                (onClick)="prevStep()">
+              </p-button>
+              
+              <!-- Etapa inline no desktop (oculta no mobile) -->
+              <p class="text-600 text-sm m-0 step-indicator-inline">
+                Etapa {{ currentStep + 1 }} de {{ steps.length }}
+              </p>
+            </div>
+
+            <!-- Botão Próximo/Finalizar -->
+            <p-button 
+              [label]="isLastStep ? 'Finalizar Cadastro' : 'Próximo'"
+              [icon]="isLastStep ? 'pi pi-check' : 'pi pi-arrow-right'"
+              [iconPos]="isLastStep ? 'left' : 'right'"
+              [loading]="submitting"
+              [disabled]="!canProceed"
+              size="large"
+              (onClick)="isLastStep ? finalizarRegistro() : nextStep()">
+            </p-button>
+
+          </div>
+
+        </div>
+      </ng-template>
+
+    </p-card>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Benefits Section -->
+  <div class="benefits-section">
+    <div class="container">
+      <h2 class="section-title text-center mb-6">Vantagens de fazer parte da 4Jus</h2>
+
+      <div class="grid">
+        <div class="col-12 md:col-6 lg:col-3">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="pi pi-users"></i>
+            </div>
+            <h3 class="benefit-title">Rede de Profissionais</h3>
+            <p class="benefit-description">
+              Conecte-se com advogados especializados em diversas áreas do direito.
+              Encontre o profissional ideal para suas necessidades.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-6 lg:col-3">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="pi pi-shield"></i>
+            </div>
+            <h3 class="benefit-title">Segurança e Confiança</h3>
+            <p class="benefit-description">
+              Plataforma segura com criptografia avançada. Todos os advogados
+              são verificados e certificados pela OAB.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-6 lg:col-3">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="pi pi-chart-line"></i>
+            </div>
+            <h3 class="benefit-title">Gestão Simplificada</h3>
+            <p class="benefit-description">
+              Acompanhe todos os seus processos e documentos em um único lugar.
+              Interface intuitiva e fácil de usar.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12 md:col-6 lg:col-3">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="pi pi-mobile"></i>
+            </div>
+            <h3 class="benefit-title">Acesso em Qualquer Lugar</h3>
+            <p class="benefit-description">
+              Plataforma responsiva e acessível de qualquer dispositivo.
+              Tenha seus documentos sempre à mão.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <app-onboarding-footer></app-onboarding-footer>
+
+</div>
+
+<!-- Toast -->
+<p-toast position="top-right"></p-toast>

@@ -1,0 +1,84 @@
+{
+  "tipos": [
+    { "label": "Trabalhista", "value": "trabalhista", "icon": "pi-briefcase" },
+    { "label": "Civil", "value": "civil", "icon": "pi-home" },
+    { "label": "Criminal", "value": "criminal", "icon": "pi-shield" },
+    { "label": "Família", "value": "familia", "icon": "pi-heart" },
+    { "label": "Tributário", "value": "tributario", "icon": "pi-dollar" },
+    { "label": "Empresarial", "value": "empresarial", "icon": "pi-building" }
+  ],
+  "status": [
+    { "label": "Aberto", "value": "aberto", "color": "info" },
+    { "label": "Em Andamento", "value": "em_andamento", "color": "warning" },
+    { "label": "Aguardando Cliente", "value": "aguardando_cliente", "color": "help" },
+    { "label": "Concluído", "value": "concluido", "color": "success" },
+    { "label": "Arquivado", "value": "arquivado", "color": "secondary" }
+  ],
+  "processos": [
+    {
+      "id": "P001",
+      "titulo": "Rescisão Trabalhista - João Silva",
+      "descricao": "Processo para rescisão de contrato de trabalho com cálculo de verbas rescisórias",
+      "tipo": "trabalhista",
+      "status": "em_andamento",
+      "clienteId": "1",
+      "advogadoId": "1",
+      "valor": 5000.00,
+      "dataCriacao": "2024-01-15T10:30:00Z",
+      "dataAtribuicao": "2024-01-16T09:00:00Z",
+      "prazoEstimado": "2024-02-15T23:59:59Z",
+      "urgencia": "media",
+      "documentosCount": 3,
+      "mensagensCount": 12
+    },
+    {
+      "id": "P002", 
+      "titulo": "Divórcio Consensual - Maria Santos",
+      "descricao": "Processo de divórcio consensual com partilha de bens",
+      "tipo": "familia",
+      "status": "aguardando_cliente",
+      "clienteId": "2",
+      "advogadoId": "2",
+      "valor": 3000.00,
+      "dataCriacao": "2024-01-10T14:20:00Z",
+      "dataAtribuicao": "2024-01-11T11:30:00Z",
+      "prazoEstimado": "2024-03-10T23:59:59Z",
+      "urgencia": "baixa",
+      "documentosCount": 5,
+      "mensagensCount": 8
+    },
+    {
+      "id": "P003",
+      "titulo": "Regularização Tributária - Empresa ABC",
+      "descricao": "Regularização de pendências tributárias junto à Receita Federal",
+      "tipo": "tributario",
+      "status": "aberto",
+      "clienteId": "3",
+      "advogadoId": null,
+      "valor": 15000.00,
+      "dataCriacao": "2024-01-20T09:15:00Z",
+      "dataAtribuicao": null,
+      "prazoEstimado": "2024-04-20T23:59:59Z",
+      "urgencia": "alta",
+      "documentosCount": 8,
+      "mensagensCount": 0
+    },
+    {
+      "id": "P004",
+      "titulo": "Ação de Cobrança - João Silva",
+      "descricao": "Cobrança de valores não pagos por prestação de serviços",
+      "tipo": "civil",
+      "status": "concluido",
+      "clienteId": "1",
+      "advogadoId": "1",
+      "valor": 2500.00,
+      "dataCriacao": "2023-12-05T16:45:00Z",
+      "dataAtribuicao": "2023-12-06T08:30:00Z",
+      "dataConclusao": "2024-01-05T14:20:00Z",
+      "prazoEstimado": "2024-02-05T23:59:59Z",
+      "urgencia": "media",
+      "documentosCount": 4,
+      "mensagensCount": 15
+    }
+  ]
+}

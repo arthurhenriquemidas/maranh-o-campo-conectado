@@ -1,0 +1,1072 @@
+<!-- Layout Mobile First -->
+<div class="processo-detalhes-layout">
+  
+  <!-- Header Component -->
+  <app-shared-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-shared-header>
+
+
+  <!-- Breadcrumb -->
+  <!-- <div class="layout-breadcrumb">
+    <div class="breadcrumb-container">
+      <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome"></p-breadcrumb>
+    </div>
+  </div> -->
+
+  <!-- Conteúdo Principal Mobile First -->
+  <div class="layout-content">
+    
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <div class="grid">
+        <div class="col-12">
+          <p-card>
+            <div class="flex align-items-center mb-3">
+              <p-skeleton shape="circle" size="3rem" class="mr-3"></p-skeleton>
+              <div class="flex-1">
+                <p-skeleton height="2rem" class="mb-2"></p-skeleton>
+                <p-skeleton height="1rem" width="60%"></p-skeleton>
+              </div>
+            </div>
+            <p-skeleton height="10rem"></p-skeleton>
+          </p-card>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div *ngIf="!loading && processo" class="content-container">
+      
+      <!-- Header do Processo -->
+      <div class="grid mb-4">
+        <div class="col-12">
+          <p-card class="processo-header-card">
+            
+            <!-- Título e Ações -->
+            <div class="flex align-items-start justify-content-between mb-4">
+              <div class="flex-1">
+                <h1 class="text-3xl font-bold text-900 m-0 mb-2">
+                  <i class="pi pi-briefcase mr-3 text-primary"></i>
+                  {{ processo.titulo }}
+                </h1>
+                <div class="flex align-items-center gap-3 mb-3">
+                  <p-tag 
+                    [value]="getStatusLabel(processo.status)"
+                    [severity]="getStatusSeverity(processo.status)"
+                    [class]="processoAceito ? 'text-sm status-accepted' : 'text-sm'">
+                  </p-tag>
+                  <p-tag 
+                    [value]="getTipoLabel(processo.tipo)"
+                    severity="info"
+                    class="text-sm">
+                  </p-tag>
+                  <p-tag 
+                    [value]="getUrgenciaLabel(processo.urgencia)"
+                    [severity]="getUrgenciaSeverity(processo.urgencia)"
+                    class="text-sm">
+                  </p-tag>
+                </div>
+                <p class="text-color-secondary m-0">{{ processo.descricao }}</p>
+              </div>
+              
+              <!-- Ações do Processo -->
+              <div class="processo-actions">
+                <p-button 
+                  icon="pi pi-comments" 
+                  label="Chat"
+                  class="p-button-outlined mr-2"
+                  (click)="iniciarChat(processo)">
+                </p-button>
+                
+                <!-- Botão Condicional baseado no tipo de usuário -->
+                <p-button 
+                  *ngIf="currentUser?.tipo === 'cliente'"
+                  [icon]="processoAceito ? 'pi pi-check-circle' : 'pi pi-check'" 
+                  [label]="processoAceito ? 'Conclusão Aceita!' : 'Aceitar Conclusão'"
+                  [class]="getButtonClass()"
+                  [loading]="processandoAceitar"
+                  [disabled]="processoAceito"
+                  (click)="aceitarConclusao(processo)">
+                </p-button>
+                
+                <p-button 
+                  *ngIf="currentUser?.tipo === 'advogado'"
+                  icon="pi pi-check-circle" 
+                  label="Marcar como Concluído"
+                  class="p-button-success mr-2"
+                  (click)="marcarComoConcluido(processo)">
+                </p-button>
+                
+                <p-button 
+                  *ngIf="currentUser?.tipo === 'admin'"
+                  icon="pi pi-gavel" 
+                  label="Avaliar Conciliação"
+                  class="p-button-warning mr-2"
+                  (click)="abrirModalAvaliacao(processo)">
+                </p-button>
+                
+                <p-button 
+                  icon="pi pi-file-edit" 
+                  label="Editar"
+                  class="p-button-outlined mr-2"
+                  (click)="editarProcesso(processo)">
+                </p-button>
+                <p-button 
+                  icon="pi pi-download" 
+                  label="Exportar"
+                  class="p-button-outlined"
+                  (click)="exportarProcesso(processo)">
+                </p-button>
+              </div>
+            </div>
+
+            <!-- Informações Principais -->
+            <div class="grid">
+              <div class="col-12 md:col-6 lg:col-3">
+                <div class="info-item">
+                  <i class="pi pi-calendar text-primary"></i>
+                  <div>
+                    <span class="info-label">Data de Criação</span>
+                    <span class="info-value">{{ processo.dataCriacao | date:'dd/MM/yyyy' }}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Cliente - Visível para Advogado e Admin -->
+              <div class="col-12 md:col-6 lg:col-3" *ngIf="currentUser?.tipo === 'advogado' ">
+                <div class="info-item">
+                  <i class="pi pi-user text-primary"></i>
+                  <div>
+                    <span class="info-label">Cliente</span>
+                    <span class="info-value">{{ getClienteNome() }}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Advogado - Visível para Cliente e Admin -->
+              <div class="col-12 md:col-6 lg:col-3" *ngIf="currentUser?.tipo === 'cliente' || currentUser?.tipo === 'admin'">
+                <div class="info-item">
+                  <i class="pi pi-user-plus text-primary"></i>
+                  <div>
+                    <span class="info-label">Advogado</span>
+                    <span class="info-value">{{ getAdvogadoNome() }}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-12 md:col-6 lg:col-3">
+                <div class="info-item">
+                  <i class="pi pi-clock text-primary"></i>
+                  <div>
+                    <span class="info-label">Prazo Estimado</span>
+                    <span class="info-value">{{ (processo.prazoEstimado | date:'dd/MM/yyyy') || 'Não definido' }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 md:col-6 lg:col-3">
+                <div class="info-item">
+                  <i class="pi pi-dollar text-primary"></i>
+                  <div>
+                    <span class="info-label">Valor</span>
+                    <span class="info-value">{{ processo.valor | currency:'BRL' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </p-card>
+        </div>
+      </div>
+
+      <!-- Conteúdo em Abas -->
+      <div class="grid">
+        <div class="col-12">
+          <p-tabView class="processo-tabs">
+            <!-- Aba Timeline -->
+            <p-tabPanel header="Fluxo do Processo" leftIcon="pi pi-history">
+              <!-- Timeline Horizontal - Estilo Bootstrap 44 -->
+              <div class="bootstrap-timeline-horizontal-container" [style.min-width]="timelineMinWidth">
+                <div class="timeline-horizontal-progress-line"></div>
+
+                <div class="bootstrap-timeline-horizontal">
+                  <div
+                    *ngFor="let event of timelineEvents; let i = index; let isFirst = first; let isLast = last"
+                    class="bootstrap-timeline-horizontal-item"
+                    [class.expanded]="event.expanded"
+                    (click)="toggleTimelineItem(event)">
+
+                    <!-- Marcador com ícone -->
+                    <div class="bootstrap-horizontal-marker-container">
+                      <div class="bootstrap-horizontal-marker" [style.background-color]="getMarkerColor(event)">
+                        <i [class]="event.icone" class="bootstrap-horizontal-marker-icon"></i>
+                      </div>
+                    </div>
+
+                    <!-- Card de conteúdo horizontal -->
+                    <div class="bootstrap-horizontal-content-container">
+                      <div class="bootstrap-horizontal-card">
+                        <!-- Cabeçalho sempre visível -->
+                        <div class="bootstrap-horizontal-card-header">
+                          <div class="bootstrap-horizontal-title">
+                            <i [class]="event.icone" class="bootstrap-horizontal-title-icon"></i>
+                            <h4 class="bootstrap-horizontal-title-text">{{ event.titulo }}</h4>
+                          </div>
+                          <div class="bootstrap-horizontal-status-badge" [class]="'status-' + getEventStatus(event)">
+                            <i [class]="'pi ' + getEventIcon(event)"></i>
+                            <span>{{ getEventStatusLabel(event) }}</span>
+                          </div>
+                        </div>
+
+                        <!-- Detalhes expansíveis -->
+                        <div class="bootstrap-horizontal-details" *ngIf="event.expanded">
+                          <div class="bootstrap-horizontal-description" *ngIf="event.descricao">
+                            <p>{{ event.descricao }}</p>
+                          </div>
+
+                          <div class="bootstrap-horizontal-metadata" *ngIf="event.usuario || event.data">
+                            <div class="bootstrap-horizontal-meta-item">
+                              <i class="pi pi-user"></i>
+                              <span>{{ event.usuario }}</span>
+                            </div>
+                          </div>
+
+                          <div class="bootstrap-horizontal-metadata" *ngIf="event.usuario || event.data">
+                            <div class="bootstrap-horizontal-meta-item">
+                              <i class="pi pi-calendar"></i>
+                              <span>{{ event.data | date:'dd/MM/yyyy HH:mm' }}</span>
+                            </div>
+                          </div>
+
+                          <!-- Ações da etapa (se houver) -->
+                          <div class="bootstrap-horizontal-actions">
+                            <button
+                              type="button"
+                              class="bootstrap-horizontal-action-btn action-info"
+                              (click)="$event.stopPropagation(); toggleTimelineItem(event)">
+                              Ver Detalhes
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </p-tabPanel>
+
+            <!-- Aba Documentos -->
+            <p-tabPanel header="Documentos" leftIcon="pi pi-file">
+              <div class="documentos-container">
+                <div class="documentos-header">
+                  <h3>Documentos do Processo</h3>
+                  <p-button 
+                    icon="pi pi-upload" 
+                    label="Adicionar Documento"
+                    class="p-button-success"
+                    (click)="adicionarDocumento()">
+                  </p-button>
+                </div>
+                
+                <div *ngIf="documentos.length > 0" class="documentos-grid">
+                  <div *ngFor="let doc of documentos" class="documento-item">
+                    <div class="documento-icon">
+                      <i class="pi pi-file"></i>
+                    </div>
+                    <div class="documento-info">
+                      <h4>{{ doc.nome }}</h4>
+                      <p>{{ doc.tipo }} • {{ doc.tamanho }}</p>
+                      <small>{{ doc.dataUpload | date:'dd/MM/yyyy' }} por {{ doc.uploadedBy }}</small>
+                    </div>
+                    <div class="documento-actions">
+                      <p-button 
+                        icon="pi pi-download" 
+                        class="p-button-text"
+                        (click)="baixarDocumento(doc)">
+                      </p-button>
+                      <p-button 
+                        icon="pi pi-eye" 
+                        class="p-button-text"
+                        (click)="visualizarDocumento(doc)">
+                      </p-button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div *ngIf="documentos.length === 0" class="empty-documents">
+                  <i class="pi pi-file text-6xl text-color-secondary"></i>
+                  <h3>Nenhum documento encontrado</h3>
+                  <p>Adicione documentos para acompanhar o progresso do processo.</p>
+                </div>
+              </div>
+            </p-tabPanel>
+
+            <!-- Aba Mensagens -->
+            <p-tabPanel header="Mensagens" leftIcon="pi pi-comments">
+              <div class="mensagens-container">
+                <div class="mensagens-header">
+                  <h3>Conversas sobre o Processo</h3>
+                  <div class="mensagens-actions">
+                    <!-- <p-button 
+                      icon="pi pi-sparkles" 
+                      label="Resumo pela Asistente Inteligente"
+                      class="p-button-outlined p-button-sm"
+                      [loading]="gerandoResumo"
+                      (click)="gerarResumoIA()">
+                    </p-button> -->
+                    <p-button 
+                      icon="pi pi-comments" 
+                      label="Iniciar Chat"
+                      class="p-button-primary p-button-sm"
+                      (click)="iniciarChat(processo)">
+                    </p-button>
+                  </div>
+                </div>
+
+                <!-- Resumo da IA -->
+                <!-- <div *ngIf="resumoIA" class="resumo-ia">
+                  <div class="resumo-header">
+                    <i class="pi pi-sparkles text-primary mr-2"></i>
+                    <span class="font-medium">Resumo da Conversa por IA</span>
+                    <p-button 
+                      icon="pi pi-times" 
+                      class="p-button-text p-button-sm ml-auto"
+                      (click)="fecharResumoIA()">
+                    </p-button>
+                  </div>
+                  <div class="resumo-content">
+                    <p [innerHTML]="processarMarkdown(resumoIA)"></p>
+                  </div>
+                </div> -->
+                
+                <div *ngIf="mensagens.length > 0" class="mensagens-list">
+                  <div *ngFor="let grupo of mensagensAgrupadas; let i = index" class="mensagens-grupo">
+                    <div class="grupo-header" (click)="toggleGrupo(i)">
+                      <div class="grupo-info">
+                        <i class="pi pi-calendar mr-2"></i>
+                        <span class="font-medium">{{ grupo.data }}</span>
+                        <span class="grupo-count">({{ grupo.mensagens.length }} mensagens)</span>
+                      </div>
+                      <!-- <div class="grupo-actions">
+                        <p-button 
+                          icon="pi pi-sparkles" 
+                          class="p-button-text p-button-sm"
+                          pTooltip="Resumo do dia"
+                          [loading]="grupo.gerandoResumo"
+                          (click)="gerarResumoDia($event, i)">
+                        </p-button>
+                        <i class="pi" [ngClass]="grupo.expandido ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+                      </div> -->
+                    </div>
+                    
+                    <!-- Resumo do dia -->
+                    <!-- <div *ngIf="grupo.resumoDia" class="resumo-dia">
+                      <div class="resumo-dia-header">
+                        <i class="pi pi-sparkles text-primary mr-2"></i>
+                        <span class="font-medium">Resumo do Dia</span>
+                        <p-button 
+                          icon="pi pi-times" 
+                          class="p-button-text p-button-sm ml-auto"
+                          (click)="fecharResumoDia(i)">
+                        </p-button>
+                      </div>
+                      <div class="resumo-dia-content">
+                        <p [innerHTML]="processarMarkdown(grupo.resumoDia)"></p>
+                      </div>
+                    </div> -->
+                    
+                    <!-- Mensagens (collapse) -->
+                    <div class="grupo-mensagens" [ngClass]="{'expandido': grupo.expandido}">
+                      <div *ngFor="let msg of grupo.mensagens" class="mensagem-item">
+                        <div class="mensagem-avatar">
+                          <i class="pi" [ngClass]="msg.tipo === 'sistema' ? 'pi-cog' : 'pi-user'"></i>
+                        </div>
+                        <div class="mensagem-content">
+                          <div class="mensagem-header">
+                            <span class="mensagem-user">{{ msg.usuario }}</span>
+                            <span class="mensagem-time">{{ msg.data | date:'HH:mm' }}</span>
+                          </div>
+                          <p class="mensagem-text">{{ msg.conteudo }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div *ngIf="mensagens.length === 0" class="empty-messages">
+                  <i class="pi pi-comments text-6xl text-color-secondary"></i>
+                  <h3>Nenhuma mensagem ainda</h3>
+                  <p>Inicie uma conversa sobre este processo.</p>
+                </div>
+              </div>
+            </p-tabPanel>
+
+            <!-- Aba Configurações -->
+            <p-tabPanel header="Configurações" leftIcon="pi pi-cog">
+              <div class="configuracoes-container">
+                <div class="config-header">
+                  <h3>Configurações do Processo</h3>
+                  <p class="text-color-secondary">Gerencie as configurações e informações do processo</p>
+                </div>
+                
+                <div class="config-grid">
+                  <!-- Informações Básicas -->
+                  <div class="config-section">
+                    <div class="section-header">
+                      <i class="pi pi-info-circle text-primary mr-2"></i>
+                      <h4>Informações Básicas</h4>
+                    </div>
+                    
+                    <div class="grid">
+                      <div class="col-12 md:col-6">
+                        <div class="field">
+                          <label for="titulo" class="field-label">
+                            <i class="pi pi-tag mr-1"></i>
+                            Título do Processo <span class="text-red-500">*</span>
+                          </label>
+                          <input 
+                            id="titulo"
+                            type="text" 
+                            pInputText 
+                            [(ngModel)]="processo.titulo"
+                            name="titulo"
+                            placeholder="Digite o título do processo"
+                            class="w-full">
+                        </div>
+                      </div>
+                      
+                      <div class="col-12 md:col-6">
+                        <div class="field">
+                          <label for="tipo" class="field-label">
+                            <i class="pi pi-briefcase mr-1"></i>
+                            Tipo de Processo <span class="text-red-500">*</span>
+                          </label>
+                          <p-dropdown 
+                            id="tipo"
+                            [options]="tipoOptions" 
+                            [(ngModel)]="processo.tipo"
+                            name="tipo"
+                            placeholder="Selecione o tipo"
+                            class="w-full">
+                          </p-dropdown>
+                        </div>
+                      </div>
+                      
+                      <div class="col-12">
+                        <div class="field">
+                          <label for="descricao" class="field-label">
+                            <i class="pi pi-file-edit mr-1"></i>
+                            Descrição do Processo
+                          </label>
+                          <textarea 
+                            id="descricao"
+                            pInputTextarea 
+                            [(ngModel)]="processo.descricao"
+                            name="descricao"
+                            rows="3"
+                            placeholder="Descreva detalhadamente o processo..."
+                            class="w-full">
+                          </textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Status e Prioridades -->
+                  <div class="config-section">
+                    <div class="section-header">
+                      <i class="pi pi-flag text-warning mr-2"></i>
+                      <h4>Status e Prioridades</h4>
+                    </div>
+                    
+                    <div class="grid">
+                      <div class="col-12 md:col-4">
+                        <div class="field">
+                          <label for="status" class="field-label">
+                            <i class="pi pi-circle-fill mr-1"></i>
+                            Status do Processo <span class="text-red-500">*</span>
+                          </label>
+                          <p-dropdown 
+                            id="status"
+                            [options]="statusOptions" 
+                            [(ngModel)]="processo.status"
+                            name="status"
+                            placeholder="Selecione o status"
+                            class="w-full">
+                          </p-dropdown>
+                        </div>
+                      </div>
+                      
+                      <div class="col-12 md:col-4">
+                        <div class="field">
+                          <label for="urgencia" class="field-label">
+                            <i class="pi pi-exclamation-triangle mr-1"></i>
+                            Nível de Urgência <span class="text-red-500">*</span>
+                          </label>
+                          <p-dropdown 
+                            id="urgencia"
+                            [options]="urgenciaOptions" 
+                            [(ngModel)]="processo.urgencia"
+                            name="urgencia"
+                            placeholder="Selecione a urgência"
+                            class="w-full">
+                          </p-dropdown>
+                        </div>
+                      </div>
+                      
+                      <div class="col-12 md:col-4">
+                        <div class="field">
+                          <label for="prioridade" class="field-label">
+                            <i class="pi pi-sort mr-1"></i>
+                            Prioridade
+                          </label>
+                          <p-dropdown 
+                            id="prioridade"
+                            [options]="prioridadeOptions" 
+                            [(ngModel)]="processo.prioridade"
+                            name="prioridade"
+                            placeholder="Selecione a prioridade"
+                            class="w-full">
+                          </p-dropdown>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Prazos e Datas -->
+                  <div class="config-section">
+                    <div class="section-header">
+                      <i class="pi pi-calendar text-info mr-2"></i>
+                      <h4>Prazos e Datas</h4>
+                    </div>
+                    
+                    <div class="grid">
+                      <div class="col-12 md:col-6">
+                        <div class="field">
+                          <label for="dataInicio" class="field-label">
+                            <i class="pi pi-play mr-1"></i>
+                            Data de Início
+                          </label>
+                          <p-calendar 
+                            id="dataInicio"
+                            [(ngModel)]="processo.dataInicio"
+                            name="dataInicio"
+                            placeholder="Selecione a data de início"
+                            class="w-full">
+                          </p-calendar>
+                        </div>
+                      </div>
+                      
+                      <div class="col-12 md:col-6">
+                        <div class="field">
+                          <label for="prazoEstimado" class="field-label">
+                            <i class="pi pi-clock mr-1"></i>
+                            Prazo Estimado
+                          </label>
+                          <p-calendar 
+                            id="prazoEstimado"
+                            [(ngModel)]="processo.prazoEstimado"
+                            name="prazoEstimado"
+                            placeholder="Selecione o prazo estimado"
+                            class="w-full">
+                          </p-calendar>
+                        </div>
+                      </div>
+                      
+                      <div class="col-12 md:col-6">
+                        <div class="field">
+                          <label for="dataLimite" class="field-label">
+                            <i class="pi pi-exclamation-circle mr-1"></i>
+                            Data Limite
+                          </label>
+                          <p-calendar 
+                            id="dataLimite"
+                            [(ngModel)]="processo.dataLimite"
+                            name="dataLimite"
+                            placeholder="Selecione a data limite"
+                            class="w-full">
+                          </p-calendar>
+                        </div>
+                      </div>
+                      
+                      <div class="col-12 md:col-6">
+                        <div class="field">
+                          <label for="dataConclusao" class="field-label">
+                            <i class="pi pi-check-circle mr-1"></i>
+                            Data de Conclusão
+                          </label>
+                          <p-calendar 
+                            id="dataConclusao"
+                            [(ngModel)]="processo.dataConclusao"
+                            name="dataConclusao"
+                            placeholder="Selecione a data de conclusão"
+                            class="w-full">
+                          </p-calendar>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Valores e Custos -->
+                  <div class="config-section">
+                    <div class="section-header">
+                      <i class="pi pi-dollar text-success mr-2"></i>
+                      <h4>Valores e Custos</h4>
+                    </div>
+                    
+                    <div class="grid">
+                      <div class="col-12 md:col-4">
+                        <div class="field">
+                          <label for="valorPretendido" class="field-label">
+                            <i class="pi pi-money-bill mr-1"></i>
+                            Valor Pretendido
+                          </label>
+                          <p-inputNumber 
+                            id="valorPretendido"
+                            [(ngModel)]="processo.valorPretendido"
+                            name="valorPretendido"
+                            mode="currency"
+                            currency="BRL"
+                            locale="pt-BR"
+                            placeholder="R$ 0,00"
+                            class="w-full">
+                          </p-inputNumber>
+                        </div>
+                      </div>
+                      
+                      <div class="col-12 md:col-4">
+                        <div class="field">
+                          <label for="custosEnvolvidos" class="field-label">
+                            <i class="pi pi-credit-card mr-1"></i>
+                            Custos Envolvidos
+                          </label>
+                          <p-inputNumber 
+                            id="custosEnvolvidos"
+                            [(ngModel)]="processo.custosEnvolvidos"
+                            name="custosEnvolvidos"
+                            mode="currency"
+                            currency="BRL"
+                            locale="pt-BR"
+                            placeholder="R$ 0,00"
+                            class="w-full">
+                          </p-inputNumber>
+                        </div>
+                      </div>
+                      
+                      <div class="col-12 md:col-4">
+                        <div class="field">
+                          <label for="honorarios" class="field-label">
+                            <i class="pi pi-wallet mr-1"></i>
+                            Honorários
+                          </label>
+                          <p-inputNumber 
+                            id="honorarios"
+                            [(ngModel)]="processo.honorarios"
+                            name="honorarios"
+                            mode="currency"
+                            currency="BRL"
+                            locale="pt-BR"
+                            placeholder="R$ 0,00"
+                            class="w-full">
+                          </p-inputNumber>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Localização e Jurisdição -->
+                  <div class="config-section">
+                    <div class="section-header">
+                      <i class="pi pi-map-marker text-danger mr-2"></i>
+                      <h4>Localização e Jurisdição</h4>
+                    </div>
+                    
+                    <div class="grid">
+                      <div class="col-12 md:col-6">
+                        <div class="field">
+                          <label for="localidade" class="field-label">
+                            <i class="pi pi-map mr-1"></i>
+                            Localidade
+                          </label>
+                          <input 
+                            id="localidade"
+                            type="text" 
+                            pInputText 
+                            [(ngModel)]="processo.localidade"
+                            name="localidade"
+                            placeholder="Cidade/Estado"
+                            class="w-full">
+                        </div>
+                      </div>
+                      
+                      <div class="col-12 md:col-6">
+                        <div class="field">
+                          <label for="jurisdicao" class="field-label">
+                            <i class="pi pi-building mr-1"></i>
+                            Jurisdição
+                          </label>
+                          <p-dropdown 
+                            id="jurisdicao"
+                            [options]="jurisdicaoOptions" 
+                            [(ngModel)]="processo.jurisdicao"
+                            name="jurisdicao"
+                            placeholder="Selecione a jurisdição"
+                            class="w-full">
+                          </p-dropdown>
+                        </div>
+                      </div>
+                      
+                      <div class="col-12">
+                        <div class="field">
+                          <label for="tribunal" class="field-label">
+                            <i class="pi pi-building mr-1"></i>
+                            Tribunal Competente
+                          </label>
+                          <input 
+                            id="tribunal"
+                            type="text" 
+                            pInputText 
+                            [(ngModel)]="processo.tribunal"
+                            name="tribunal"
+                            placeholder="Nome do tribunal competente"
+                            class="w-full">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Observações e Notas -->
+                  <div class="config-section">
+                    <div class="section-header">
+                      <i class="pi pi-file-text text-secondary mr-2"></i>
+                      <h4>Observações e Notas</h4>
+                    </div>
+                    
+                    <div class="grid">
+                      <div class="col-12">
+                        <div class="field">
+                          <label for="observacoes" class="field-label">
+                            <i class="pi pi-comment mr-1"></i>
+                            Observações Gerais
+                          </label>
+                          <textarea 
+                            id="observacoes"
+                            pInputTextarea 
+                            [(ngModel)]="processo.observacoes"
+                            name="observacoes"
+                            rows="4"
+                            placeholder="Observações importantes sobre o processo..."
+                            class="w-full">
+                          </textarea>
+                        </div>
+                      </div>
+                      
+                      <div class="col-12">
+                        <div class="field">
+                          <label for="instrucoes" class="field-label">
+                            <i class="pi pi-list mr-1"></i>
+                            Instruções Especiais
+                          </label>
+                          <textarea 
+                            id="instrucoes"
+                            pInputTextarea 
+                            [(ngModel)]="processo.instrucoes"
+                            name="instrucoes"
+                            rows="3"
+                            placeholder="Instruções especiais para o processo..."
+                            class="w-full">
+                          </textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Ações -->
+                <div class="config-actions">
+                  <div class="flex justify-content-between align-items-center">
+                    <div class="flex gap-2">
+                      <p-button 
+                        label="Cancelar" 
+                        icon="pi pi-times"
+                        class="p-button-outlined"
+                        (click)="cancelarAlteracoes()">
+                      </p-button>
+                    </div>
+                    <p-button 
+                      label="Salvar Alterações" 
+                      icon="pi pi-check"
+                      class="p-button-success"
+                      [loading]="salvandoConfiguracoes"
+                      (click)="salvarConfiguracoes()">
+                    </p-button>
+                  </div>
+                </div>
+              </div>
+            </p-tabPanel>
+          </p-tabView>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado Vazio -->
+    <div *ngIf="!loading && !processo" class="empty-state">
+      <i class="pi pi-search text-6xl text-color-secondary"></i>
+      <h3>Processo não encontrado</h3>
+      <p>O processo solicitado não foi encontrado ou você não tem permissão para visualizá-lo.</p>
+      <p-button 
+        label="Voltar para Processos" 
+        icon="pi pi-arrow-left"
+        (click)="voltarParaProcessos()">
+      </p-button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Avaliação de Conciliação (Admin) -->
+<p-dialog 
+  header="Avaliar Conciliação" 
+  [(visible)]="showModalAvaliacao" 
+  [modal]="true"
+  [responsive]="true" 
+  [style]="modalStyle"
+  [closable]="!processandoAvaliacao"
+  [draggable]="false"
+  [resizable]="false">
+  
+  <div *ngIf="processoSelecionado" class="modal-content">
+    <!-- Informações do Processo -->
+    <div class="processo-info mb-4 p-3 border-round surface-100">
+      <div class="flex align-items-center mb-2">
+        <i class="pi pi-gavel text-warning mr-2"></i>
+        <h4 class="m-0 text-900">{{ processoSelecionado.titulo }}</h4>
+      </div>
+      <p class="text-600 m-0 text-sm">{{ processoSelecionado.descricao }}</p>
+    </div>
+    
+    <!-- Formulário de Avaliação -->
+    <div class="form-container">
+      <div class="grid">
+        <!-- Descrição da Avaliação -->
+        <div class="col-12">
+          <div class="field">
+            <label for="descricaoAvaliacao" class="block text-900 font-semibold mb-2">
+              <i class="pi pi-file-edit mr-1"></i>
+              Descrição da Avaliação <span class="text-red-500">*</span>
+            </label>
+            <textarea
+              id="descricaoAvaliacao"
+              [(ngModel)]="dadosAvaliacao.descricao"
+              pInputTextarea
+              rows="4"
+              placeholder="Descreva sua avaliação sobre a conciliação, pontos positivos, negativos e recomendações..."
+              class="w-full"
+              [class.ng-invalid]="!dadosAvaliacao.descricao && dadosAvaliacao.descricao !== ''">
+            </textarea>
+            <small class="text-500">Descreva detalhadamente sua avaliação da conciliação</small>
+          </div>
+        </div>
+
+        <!-- Decisão -->
+        <div class="col-12">
+          <div class="field">
+            <label for="decisao" class="block text-900 font-semibold mb-2">
+              <i class="pi pi-flag mr-1"></i>
+              Decisão <span class="text-red-500">*</span>
+            </label>
+            <p-dropdown
+              id="decisao"
+              [(ngModel)]="dadosAvaliacao.decisao"
+              [options]="decisaoOptions"
+              placeholder="Selecione a decisão"
+              class="w-full"
+              optionLabel="label"
+              optionValue="value"
+              [class.ng-invalid]="!dadosAvaliacao.decisao">
+            </p-dropdown>
+            <small class="text-500">Aceitar ou rejeitar a conclusão forçada</small>
+          </div>
+        </div>
+
+        <!-- Observações Adicionais -->
+        <div class="col-12">
+          <div class="field">
+            <label for="observacoes" class="block text-900 font-semibold mb-2">
+              <i class="pi pi-comment mr-1"></i>
+              Observações Adicionais
+            </label>
+            <textarea
+              id="observacoes"
+              [(ngModel)]="dadosAvaliacao.observacoes"
+              pInputTextarea
+              rows="3"
+              placeholder="Observações adicionais sobre a decisão..."
+              class="w-full">
+            </textarea>
+            <small class="text-500">Informações complementares sobre a decisão</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        class="p-button-text p-button-secondary"
+        [disabled]="processandoAvaliacao"
+        (click)="cancelarAvaliacao()">
+      </p-button>
+      <p-button 
+        label="Confirmar Avaliação" 
+        icon="pi pi-check" 
+        class="p-button-warning"
+        [loading]="processandoAvaliacao"
+        [disabled]="!isAvaliacaoValid()"
+        (click)="confirmarAvaliacao()">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- Toast para notificações -->
+<p-toast position="top-right"></p-toast>
+
+<!-- Estilos para efeitos visuais -->
+<style>
+/* Animação de pulso durante processamento */
+.pulse-animation {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+/* Efeito de brilho para sucesso */
+.success-glow {
+  animation: successGlow 2s ease-in-out;
+  background: linear-gradient(45deg, #10b981, #34d399) !important;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5) !important;
+  border: 2px solid #10b981 !important;
+}
+
+@keyframes successGlow {
+  0% {
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+  }
+}
+
+/* Efeito de confetes (simulado) */
+.confetti-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.confetti-effect::after {
+  content: '🎉';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: confetti 3s ease-out;
+  pointer-events: none;
+}
+
+@keyframes confetti {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-100px) rotate(360deg);
+  }
+}
+
+/* Animação de entrada para mensagens */
+.p-toast-message {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Efeito de hover melhorado */
+.p-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  transition: all 0.2s ease;
+}
+
+/* Estado desabilitado com estilo especial */
+.p-button:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.p-button:disabled::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+/* Status aceito com efeito especial */
+.status-accepted {
+  animation: statusAccepted 2s ease-in-out;
+  background: linear-gradient(45deg, #10b981, #34d399) !important;
+  color: white !important;
+  font-weight: bold !important;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4) !important;
+}
+
+@keyframes statusAccepted {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+  }
+}
+</style>

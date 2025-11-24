@@ -1,0 +1,88 @@
+{
+  "clientes": [
+    {
+      "id": "1",
+      "nome": "João Silva",
+      "email": "joao.silva@email.com",
+      "telefone": "(11) 99999-9999",
+      "cpf": "123.456.789-00",
+      "tipo": "PF",
+      "status": "ativo",
+      "verificado": true,
+      "dataCadastro": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": "2",
+      "nome": "Maria Santos",
+      "email": "maria.santos@email.com",
+      "telefone": "(11) 88888-8888",
+      "cpf": "987.654.321-00",
+      "tipo": "PF",
+      "status": "ativo",
+      "verificado": true,
+      "dataCadastro": "2024-01-10T14:20:00Z"
+    },
+    {
+      "id": "3",
+      "nome": "Empresa ABC Ltda",
+      "email": "contato@empresaabc.com",
+      "telefone": "(11) 77777-7777",
+      "cnpj": "12.345.678/0001-90",
+      "tipo": "PJ",
+      "status": "ativo",
+      "verificado": false,
+      "dataCadastro": "2024-01-20T09:15:00Z"
+    }
+  ],
+  "advogados": [
+    {
+      "id": "1",
+      "nome": "Dr. Carlos Oliveira",
+      "email": "carlos.oliveira@adv.com",
+      "telefone": "(11) 66666-6666",
+      "oab": "SP 123456",
+      "especialidades": ["Trabalhista", "Civil"],
+      "status": "ativo",
+      "verificado": true,
+      "avaliacaoMedia": 4.8,
+      "totalProcessos": 45,
+      "dataCadastro": "2023-12-01T08:00:00Z"
+    },
+    {
+      "id": "2",
+      "nome": "Dra. Ana Costa",
+      "email": "ana.costa@adv.com",
+      "telefone": "(11) 55555-5555",
+      "oab": "SP 654321",
+      "especialidades": ["Família", "Criminal"],
+      "status": "ativo",
+      "verificado": true,
+      "avaliacaoMedia": 4.9,
+      "totalProcessos": 32,
+      "dataCadastro": "2023-11-15T10:30:00Z"
+    },
+    {
+      "id": "3",
+      "nome": "Dr. Pedro Lima",
+      "email": "pedro.lima@adv.com",
+      "telefone": "(11) 44444-4444",
+      "oab": "SP 789123",
+      "especialidades": ["Tributário", "Empresarial"],
+      "status": "pendente",
+      "verificado": false,
+      "avaliacaoMedia": 0,
+      "totalProcessos": 0,
+      "dataCadastro": "2024-01-25T16:45:00Z"
+    }
+  ],
+  "admins": [
+    {
+      "id": "1",
+      "nome": "Admin Sistema",
+      "email": "admin@plataforma.com",
+      "telefone": "(11) 33333-3333",
+      "status": "ativo",
+      "dataCadastro": "2023-10-01T00:00:00Z"
+    }
+  ]
+}

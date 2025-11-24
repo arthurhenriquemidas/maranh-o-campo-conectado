@@ -1,0 +1,407 @@
+<!-- Layout Mobile First -->
+<div class="advogado-layout">
+  
+  <!-- Header Mobile First -->
+  <div class="elegant-header">
+    <div class="header-container">
+      
+      <!-- Mobile Menu Button -->
+      <button 
+        class="mobile-menu-btn"
+        pButton 
+        type="button" 
+        icon="pi pi-bars"
+        (click)="toggleMobileMenu()"
+        pTooltip="Menu"
+        tooltipPosition="bottom"
+        title="Menu">
+      </button>
+
+      <!-- Logo e Nome da Aplicação -->
+      <div class="header-brand">
+        <div class="brand-logo">
+          <i class="pi pi-balance-scale brand-icon"></i>
+          <div class="brand-text">
+            <h1 class="brand-title">4Jus</h1>
+            <span class="brand-subtitle">Advogado</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menu de Navegação Desktop -->
+      <div class="header-nav desktop-only">
+        <p-menubar [model]="menuItems" styleClass="elegant-menubar">
+          <ng-template pTemplate="start" >
+            <!-- Menu items serão renderizados aqui -->
+          </ng-template>
+        </p-menubar>
+      </div>
+
+      <!-- Área do Usuário -->
+      <div class="header-user">
+        <div class="user-info desktop-only">
+          <div class="user-avatar">
+            <i class="pi pi-user"></i>
+          </div>
+          <div class="user-details">
+            <span class="user-name">{{ currentUser?.nome }}</span>
+            <span class="user-role">Advogado</span>
+          </div>
+        </div>
+        
+        <div class="user-actions">
+          <p-button 
+            icon="pi pi-bell" 
+            class="action-btn notification-btn"
+            pTooltip="Notificações"
+            tooltipPosition="bottom"
+            (click)="openNotifications()">
+            <span class="notification-badge" *ngIf="hasNotifications">2</span>
+          </p-button>
+          
+          <p-button 
+            icon="pi pi-sign-out" 
+            class="action-btn logout-btn"
+            pTooltip="Sair"
+            tooltipPosition="bottom"
+            (click)="logout()">
+          </p-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" [class.active]="mobileMenuOpen" (click)="closeMobileMenu()">
+      <div class="mobile-menu" (click)="$event.stopPropagation()">
+        <div class="mobile-menu-header">
+          <div class="user-info-mobile">
+            <div class="user-avatar">
+              <i class="pi pi-user"></i>
+            </div>
+            <div class="user-details">
+              <span class="user-name">{{ currentUser?.nome }}</span>
+              <span class="user-role">Advogado</span>
+            </div>
+          </div>
+          <button 
+            class="close-menu-btn"
+            pButton 
+            type="button" 
+            icon="pi pi-times"
+            (click)="closeMobileMenu()"
+            title="Fechar Menu">
+          </button>
+        </div>
+        <div class="mobile-menu-items">
+          <a 
+            *ngFor="let item of menuItems" 
+            [routerLink]="item.routerLink"
+            class="mobile-menu-item"
+            (click)="closeMobileMenu()">
+            <i [class]="item.icon"></i>
+            <span>{{ item.label }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Breadcrumb -->
+  <!-- <div class="layout-breadcrumb">
+    <div class="breadcrumb-container">
+      <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome"></p-breadcrumb>
+    </div>
+  </div> -->
+
+  <!-- Conteúdo Principal Mobile First -->
+  <div class="layout-content">
+    
+    <!-- Estados de Carregamento -->
+    <ng-container *ngIf="state$ | async as state">
+      <ng-container [ngSwitch]="state.status">
+        
+        <!-- Loading State -->
+        <app-loading-state *ngSwitchCase="'loading'" [rows]="5" [card]="true"></app-loading-state>
+
+        <!-- Empty State -->
+        <app-empty-state
+          *ngSwitchCase="'empty'"
+          icon="pi pi-search"
+          titleKey="Processo não encontrado"
+          descriptionKey="O processo solicitado não foi encontrado ou você não tem permissão para visualizá-lo."
+          actionLabelKey="Voltar para Processos"
+          [actionRouterLink]="['/advogado/processos']"
+        ></app-empty-state>
+
+        <!-- Error State -->
+        <p-card *ngSwitchCase="'error'" class="process-detail__error">
+          <ng-template pTemplate="title">Erro ao Carregar</ng-template>
+          <p>Ocorreu um erro ao carregar os detalhes do processo. Tente novamente.</p>
+          <div class="error-actions">
+            <p-button 
+              label="Tentar Novamente" 
+              icon="pi pi-refresh"
+              (click)="reload$.next()">
+            </p-button>
+            <p-button 
+              label="Voltar" 
+              icon="pi pi-arrow-left"
+              severity="secondary"
+              (click)="goBack()">
+            </p-button>
+          </div>
+        </p-card>
+
+        <!-- Success State -->
+        <ng-container *ngSwitchCase="'success'">
+          <ng-container *ngIf="state.data as process">
+            <div class="process-detail">
+              
+              <!-- Header da Página Mobile First -->
+              <div class="page-header">
+                <!-- Mobile Header -->
+                <div class="mobile-header">
+                  <div class="mobile-header-top">
+                    <p-button 
+                      icon="pi pi-arrow-left" 
+                      class="back-btn"
+                      pTooltip="Voltar para Processos"
+                      (click)="goBack()">
+                    </p-button>
+                    <div class="mobile-title">
+                      <h1>{{ process.title }}</h1>
+                      <p>Detalhes do processo</p>
+                    </div>
+                    <button 
+                      class="mobile-actions-btn"
+                      pButton 
+                      type="button" 
+                      icon="pi pi-ellipsis-v"
+                      (click)="toggleMobileActions()"
+                      pTooltip="Ações"
+                      tooltipPosition="bottom"
+                      title="Ações">
+                    </button>
+                  </div>
+                  
+                  <!-- Mobile Actions Dropdown -->
+                  <div class="mobile-actions" [class.active]="mobileActionsOpen">
+                    <p-button 
+                      icon="pi pi-check-circle" 
+                      label="Solicitar Aprovação"
+                      severity="success"
+                      class="mobile-action-btn"
+                      (click)="requestApproval(process); closeMobileActions()">
+                    </p-button>
+                    <p-button 
+                      icon="pi pi-share-square" 
+                      label="Reatribuir"
+                      severity="secondary"
+                      class="mobile-action-btn"
+                      (click)="reassignProcess(process); closeMobileActions()">
+                    </p-button>
+                  </div>
+                </div>
+
+                <!-- Desktop Header -->
+                <div class="desktop-header desktop-only">
+                  <div class="desktop-header-content">
+                    <div class="desktop-header-left">
+                      <p-button 
+                        icon="pi pi-arrow-left" 
+                        class="p-button-rounded p-button-text"
+                        pTooltip="Voltar para Processos"
+                        (click)="goBack()">
+                      </p-button>
+                      <div class="desktop-title">
+                        <h1>{{ process.title }}</h1>
+                        <p>Detalhes completos do processo jurídico</p>
+                      </div>
+                    </div>
+                    <div class="desktop-actions">
+                      <p-button 
+                        icon="pi pi-check-circle" 
+                        label="Solicitar Aprovação"
+                        severity="success"
+                        (click)="requestApproval(process)">
+                      </p-button>
+                      <p-button 
+                        icon="pi pi-share-square" 
+                        label="Reatribuir"
+                        severity="secondary"
+                        (click)="reassignProcess(process)">
+                      </p-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cards Mobile First -->
+              <div class="process-cards">
+                
+                <!-- Card Principal do Processo -->
+                <div class="process-main-card">
+                  <p-card>
+                    <ng-template pTemplate="title">
+                      <div class="card-title-mobile">
+                        <span>{{ process.title }}</span>
+                        <app-status-badge [status]="process.status"></app-status-badge>
+                      </div>
+                    </ng-template>
+                    
+                    <!-- Tags Mobile -->
+                    <div class="process-tags-mobile">
+                      <p-tag [value]="process.area" class="process-tag"></p-tag>
+                      <p-tag severity="info" [value]="'Ref: ' + process.reference" class="process-tag"></p-tag>
+                    </div>
+                    
+                    <!-- Descrição -->
+                    <div class="process-description">
+                      <p>{{ process.description }}</p>
+                    </div>
+                    
+                    <!-- Metadados Mobile First -->
+                    <div class="process-meta-mobile">
+                      <div class="meta-item">
+                        <i class="pi pi-user"></i>
+                        <div class="meta-content">
+                          <span class="meta-label">Cliente</span>
+                          <span class="meta-value">{{ process.customerName }}</span>
+                        </div>
+                      </div>
+                      <div class="meta-item">
+                        <i class="pi pi-star"></i>
+                        <div class="meta-content">
+                          <span class="meta-label">Plano</span>
+                          <span class="meta-value">{{ process.customerPlan === 'premium' ? 'Premium' : 'Gratuito' }}</span>
+                        </div>
+                      </div>
+                      <div class="meta-item">
+                        <i class="pi pi-calendar"></i>
+                        <div class="meta-content">
+                          <span class="meta-label">Aberto em</span>
+                          <span class="meta-value">{{ process.createdAt | date: 'dd/MM/yyyy' }}</span>
+                        </div>
+                      </div>
+                      <div class="meta-item">
+                        <i class="pi pi-clock"></i>
+                        <div class="meta-content">
+                          <span class="meta-label">Atualizado</span>
+                          <span class="meta-value">{{ process.updatedAt | date: 'dd/MM/yyyy' }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </p-card>
+                </div>
+
+                <!-- Card de Prazos -->
+                <div class="process-deadline-card">
+                  <p-card>
+                    <ng-template pTemplate="title">
+                      <div class="card-title-with-icon">
+                        <i class="pi pi-calendar"></i>
+                        <span>Prazos</span>
+                      </div>
+                    </ng-template>
+                    <div class="deadline-content">
+                      <p *ngIf="process.nextDeadline; else noDeadline" class="deadline-date">
+                        {{ process.nextDeadline | date: 'dd/MM/yyyy' }}
+                      </p>
+                      <ng-template #noDeadline>
+                        <p class="no-deadline">Nenhum prazo definido</p>
+                      </ng-template>
+                      <button 
+                        pButton 
+                        type="button" 
+                        label="Agendar" 
+                        icon="pi pi-calendar" 
+                        class="deadline-btn"
+                        pTooltip="Agendar prazo" 
+                        tooltipPosition="top" 
+                        title="Agendar prazo">
+                      </button>
+                    </div>
+                  </p-card>
+                </div>
+
+                <!-- Card de Timeline -->
+                <div class="process-timeline-card">
+                  <p-card>
+                    <ng-template pTemplate="title">
+                      <div class="card-title-with-icon">
+                        <i class="pi pi-history"></i>
+                        <span>Timeline</span>
+                      </div>
+                    </ng-template>
+                    <div class="timeline-mobile">
+                      <div *ngFor="let event of process.timeline; let i = index" class="timeline-item-mobile">
+                        <div class="timeline-marker-mobile">
+                          <i class="pi pi-circle"></i>
+                        </div>
+                        <div class="timeline-content-mobile">
+                          <h4>{{ event.title }}</h4>
+                          <p>{{ event.description }}</p>
+                          <small>{{ event.createdAt | date: 'dd/MM/yyyy HH:mm' }}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </p-card>
+                </div>
+
+                <!-- Card de Documentos -->
+                <div class="process-documents-card">
+                  <p-card>
+                    <ng-template pTemplate="title">
+                      <div class="card-title-with-icon">
+                        <i class="pi pi-file"></i>
+                        <span>Documentos</span>
+                      </div>
+                    </ng-template>
+                    <div class="documents-mobile">
+                      <div *ngFor="let doc of process.documents" class="document-item-mobile">
+                        <div class="document-info">
+                          <div class="document-name">{{ doc.name }}</div>
+                          <div class="document-meta">
+                            {{ doc.uploadedBy }} - {{ doc.uploadedAt | date: 'dd/MM/yyyy' }}
+                          </div>
+                        </div>
+                        <button 
+                          pButton 
+                          type="button" 
+                          icon="pi pi-download" 
+                          class="document-download-btn"
+                          pTooltip="Download" 
+                          tooltipPosition="top" 
+                          title="Download">
+                        </button>
+                      </div>
+                      <div *ngIf="process.documents.length === 0" class="no-documents">
+                        <i class="pi pi-file-o"></i>
+                        <p>Nenhum documento disponível</p>
+                      </div>
+                    </div>
+                    <div class="document-upload-mobile">
+                      <button 
+                        pButton 
+                        type="button" 
+                        severity="secondary" 
+                        icon="pi pi-upload" 
+                        label="Adicionar Documento" 
+                        class="w-full"
+                        pTooltip="Upload de documento" 
+                        tooltipPosition="top" 
+                        title="Upload de documento">
+                      </button>
+                    </div>
+                  </p-card>
+                </div>
+
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
+  </div>
+</div>

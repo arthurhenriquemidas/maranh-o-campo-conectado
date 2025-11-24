@@ -1,0 +1,509 @@
+<!-- Dialog Novo Processo - Compacto -->
+<p-dialog 
+  header="Novo Processo" 
+  [(visible)]="visible" 
+  [modal]="true"
+  [responsive]="true" 
+  [style]="{width: '95vw', maxWidth: '1000px', height: '90vh'}"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="fecharDialog()">
+  
+  <!-- Seletor de modo de preenchimento -->
+  <div class="mode-selector mb-4">
+    <div class="flex justify-content-center gap-3">
+      <p-button 
+        label="Preenchimento Manual" 
+        icon="pi pi-pencil"
+        [class]="activeTabIndex === 0 ? 'p-button-primary' : 'p-button-outlined'"
+        (click)="activeTabIndex = 0">
+      </p-button>
+      <p-button 
+        label="Assistente IA" 
+        icon="pi pi-sparkles"
+        [class]="activeTabIndex === 1 ? 'p-button-primary' : 'p-button-outlined'"
+        (click)="activeTabIndex = 1">
+      </p-button>
+      <p-button 
+        label="Chat Interativo" 
+        icon="pi pi-comments"
+        [class]="activeTabIndex === 2 ? 'p-button-primary' : 'p-button-outlined'"
+        (click)="activeTabIndex = 2">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Conteúdo baseado na seleção -->
+  <div *ngIf="activeTabIndex === 0" class="compact-form">
+    <div class="form-grid">
+      <!-- Título do Processo -->
+      <div class="form-field">
+        <label for="titulo" class="form-label required-field">
+          Título do Processo
+        </label>
+        <input 
+          id="titulo" 
+          type="text" 
+          pInputText 
+          class="w-full p-inputtext-sm"
+          [(ngModel)]="novoProcesso.titulo"
+          name="titulo"
+          placeholder="Ex: Rescisão trabalhista...">
+      </div>
+      
+      <!-- Área do Direito e Objetivo -->
+      <div class="form-row">
+        <div class="form-field">
+          <label for="areaDireito" class="form-label required-field">
+            Área do Direito
+          </label>
+          <div class="compact-dropdown">
+            <p-dropdown 
+              id="areaDireito"
+              [options]="areasDireito" 
+              [(ngModel)]="novoProcesso.areaDireito"
+              name="areaDireito"
+              placeholder="Selecione..."
+              class="w-full">
+            </p-dropdown>
+          </div>
+        </div>
+        
+        <div class="form-field">
+          <label for="objetivo" class="form-label required-field">
+            Objetivo
+          </label>
+          <div class="compact-dropdown">
+            <p-dropdown 
+              id="objetivo"
+              [options]="objetivosCliente" 
+              [(ngModel)]="novoProcesso.objetivo"
+              name="objetivo"
+              placeholder="Selecione..."
+              class="w-full">
+            </p-dropdown>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Urgência e Localidade -->
+      <div class="form-row">
+        <div class="form-field">
+          <label for="urgencia" class="form-label required-field">
+            Urgência
+          </label>
+          <div class="compact-dropdown">
+            <p-dropdown 
+              id="urgencia"
+              [options]="niveisUrgencia" 
+              [(ngModel)]="novoProcesso.urgencia"
+              name="urgencia"
+              placeholder="Selecione..."
+              class="w-full">
+            </p-dropdown>
+          </div>
+        </div>
+        
+        <div class="form-field">
+          <label for="localidade" class="form-label">
+            Localidade
+          </label>
+          <input 
+            id="localidade" 
+            type="text" 
+            pInputText 
+            class="w-full p-inputtext-sm"
+            [(ngModel)]="novoProcesso.localidade"
+            name="localidade"
+            placeholder="Cidade/Estado">
+        </div>
+      </div>
+
+      <!-- Valores -->
+      <div class="form-row">
+        <div class="form-field">
+          <label for="valorPretendido" class="form-label">
+            Valor Pretendido
+          </label>
+          <p-inputNumber 
+            id="valorPretendido"
+            [(ngModel)]="novoProcesso.valorPretendido"
+            name="valorPretendido"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+            class="w-full p-inputnumber-sm"
+            placeholder="R$ 0,00">
+          </p-inputNumber>
+        </div>
+        
+        <div class="form-field">
+          <label for="custosEnvolvidos" class="form-label">
+            Custos Envolvidos
+          </label>
+          <p-inputNumber 
+            id="custosEnvolvidos"
+            [(ngModel)]="novoProcesso.custosEnvolvidos"
+            name="custosEnvolvidos"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+            class="w-full p-inputnumber-sm"
+            placeholder="R$ 0,00">
+          </p-inputNumber>
+        </div>
+      </div>
+      
+      <!-- Descrição -->
+      <div class="form-field">
+        <label for="descricao" class="form-label required-field">
+          Descrição
+        </label>
+        <textarea 
+          id="descricao"
+          pInputTextarea 
+          rows="3" 
+          class="w-full p-inputtextarea-sm"
+          [(ngModel)]="novoProcesso.descricao"
+          name="descricao"
+          placeholder="Descreva brevemente sua situação...">
+        </textarea>
+        <small class="help-text">
+          <i class="pi pi-info-circle mr-1"></i>
+          Descreva naturalmente sua situação.
+        </small>
+      </div>
+      
+      <!-- Upload de Documentos -->
+      <div class="form-field">
+        <label class="form-label">
+          Documentos
+        </label>
+        <p-fileUpload 
+          mode="basic"
+          name="documentos"
+          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+          maxFileSize="10000000"
+          [multiple]="true"
+          (onSelect)="onFileSelect($event)"
+          chooseLabel="Selecionar Arquivos"
+          class="w-full p-fileupload-sm">
+        </p-fileUpload>
+        
+        <!-- Lista de documentos selecionados -->
+        <div *ngIf="novoProcesso.documentos.length > 0" class="document-list">
+          <div *ngFor="let doc of novoProcesso.documentos; let i = index" 
+               class="document-item">
+            <div class="flex align-items-center justify-content-between">
+              <div class="flex align-items-center">
+                <i class="pi pi-file mr-2 text-sm"></i>
+                <span class="text-sm">{{ doc.name }}</span>
+                <span class="text-xs text-500 ml-2">({{ (doc.size / 1024 / 1024).toFixed(1) }}MB)</span>
+              </div>
+              <p-button 
+                icon="pi pi-times" 
+                class="p-button-text p-button-sm"
+                size="small"
+                (click)="removerDocumento(i)">
+              </p-button>
+            </div>
+          </div>
+        </div>
+        
+        <small class="help-text">
+          <i class="pi pi-info-circle mr-1"></i>
+          PDF, DOC, DOCX, JPG, PNG. Máx. 10MB.
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteúdo do Assistente IA -->
+  <div *ngIf="activeTabIndex === 1" class="ai-assistant-form">
+    <div class="ai-intro">
+      <div class="ai-icon">
+        <i class="pi pi-sparkles text-4xl text-primary"></i>
+      </div>
+      <h3 class="ai-title">Assistente Jurídico Inteligente</h3>
+      <p class="ai-description">
+        Descreva sua situação em linguagem natural e nossa IA irá preencher automaticamente 
+        os campos do processo com as informações mais relevantes.
+      </p>
+    </div>
+    
+    <div class="ai-input-section">
+      <label for="aiDescription" class="form-label required-field">
+        Descreva sua situação jurídica
+      </label>
+      <textarea 
+        id="aiDescription"
+        pInputTextarea 
+        rows="6" 
+        class="w-full ai-textarea"
+        [(ngModel)]="aiDescription"
+        name="aiDescription"
+        placeholder="Ex: Trabalho há 3 anos em uma empresa e fui demitido sem justa causa. Não recebi meus direitos trabalhistas como férias, 13º salário e FGTS. Quero entrar com uma ação trabalhista para receber o que me é devido...">
+      </textarea>
+      <small class="help-text">
+        <i class="pi pi-info-circle mr-1"></i>
+        Seja o mais detalhado possível. A IA analisará sua descrição e preencherá automaticamente os campos.
+      </small>
+    </div>
+    
+    <div class="ai-actions">
+      <p-button 
+        label="Analisar com IA" 
+        icon="pi pi-sparkles" 
+        class="p-button-primary"
+        [loading]="analisandoComIA"
+        [disabled]="!aiDescription"
+        (click)="analisarComIA()">
+      </p-button>
+    </div>
+    
+    <!-- Resultado da análise da IA -->
+    <div *ngIf="resultadoIA" class="ai-result">
+      <div class="ai-result-header">
+        <i class="pi pi-check-circle text-green-500 mr-2"></i>
+        <span class="font-medium">Análise concluída! Revise os dados preenchidos:</span>
+      </div>
+      
+      <div class="ai-suggestions">
+        <div class="suggestion-item">
+          <label class="suggestion-label">Título sugerido:</label>
+          <p class="suggestion-text">{{ resultadoIA.titulo }}</p>
+        </div>
+        
+        <div class="suggestion-item">
+          <label class="suggestion-label">Área do Direito:</label>
+          <p class="suggestion-text">{{ resultadoIA.areaDireito }}</p>
+        </div>
+        
+        <div class="suggestion-item">
+          <label class="suggestion-label">Objetivo:</label>
+          <p class="suggestion-text">{{ resultadoIA.objetivo }}</p>
+        </div>
+        
+        <div class="suggestion-item">
+          <label class="suggestion-label">Urgência:</label>
+          <p class="suggestion-text">{{ resultadoIA.urgencia }}</p>
+        </div>
+        
+        <div class="suggestion-item">
+          <label class="suggestion-label">Valor estimado:</label>
+          <p class="suggestion-text">{{ resultadoIA.valorPretendido | currency:'BRL' }}</p>
+        </div>
+      </div>
+      
+      <div class="ai-actions">
+        <p-button 
+          label="Usar Sugestões" 
+          icon="pi pi-check" 
+          class="p-button-success"
+          (click)="usarSugestoesIA()">
+        </p-button>
+        <p-button 
+          label="Refazer Análise" 
+          icon="pi pi-refresh" 
+          class="p-button-outlined"
+          (click)="refazerAnalise()">
+        </p-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Interativo com IA -->
+  <div *ngIf="activeTabIndex === 2 && !chatResultado" class="chat-interactive">
+    <div class="chat-header">
+      <div class="chat-avatar">
+        <i class="pi pi-robot text-2xl text-primary"></i>
+      </div>
+      <div class="chat-info">
+        <h4 class="chat-title">Assistente Jurídico Inteligente</h4>
+        <p class="chat-subtitle">Conversa interativa para análise detalhada</p>
+      </div>
+      <div class="chat-status">
+        <span class="status-indicator" [class.online]="!chatLoading"></span>
+        <span class="status-text">{{ chatLoading ? 'Analisando...' : 'Online' }}</span>
+      </div>
+    </div>
+
+    <div class="chat-messages" #chatContainer>
+      <!-- Mensagem de boas-vindas -->
+      <div class="message ai-message">
+        <div class="message-avatar">
+          <i class="pi pi-robot"></i>
+        </div>
+        <div class="message-content">
+          <div class="message-bubble">
+            <p>Olá! Sou seu assistente jurídico inteligente. Vou te ajudar a criar seu processo através de uma conversa natural.</p>
+            <p>Para começar, me conte brevemente sobre sua situação jurídica. Quanto mais detalhes você fornecer, melhor posso te ajudar!</p>
+          </div>
+          <div class="message-actions">
+            <p-button 
+              label="Começar Conversa" 
+              icon="pi pi-play" 
+              class="p-button-sm p-button-outlined"
+              (click)="iniciarConversa()">
+            </p-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensagens da conversa -->
+      <div *ngFor="let message of chatMessages" class="message" [ngClass]="message.sender">
+        <div class="message-avatar" *ngIf="message.sender === 'ai-message'">
+          <i class="pi pi-robot"></i>
+        </div>
+        <div class="message-avatar" *ngIf="message.sender === 'user-message'">
+          <i class="pi pi-user"></i>
+        </div>
+        <div class="message-content">
+          <div class="message-bubble">
+            <div [innerHTML]="message.content"></div>
+            <div *ngIf="message.actions" class="message-actions">
+              <p-button 
+                *ngFor="let action of message.actions"
+                [label]="action.label" 
+                [icon]="action.icon"
+                [class]="action.class"
+                [size]="'small'"
+                (click)="executarAcao(action)">
+              </p-button>
+            </div>
+          </div>
+          <div class="message-time">{{ message.timestamp | date:'HH:mm' }}</div>
+        </div>
+      </div>
+
+      <!-- Indicador de digitação -->
+      <div *ngIf="chatLoading" class="message ai-message typing">
+        <div class="message-avatar">
+          <i class="pi pi-robot"></i>
+        </div>
+        <div class="message-content">
+          <div class="message-bubble typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Área de input do chat -->
+    <div class="chat-input">
+      <div class="input-container">
+        <textarea 
+          pInputTextarea 
+          [(ngModel)]="chatInput"
+          (keydown.enter)="enviarMensagem($event)"
+          placeholder="Digite sua mensagem..."
+          class="chat-textarea"
+          rows="2">
+        </textarea>
+        <div class="input-actions">
+          <p-button 
+            icon="pi pi-send" 
+            class="p-button-primary p-button-sm"
+            [disabled]="!chatInput.trim() || chatLoading"
+            (click)="enviarMensagem()">
+          </p-button>
+        </div>
+      </div>
+      
+      <!-- Ações rápidas -->
+      <div class="quick-actions">
+        <p-button 
+          label="Gerar Resumo" 
+          icon="pi pi-file-text" 
+          class="p-button-outlined p-button-sm"
+          (click)="gerarResumo()">
+        </p-button>
+        <p-button 
+          label="Preencher Formulário" 
+          icon="pi pi-check" 
+          class="p-button-success p-button-sm"
+          (click)="preencherFormulario()">
+        </p-button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Painel de resultados do Chat -->
+  <div *ngIf="activeTabIndex === 2 && chatResultado" class="chat-resultado">
+    <div class="resultado-header">
+      <i class="pi pi-check-circle text-green-500 mr-2"></i>
+      <span class="font-medium">Análise Completa Finalizada!</span>
+    </div>
+    
+    <div class="resultado-content">
+      <div class="resultado-section">
+        <h5>Resumo da Conversa:</h5>
+        <p class="resumo-texto">{{ chatResultado.resumo }}</p>
+      </div>
+      
+      <div class="resultado-section">
+        <h5>Dados Extraídos:</h5>
+        <div class="dados-grid">
+          <div class="dado-item">
+            <label>Título:</label>
+            <span>{{ chatResultado.titulo }}</span>
+          </div>
+          <div class="dado-item">
+            <label>Área:</label>
+            <span>{{ chatResultado.areaDireito }}</span>
+          </div>
+          <div class="dado-item">
+            <label>Objetivo:</label>
+            <span>{{ chatResultado.objetivo }}</span>
+          </div>
+          <div class="dado-item">
+            <label>Urgência:</label>
+            <span>{{ chatResultado.urgencia }}</span>
+          </div>
+          <div class="dado-item">
+            <label>Valor:</label>
+            <span>{{ chatResultado.valorPretendido | currency:'BRL' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="resultado-actions">
+      <p-button 
+        label="Aplicar ao Formulário" 
+        icon="pi pi-check" 
+        class="p-button-success"
+        (click)="aplicarResultadoChat()">
+      </p-button>
+      <p-button 
+        label="Nova Conversa" 
+        icon="pi pi-refresh" 
+        class="p-button-outlined"
+        (click)="novaConversa()">
+      </p-button>
+    </div>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        class="p-button-text p-button-sm"
+        (click)="cancelarNovoProcesso()">
+      </p-button>
+      <p-button 
+        label="Criar Processo" 
+        icon="pi pi-check" 
+        class="p-button-sm"
+        [loading]="salvandoProcesso"
+        [disabled]="!novoProcesso.titulo || !novoProcesso.areaDireito || !novoProcesso.objetivo || !novoProcesso.urgencia"
+        (click)="criarProcesso()">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>

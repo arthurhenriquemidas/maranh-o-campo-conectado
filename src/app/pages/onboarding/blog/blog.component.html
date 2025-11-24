@@ -1,0 +1,265 @@
+<!-- Top Navigation -->
+<app-custom-menu
+  [menuItems]="menuItems"
+  [logoText]="'4'"
+  [activeMenuItem]="activeMenuItem"
+  (menuItemClick)="onMenuItemClick($event)"
+  (logoClick)="onLogoClick()">
+</app-custom-menu>
+
+<!-- Hero Section - Blog -->
+<!-- <div class="hero-section">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1 class="hero-title">
+        Blog Jurídico
+      </h1>
+      <p class="hero-subtitle">
+        Mantenha-se atualizado com as últimas notícias e análises jurídicas
+      </p>
+      <p class="hero-description">
+        Artigos, análises e insights sobre direito, legislação e jurisprudência.
+        Conteúdo exclusivo produzido por especialistas em diversas áreas do direito.
+      </p>
+    </div>
+  </div>
+</div> -->
+
+<!-- Filtros Section -->
+<div class="filtros-section" style="padding-top: 100px;">
+  <div class="container">
+    <div class="filtros-container">
+      <!-- Busca -->
+      <div class="search-container">
+        <div class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            pInputText
+            placeholder="Buscar artigos..."
+            [(ngModel)]="buscaTexto"
+            (input)="filtrarPorBusca()"
+            class="search-input">
+        </div>
+      </div>
+
+      <!-- Categorias -->
+      <div class="categorias-container">
+        <button
+          class="categoria-btn"
+          [class.active]="categoriaSelecionada === ''"
+          (click)="limparFiltros()">
+          Todas
+        </button>
+        <button
+          *ngFor="let categoria of categorias"
+          class="categoria-btn"
+          [class.active]="categoriaSelecionada === categoria"
+          (click)="filtrarPorCategoria(categoria)">
+          {{ categoria }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Artigos em Destaque Section -->
+<div class="destaques-section" *ngIf="getArtigosDestaque().length > 0">
+  <div class="container">
+    <h2 class="section-title text-center mb-6">Artigos em Destaque</h2>
+
+    <div class="grid">
+      <div class="col-12 lg:col-4" *ngFor="let artigo of getArtigosDestaque()">
+        <div class="artigo-destaque-card">
+          <div class="artigo-imagem">
+            <img [src]="artigo.imagem" [alt]="artigo.titulo" />
+            <div class="artigo-overlay">
+              <div class="categoria-badge">{{ artigo.categoria }}</div>
+            </div>
+          </div>
+
+          <div class="artigo-conteudo">
+            <div class="artigo-meta">
+              <span class="artigo-data">
+                <i class="pi pi-calendar mr-1"></i>
+                {{ artigo.data }}
+              </span>
+              <span class="artigo-leitura">
+                <i class="pi pi-clock mr-1"></i>
+                {{ artigo.tempoLeitura }}
+              </span>
+            </div>
+
+            <h3 class="artigo-titulo">{{ artigo.titulo }}</h3>
+            <p class="artigo-resumo">{{ artigo.resumo }}</p>
+
+            <div class="artigo-autor">
+              <i class="pi pi-user mr-2"></i>
+              {{ artigo.autor }}
+            </div>
+
+            <div class="artigo-destaques">
+              <span *ngFor="let destaque of artigo.destaques" class="destaque-tag">
+                {{ destaque }}
+              </span>
+            </div>
+
+            <button class="ler-mais-btn" (click)="expandirArtigo(artigo)">
+              <i class="pi pi-arrow-right mr-2"></i>
+              Ler Artigo Completo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Artigos Recentes Section -->
+<div class="artigos-section">
+  <div class="container">
+    <h2 class="section-title text-center mb-6">
+      {{ categoriaSelecionada ? categoriaSelecionada : 'Todos os Artigos' }}
+      <span class="artigos-count">({{ artigosFiltrados.length }})</span>
+    </h2>
+
+    <div class="grid">
+      <div class="col-12 lg:col-8 mx-auto">
+        <div class="artigos-lista">
+          <div class="artigo-item" *ngFor="let artigo of artigosFiltrados">
+            <div class="artigo-imagem-small">
+              <img [src]="artigo.imagem" [alt]="artigo.titulo" />
+            </div>
+
+            <div class="artigo-info">
+              <div class="artigo-meta">
+                <span class="categoria">{{ artigo.categoria }}</span>
+                <span class="data">{{ artigo.data }}</span>
+                <span class="leitura">{{ artigo.tempoLeitura }}</span>
+              </div>
+
+              <h3 class="artigo-titulo">{{ artigo.titulo }}</h3>
+              <p class="artigo-resumo">{{ artigo.resumo }}</p>
+
+              <div class="artigo-footer">
+                <div class="artigo-autor">
+                  <i class="pi pi-user mr-1"></i>
+                  {{ artigo.autor }}
+                </div>
+
+                <button class="ler-btn" (click)="expandirArtigo(artigo)">
+                  Ler mais
+                  <i class="pi pi-arrow-right ml-2"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sem resultados -->
+        <div class="sem-resultados" *ngIf="artigosFiltrados.length === 0">
+          <div class="text-center">
+            <i class="pi pi-search text-4xl text-gray-400 mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-600 mb-2">
+              Nenhum artigo encontrado
+            </h3>
+            <p class="text-gray-500 mb-4">
+              Não encontramos artigos para os filtros aplicados. Tente usar palavras-chave diferentes ou remova alguns filtros.
+            </p>
+            <button class="limpar-filtros-btn" (click)="limparFiltros()">
+              <i class="pi pi-times mr-2"></i>
+              Limpar Filtros
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Artigo Expandido Modal -->
+<div class="artigo-modal" *ngIf="artigoSelecionado" (click)="fecharArtigo()">
+  <div class="modal-overlay" (click)="fecharArtigo()"></div>
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="categoria-badge">{{ artigoSelecionado.categoria }}</div>
+      <button class="modal-close" (click)="fecharArtigo()">
+        <i class="pi pi-times"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="artigo-imagem-large">
+        <img [src]="artigoSelecionado.imagem" [alt]="artigoSelecionado.titulo" />
+      </div>
+
+      <div class="artigo-conteudo-completo">
+        <div class="artigo-meta-large">
+          <div class="artigo-autor-large">
+            <i class="pi pi-user mr-2"></i>
+            {{ artigoSelecionado.autor }}
+          </div>
+          <div class="artigo-data-large">
+            <i class="pi pi-calendar mr-2"></i>
+            {{ artigoSelecionado.data }}
+          </div>
+          <div class="artigo-leitura-large">
+            <i class="pi pi-clock mr-2"></i>
+            {{ artigoSelecionado.tempoLeitura }}
+          </div>
+        </div>
+
+        <h1 class="artigo-titulo-large">{{ artigoSelecionado.titulo }}</h1>
+
+        <div class="artigo-destaques-large">
+          <span *ngFor="let destaque of artigoSelecionado.destaques" class="destaque-tag-large">
+            {{ destaque }}
+          </span>
+        </div>
+
+        <div class="artigo-conteudo-html" [innerHTML]="artigoSelecionado.conteudo"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Newsletter Section -->
+<div class="newsletter-section">
+  <div class="container text-center">
+    <h2 class="newsletter-title">Receba nossos artigos por e-mail</h2>
+    <p class="newsletter-description">
+      Assine nossa newsletter e receba semanalmente os melhores artigos jurídicos diretamente no seu e-mail.
+    </p>
+
+    <div class="newsletter-form">
+      <div class="grid">
+        <div class="col-12 md:col-4">
+          <input
+            type="text"
+            pInputText
+            placeholder="Seu nome"
+            class="newsletter-input">
+        </div>
+        <div class="col-12 md:col-5">
+          <input
+            type="email"
+            pInputText
+            placeholder="seu.email&#64;exemplo.com"
+            class="newsletter-input">
+        </div>
+        <div class="col-12 md:col-3">
+          <button class="newsletter-btn">
+            <i class="pi pi-envelope mr-2"></i>
+            Assinar
+          </button>
+        </div>
+      </div>
+      <p class="newsletter-disclaimer">
+        Não enviamos spam. Você pode cancelar a assinatura a qualquer momento.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Footer Section -->
+<app-onboarding-footer></app-onboarding-footer>

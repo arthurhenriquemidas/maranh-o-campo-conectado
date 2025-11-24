@@ -1,0 +1,74 @@
+{
+  "conversas": [
+    {
+      "processoId": "P001",
+      "mensagens": [
+        {
+          "id": "1",
+          "remetenteId": "1",
+          "remetenteTipo": "cliente",
+          "remetenteNome": "João Silva",
+          "conteudo": "Olá Dr. Carlos, gostaria de saber como está o andamento do meu processo.",
+          "dataEnvio": "2024-01-20T10:30:00Z",
+          "lida": true,
+          "tipo": "texto"
+        },
+        {
+          "id": "2", 
+          "remetenteId": "1",
+          "remetenteTipo": "advogado",
+          "remetenteNome": "Dr. Carlos Oliveira",
+          "conteudo": "Bom dia João! Seu processo está progredindo bem. Já protocolamos a petição inicial e estamos aguardando a resposta da empresa.",
+          "dataEnvio": "2024-01-20T14:15:00Z",
+          "lida": true,
+          "tipo": "texto"
+        },
+        {
+          "id": "3",
+          "remetenteId": "1",
+          "remetenteTipo": "advogado", 
+          "remetenteNome": "Dr. Carlos Oliveira",
+          "conteudo": "Preciso que você envie os últimos 3 holerites para complementar a documentação.",
+          "dataEnvio": "2024-01-21T09:00:00Z",
+          "lida": true,
+          "tipo": "texto"
+        },
+        {
+          "id": "4",
+          "remetenteId": "1",
+          "remetenteTipo": "cliente",
+          "remetenteNome": "João Silva", 
+          "conteudo": "Perfeito! Vou providenciar os holerites hoje mesmo.",
+          "dataEnvio": "2024-01-21T10:30:00Z",
+          "lida": true,
+          "tipo": "texto"
+        }
+      ]
+    },
+    {
+      "processoId": "P002",
+      "mensagens": [
+        {
+          "id": "5",
+          "remetenteId": "2",
+          "remetenteTipo": "cliente",
+          "remetenteNome": "Maria Santos",
+          "conteudo": "Dra. Ana, já conseguiu analisar os documentos que enviei?",
+          "dataEnvio": "2024-01-22T16:20:00Z",
+          "lida": true,
+          "tipo": "texto"
+        },
+        {
+          "id": "6",
+          "remetenteId": "2",
+          "remetenteTipo": "advogado",
+          "remetenteNome": "Dra. Ana Costa",
+          "conteudo": "Oi Maria! Sim, já analisei tudo. O processo está quase pronto para finalização. Preciso apenas da sua aprovação em alguns pontos da partilha.",
+          "dataEnvio": "2024-01-22T17:45:00Z",
+          "lida": false,
+          "tipo": "texto"
+        }
+      ]
+    }
+  ]
+}

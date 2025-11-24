@@ -1,0 +1,193 @@
+/**
+ * Breakpoints e Mixins Responsivos - Mobile First
+ * Baseado em estatísticas de uso brasileiro
+ */
+
+// Breakpoints (Mobile First)
+$breakpoints: (
+  'xs': 0,          // 0px - 575px (Mobile Portrait)
+  'sm': 576px,      // 576px - 767px (Mobile Landscape)
+  'md': 768px,      // 768px - 991px (Tablet Portrait)
+  'lg': 992px,      // 992px - 1199px (Tablet Landscape / Desktop Small)
+  'xl': 1200px,     // 1200px - 1399px (Desktop)
+  'xxl': 1400px     // 1400px+ (Large Desktop)
+);
+
+// Mixins para Media Queries (Mobile First)
+@mixin respond-above($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $value: map-get($breakpoints, $breakpoint);
+    @if $value != 0 {
+      @media (min-width: $value) {
+        @content;
+      }
+    } @else {
+      @content;
+    }
+  }
+}
+
+@mixin respond-below($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $value: map-get($breakpoints, $breakpoint);
+    @media (max-width: $value - 1px) {
+      @content;
+    }
+  }
+}
+
+@mixin respond-between($lower, $upper) {
+  @if map-has-key($breakpoints, $lower) and map-has-key($breakpoints, $upper) {
+    $lower-value: map-get($breakpoints, $lower);
+    $upper-value: map-get($breakpoints, $upper);
+    
+    @media (min-width: $lower-value) and (max-width: $upper-value - 1px) {
+      @content;
+    }
+  }
+}
+
+// Mixins para containers responsivos
+@mixin container-padding {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  
+  @include respond-above('sm') {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  @include respond-above('lg') {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@mixin card-spacing {
+  margin-bottom: 1rem;
+  
+  @include respond-above('md') {
+    margin-bottom: 1.5rem;
+  }
+}
+
+// Mixins para texto responsivo
+@mixin font-size-responsive($mobile, $desktop: null) {
+  font-size: $mobile;
+  
+  @if $desktop {
+    @include respond-above('lg') {
+      font-size: $desktop;
+    }
+  }
+}
+
+// Mixins para grid responsivo
+@mixin grid-responsive {
+  display: grid;
+  gap: 1rem;
+  
+  // Mobile: 1 coluna
+  grid-template-columns: 1fr;
+  
+  // Tablet: 2 colunas
+  @include respond-above('md') {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  // Desktop: 3 colunas
+  @include respond-above('lg') {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+@mixin grid-auto-fit($min-width: 280px) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  gap: 1rem;
+  
+  @include respond-above('md') {
+    gap: 1.5rem;
+  }
+  
+  @include respond-above('lg') {
+    gap: 2rem;
+  }
+}
+
+// Mixins para flexbox responsivo
+@mixin flex-responsive {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  
+  @include respond-above('md') {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+}
+
+// Mixins para botões responsivos
+@mixin button-responsive {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  
+  @include respond-above('md') {
+    width: auto;
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+// Mixins para formulários responsivos
+@mixin form-responsive {
+  .p-field {
+    margin-bottom: 1rem;
+    
+    @include respond-above('md') {
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  .p-button {
+    @include button-responsive;
+  }
+}
+
+// Mixins para tabelas responsivas
+@mixin table-responsive {
+  .p-datatable {
+    .p-datatable-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    @include respond-below('md') {
+      .p-datatable-thead > tr > th,
+      .p-datatable-tbody > tr > td {
+        padding: 0.5rem;
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+// Classes utilitárias responsivas
+.mobile-only {
+  @include respond-above('md') {
+    display: none !important;
+  }
+}
+
+.desktop-only {
+  @include respond-below('md') {
+    display: none !important;
+  }
+}
+
+.tablet-up {
+  @include respond-below('md') {
+    display: none !important;
+  }
+}

@@ -1,0 +1,274 @@
+
+<!-- Layout Mobile First -->
+<div class="advogado-layout">
+  
+  <!-- Header Component -->
+  <app-advogado-header 
+    [currentUser]="currentUser"
+    [hasNotifications]="hasNotifications"
+    (onLogout)="onLogout()"
+    (onNotifications)="onNotifications()"
+    (onProfile)="onProfile()">
+  </app-advogado-header>
+
+
+  <!-- Breadcrumb -->
+  <!-- <div class="layout-breadcrumb">
+    <div class="breadcrumb-container">
+      <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome"></p-breadcrumb>
+    </div>
+  </div> -->
+
+  <!-- Conteúdo Principal Mobile First -->
+  <div class="layout-content">
+    
+    <!-- Header da Página Mobile First -->
+    <div class="page-header">
+      <!-- Mobile Header -->
+      <div class="mobile-header">
+        <div class="mobile-header-content">
+          <div class="mobile-title">
+            <h1>Meus Processos</h1>
+            <p>Gerencie seus processos</p>
+          </div>
+          <button 
+            class="mobile-refresh-btn"
+            pButton 
+            type="button" 
+            icon="pi pi-refresh"
+            (click)="refresh()"
+            pTooltip="Atualizar"
+            tooltipPosition="bottom"
+            title="Atualizar">
+          </button>
+        </div>
+      </div>
+
+      <!-- Desktop Header -->
+      <div class="desktop-header desktop-only">
+        <div class="desktop-header-content">
+          <div class="desktop-title">
+            <h1>Meus Processos</h1>
+            <p>Gerencie e acompanhe todos os processos atribuídos a você.</p>
+          </div>
+          <p-button 
+            icon="pi pi-refresh" 
+            label="Atualizar"
+            class="p-button-outlined p-button-lg"
+            (click)="refresh()">
+          </p-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Busca e Filtros Mobile First -->
+    <div class="search-container">
+      
+      <!-- Barra de Busca Mobile -->
+      <div class="search-main">
+        <div class="search-input-wrapper">
+          <div class="search-icon">
+            <i class="pi pi-search"></i>
+          </div>
+          <input 
+            type="text" 
+            pInputText 
+            placeholder="Buscar processos..." 
+            [formControl]="searchControl"
+            class="search-input">
+          <div class="search-actions">
+            <p-button 
+              *ngIf="searchControl.value"
+              class="clear-btn"
+              (click)="searchControl.setValue('')"
+              pTooltip="Limpar busca"
+              tooltipPosition="top"
+              title="Limpar busca">
+              <i class="pi pi-times"></i>
+            </p-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtros Mobile -->
+      <div class="search-filters">
+        <div class="filter-group">
+          <label class="filter-label">Status</label>
+          <p-dropdown 
+            [options]="statuses" 
+            [formControl]="statusControl"
+            placeholder="Todos os status"
+            class="filter-dropdown">
+          </p-dropdown>
+        </div>
+        
+        <div class="filter-actions">
+          <p-button 
+            icon="pi pi-refresh" 
+            label="Atualizar"
+            severity="secondary"
+            outlined="true"
+            size="small"
+            pTooltip="Recarregar dados"
+            (click)="refresh()">
+          </p-button>
+          
+          <p-button 
+            icon="pi pi-filter-slash" 
+            label="Limpar"
+            severity="secondary"
+            text="true"
+            size="small"
+            pTooltip="Remover todos os filtros"
+            (click)="clearAllFilters()">
+          </p-button>
+        </div>
+      </div>
+
+      <!-- Resultados da Busca Mobile -->
+      <div *ngIf="searchControl.value || statusControl.value !== 'todos'" class="search-results-info">
+        <div class="results-count">
+          <i class="pi pi-info-circle"></i>
+          <div class="results-text">
+            <span *ngIf="searchControl.value" class="search-term">
+              Buscando: <strong>"{{ searchControl.value }}"</strong>
+            </span>
+            <span *ngIf="statusControl.value !== 'todos'" class="filter-tag">
+              <i class="pi pi-tag"></i>
+              {{ getStatusLabel(statusControl.value) }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de Processos Mobile First -->
+    <div class="processes-container">
+      
+      <!-- Loading State Mobile -->
+      <div *ngIf="(state$ | async)?.status === 'loading'" class="loading-mobile">
+        <div *ngFor="let item of [1,2,3,4,5]" class="process-skeleton">
+          <div class="skeleton-header">
+            <p-skeleton shape="circle" size="2.5rem"></p-skeleton>
+            <div class="skeleton-content">
+              <p-skeleton width="80%" height="1rem" class="mb-2"></p-skeleton>
+              <p-skeleton width="60%" height="0.8rem"></p-skeleton>
+            </div>
+            <p-skeleton width="3rem" height="2rem"></p-skeleton>
+          </div>
+          <div class="skeleton-body">
+            <p-skeleton width="100%" height="0.8rem" class="mb-2"></p-skeleton>
+            <p-skeleton width="70%" height="0.6rem"></p-skeleton>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de Processos Mobile -->
+      <div *ngIf="(state$ | async)?.status !== 'loading'">
+        <ng-container *ngIf="state$ | async as state">
+          <div *ngIf="state.status === 'success' && state.data && state.data.processes && state.data.processes.length > 0" class="processes-list">
+            <div *ngFor="let processo of state.data.processes" class="process-card-mobile">
+              
+              <!-- Header do Card Mobile -->
+              <div class="process-header-mobile">
+                <div class="process-title-mobile">
+                  <h3>{{ processo.title }}</h3>
+                  <app-status-badge [status]="processo.status"></app-status-badge>
+                </div>
+                <div class="process-actions-mobile">
+                  <p-button 
+                    icon="pi pi-eye" 
+                    class="p-button-rounded p-button-text p-button-sm"
+                    pTooltip="Ver detalhes"
+                    (click)="verProcesso(processo)"
+                    title="Ver detalhes">
+                  </p-button>
+                  <p-button 
+                    icon="pi pi-comments" 
+                    class="p-button-rounded p-button-text p-button-sm"
+                    pTooltip="Chat"
+                    (click)="iniciarChat(processo)"
+                    title="Chat">
+                  </p-button>
+                </div>
+              </div>
+
+              <!-- Descrição Mobile -->
+              <div class="process-description-mobile">
+                <p>{{ processo.description }}</p>
+              </div>
+
+              <!-- Metadados Mobile -->
+              <div class="process-meta-mobile">
+                <div class="meta-item-mobile">
+                  <i class="pi pi-user"></i>
+                  <span>{{ processo.customerName }}</span>
+                </div>
+                <div class="meta-item-mobile">
+                  <i class="pi pi-calendar"></i>
+                  <span>{{ processo.createdAt | date:'dd/MM/yyyy' }}</span>
+                </div>
+                <div class="meta-item-mobile">
+                  <i class="pi pi-tag"></i>
+                  <span>{{ processo.area }}</span>
+                </div>
+                <div class="meta-item-mobile" *ngIf="processo.priority === 'alta'">
+                  <i class="pi pi-flag"></i>
+                  <span class="priority-high">Alta Prioridade</span>
+                </div>
+              </div>
+
+              <!-- Ações Mobile -->
+              <div class="process-actions-bottom-mobile">
+                <p-button 
+                  icon="pi pi-eye" 
+                  label="Ver Detalhes"
+                  class="w-full"
+                  (click)="verProcesso(processo)">
+                </p-button>
+                <p-button 
+                  icon="pi pi-comments" 
+                  label="Chat"
+                  severity="secondary"
+                  class="w-full"
+                  (click)="iniciarChat(processo)">
+                </p-button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Estado Vazio Mobile -->
+          <div *ngIf="state.status === 'empty'" class="empty-state-mobile">
+            <div class="empty-content">
+              <i class="pi pi-briefcase empty-icon"></i>
+              <h3>Nenhum processo encontrado</h3>
+              <p>Não há processos atribuídos a você no momento.</p>
+              <p-button 
+                icon="pi pi-refresh" 
+                label="Atualizar"
+                class="p-button-outlined"
+                (click)="refresh()">
+              </p-button>
+            </div>
+          </div>
+
+          <!-- Estado de Erro Mobile -->
+          <div *ngIf="state.status === 'error'" class="error-state-mobile">
+            <div class="error-content">
+              <i class="pi pi-exclamation-triangle error-icon"></i>
+              <h3>Erro ao carregar processos</h3>
+              <p>Ocorreu um erro ao carregar os processos. Tente novamente.</p>
+              <p-button 
+                icon="pi pi-refresh" 
+                label="Tentar Novamente"
+                class="p-button-outlined"
+                (click)="refresh()">
+              </p-button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+  </div>
+</div>

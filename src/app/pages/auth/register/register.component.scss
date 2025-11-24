@@ -1,0 +1,455 @@
+// Modern Register Layout Styles - Base from Login
+.register-wrapper {
+  min-height: 100vh;
+  background: #f8f9fa;
+  overflow-x: hidden;
+  width: 100%;
+
+  // Prevenir scroll horizontal do PrimeNG Grid
+  :ng-deep .grid {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    max-width: 100%;
+  }
+
+  :ng-deep .col-12,
+  :ng-deep .col-md-6,
+  :ng-deep [class*="col-"] {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+// Register Form Section
+.register-form-section {
+  padding: 2rem 0 4rem 0;
+  background: white;
+  margin-top: 90px;
+  overflow-x: hidden;
+  width: 100%;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    .grid {
+      width: 100%;
+      margin: 0;
+      max-width: 100%;
+
+      .auth-card {
+        width: 100%;
+
+        :ng-deep .p-card-body {
+          padding: 1.5rem 2.5rem 2.5rem 2.5rem;
+          overflow-x: hidden;
+
+          @media (max-width: 768px) {
+            padding: 1rem 1rem 1.5rem 1rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Register Header - Outside Card
+.register-header {
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem !important;
+
+  .register-title {
+    margin-bottom: 0.5rem;
+  }
+
+  .register-subtitle {
+    margin-bottom: 1rem;
+  }
+}
+
+// Estilos específicos para o registro
+.tipo-option {
+  border: 2px solid var(--surface-border);
+  transition: all 0.3s ease;
+  background: var(--surface-card);
+  
+  &:hover {
+    border-color: var(--primary-color);
+    background-color: var(--primary-50);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  &.selected {
+    border-color: var(--primary-color);
+    background-color: var(--primary-50);
+    box-shadow: 0 0 0 1px var(--primary-color), 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  .tipo-icon {
+    transition: all 0.3s ease;
+  }
+}
+
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.demo-credentials {
+  .p-card {
+    background-color: var(--surface-50);
+    border: 1px solid var(--surface-200);
+  }
+}
+
+// Estilos para o wizard
+.p-steps {
+  .p-steps-item {
+    .p-steps-number {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: bold;
+    }
+    
+    &.p-steps-current {
+      .p-steps-number {
+        background-color: var(--primary-color);
+        box-shadow: 0 0 0 2px var(--primary-200);
+      }
+    }
+    
+    .p-steps-title {
+      font-weight: 600;
+    }
+  }
+}
+
+// Estilos para resumo
+.summary-section {
+  h6 {
+    border-bottom: 1px solid var(--surface-border);
+    padding-bottom: 0.5rem;
+  }
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--surface-100);
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+// Animação de sucesso
+.success-animation {
+  animation: successPulse 2s ease-in-out;
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// Melhorias nos componentes PrimeNG
+.modern-input {
+  border-radius: 8px;
+  border: 2px solid var(--surface-border);
+  transition: all 0.3s ease;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  
+  &:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color);
+    outline: none;
+  }
+  
+  &::placeholder {
+    color: var(--text-color-secondary);
+    opacity: 0.7;
+  }
+}
+
+// Estilos específicos para p-password
+:ng-deep .p-password {
+  width: 100% !important;
+  
+  .p-password-input {
+    width: 100% !important;
+    border-radius: 8px !important;
+    border: 2px solid var(--surface-border) !important;
+    transition: all 0.3s ease !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 1rem !important;
+    height: auto !important;
+    min-height: 48px !important;
+    line-height: 1.5 !important;
+    
+    &:focus {
+      border-color: var(--primary-color) !important;
+      box-shadow: 0 0 0 1px var(--primary-color) !important;
+      outline: none !important;
+    }
+    
+    &::placeholder {
+      color: var(--text-color-secondary) !important;
+      opacity: 0.7 !important;
+    }
+  }
+  
+  .p-password-panel {
+    .p-password-meter {
+      margin-top: 0.5rem;
+    }
+  }
+}
+
+// Força os estilos para inputs com classe modern-input
+:ng-deep .p-password .p-password-input.modern-input {
+  padding: 0.75rem 1rem !important;
+  font-size: 1rem !important;
+  border-radius: 8px !important;
+  border: 2px solid var(--surface-border) !important;
+  min-height: 48px !important;
+  height: auto !important;
+  line-height: 1.5 !important;
+  
+  &:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 1px var(--primary-color) !important;
+    outline: none !important;
+  }
+}
+
+.p-multiselect {
+  .p-multiselect-label {
+    border-radius: 8px;
+    border: 2px solid var(--surface-border);
+    transition: all 0.3s ease;
+  }
+  
+  &.p-focus .p-multiselect-label {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color);
+  }
+}
+
+.p-panel {
+  .p-panel-header {
+    background: var(--primary-50);
+    border-bottom: 2px solid var(--primary-color);
+    font-weight: 600;
+  }
+}
+
+.p-fieldset {
+  .p-fieldset-legend {
+    background: var(--primary-50);
+    border: 2px solid var(--primary-color);
+    font-weight: 600;
+    color: var(--primary-color);
+  }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .tipo-option {
+    margin-bottom: 1rem;
+    padding: 1rem !important;
+    
+    .tipo-icon i {
+      font-size: 2.5rem !important;
+    }
+    
+    h4, h5 {
+      font-size: 1.1rem !important;
+    }
+  }
+  
+  .grid {
+    margin: 0 !important;
+    
+    .col-12 {
+      padding: 0.5rem;
+    }
+  }
+  
+  .summary-item {
+    flex-direction: column;
+    align-items: flex-start;
+    
+    span:first-child {
+      margin-bottom: 0.25rem;
+    }
+  }
+  
+  .p-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .auth-title {
+    font-size: 1.8rem !important;
+  }
+  
+  .auth-subtitle {
+    font-size: 1rem !important;
+  }
+  
+  .tipo-option {
+    .tipo-icon i {
+      font-size: 2rem !important;
+    }
+  }
+}
+
+// Estilo para input da OAB
+.oab-input {
+  text-transform: uppercase;
+}
+
+// Benefits Section - Same as Login
+.benefits-section {
+  padding: 4rem 0;
+  background: #f8f9fa;
+  overflow-x: hidden;
+  width: 100%;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    width: 100%;
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-900);
+    margin-bottom: 3rem;
+
+    @media (max-width: 768px) {
+      font-size: 2rem;
+    }
+  }
+
+  .benefit-card {
+    text-align: center;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .benefit-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+
+      i {
+        font-size: 2rem;
+        color: white;
+      }
+    }
+
+    .benefit-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary-900);
+      margin-bottom: 1rem;
+    }
+
+    .benefit-description {
+      color: var(--primary-600);
+      line-height: 1.6;
+    }
+  }
+}
+
+// Address Section Styling
+.address-section {
+  background: var(--surface-50);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color);
+}
+
+// Footer Navigation Styling
+.register-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .step-indicator {
+    order: 1;
+  }
+
+  .buttons-container {
+    order: 2;
+  }
+
+  // Desktop: Layout horizontal
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0;
+
+    // Ocultar indicador de etapa acima no desktop
+    .step-indicator {
+      display: none;
+    }
+
+    .buttons-container {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      .left-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+  }
+}
+
+// Indicador de etapa inline (apenas desktop)
+.step-indicator-inline {
+  display: none;
+  
+  @media (min-width: 768px) {
+    display: block;
+    white-space: nowrap;
+  }
+}

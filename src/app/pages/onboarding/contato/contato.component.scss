@@ -1,0 +1,544 @@
+/* === VARIÁVEIS LOCAIS === */
+:host {
+  --primary-color: var(--primary-600);
+  --primary-light: #e6f2ff;
+  --text-primary: #2d3748;
+  --text-secondary: #718096;
+  --background-light: #ffffff;
+  --background-gray: #f8fafc;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
+  --border-radius: 12px;
+  --transition: all 0.3s ease;
+  
+  display: block;
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+// Contato Section
+.contato-section {
+  padding: 6rem 2rem 4rem;
+  background: var(--background-light);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+
+  .contato-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .contato-header {
+    text-align: center;
+    margin-bottom: 4rem;
+
+    .contato-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+
+      @media (max-width: 768px) {
+        font-size: 2rem;
+      }
+    }
+
+    .contato-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+
+  .contato-content {
+    .contato-info-section {
+      margin-bottom: 4rem;
+
+      .info-cards {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+        width: 100%;
+        box-sizing: border-box;
+
+        @media (max-width: 1200px) {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .info-card {
+          background: white;
+          border-radius: var(--border-radius);
+          padding: 2.5rem 2rem;
+          box-shadow: var(--shadow-sm);
+          text-align: center;
+          transition: var(--transition);
+          border-top: 4px solid var(--primary-color);
+
+          &:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+          }
+
+          .info-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+
+            i {
+              font-size: 2.5rem;
+              color: var(--primary-color);
+            }
+          }
+
+          &:hover .info-icon {
+            background: var(--primary-color);
+            transform: scale(1.1);
+
+            i {
+              color: white;
+            }
+          }
+
+          .info-content {
+            h3 {
+              font-size: 1.4rem;
+              font-weight: 600;
+              color: var(--text-primary);
+              margin-bottom: 1rem;
+            }
+
+            p {
+              color: var(--text-secondary);
+              line-height: 1.6;
+              margin-bottom: 1rem;
+              font-size: 0.95rem;
+            }
+
+            .info-link {
+              color: var(--primary-color);
+              text-decoration: none;
+              font-weight: 600;
+              font-size: 1.1rem;
+              transition: var(--transition);
+
+              &:hover {
+                color: #1a4d6b;
+                text-decoration: underline;
+              }
+            }
+
+            address {
+              color: var(--primary-color);
+              font-weight: 600;
+              font-size: 1rem;
+              font-style: normal;
+            }
+          }
+        }
+      }
+    }
+
+    .contato-form-section {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 3rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 4rem;
+
+      @media (max-width: 768px) {
+        padding: 2rem;
+      }
+
+      .form-container {
+        .form-title {
+          font-size: 2rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin-bottom: 0.5rem;
+          text-align: center;
+        }
+
+        .form-subtitle {
+          color: var(--text-secondary);
+          text-align: center;
+          margin-bottom: 2rem;
+          font-size: 1.1rem;
+        }
+
+        .contato-form {
+          .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+
+            @media (max-width: 768px) {
+              grid-template-columns: 1fr;
+              gap: 1rem;
+            }
+          }
+
+          .form-group {
+            .form-label {
+              display: block;
+              margin-bottom: 0.5rem;
+              color: var(--text-primary);
+              font-weight: 500;
+              font-size: 0.95rem;
+            }
+
+            .form-input,
+            .form-textarea {
+              width: 100%;
+              padding: 0.75rem 1rem;
+              border: 2px solid #e2e8f0;
+              border-radius: var(--border-radius);
+              font-size: 1rem;
+              transition: var(--transition);
+              background: white;
+              color: var(--text-primary);
+
+              &:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(44, 95, 124, 0.1);
+              }
+
+              &.is-invalid {
+                border-color: #ef4444;
+                box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+              }
+
+              &::placeholder {
+                color: #a0aec0;
+              }
+            }
+
+            .form-textarea {
+              resize: vertical;
+              min-height: 120px;
+              font-family: inherit;
+            }
+
+            .invalid-feedback {
+              color: #ef4444;
+              font-size: 0.875rem;
+              margin-top: 0.25rem;
+              display: block;
+            }
+
+            .form-checkbox {
+              display: flex;
+              align-items: flex-start;
+              gap: 0.75rem;
+              margin-top: 1rem;
+
+              .form-checkbox-input {
+                margin: 0;
+                width: 1.2rem;
+                height: 1.2rem;
+                flex-shrink: 0;
+              }
+
+              .form-checkbox-label {
+                color: var(--text-secondary);
+                font-size: 0.9rem;
+                line-height: 1.5;
+
+                .text-link {
+                  color: var(--primary-color);
+                  text-decoration: none;
+                  font-weight: 500;
+
+                  &:hover {
+                    text-decoration: underline;
+                  }
+                }
+              }
+            }
+          }
+
+          .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+
+            @media (max-width: 768px) {
+              flex-direction: column;
+              gap: 0.75rem;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+              padding: 1rem 2rem;
+              border: none;
+              border-radius: 50px;
+              font-weight: 600;
+              font-size: 1rem;
+              cursor: pointer;
+              transition: var(--transition);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 0.5rem;
+              min-width: 180px;
+
+              i {
+                font-size: 1.1rem;
+              }
+            }
+
+            .btn-primary {
+              background: var(--primary-color);
+              color: white;
+
+              &:hover:not(:disabled) {
+                background: #1a4d6b;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(44, 95, 124, 0.3);
+              }
+
+              &:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+              }
+            }
+
+            .btn-secondary {
+              background: transparent;
+              color: var(--primary-color);
+              border: 2px solid var(--primary-color);
+
+              &:hover:not(:disabled) {
+                background: var(--primary-color);
+                color: white;
+                transform: translateY(-2px);
+              }
+
+              &:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+              }
+            }
+          }
+
+          .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-top: 2rem;
+            border-left: 4px solid #10b981;
+
+            i {
+              font-size: 1.5rem;
+              margin-bottom: 0.5rem;
+              display: block;
+            }
+
+            p {
+              margin: 0;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+    }
+
+    .horario-section {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 3rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 4rem;
+
+      @media (max-width: 768px) {
+        padding: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      .horario-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .horario-item {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+          padding: 1.5rem;
+          background: var(--background-gray);
+          border-radius: var(--border-radius);
+          transition: var(--transition);
+
+          &:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+          }
+
+          .horario-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+
+            i {
+              font-size: 1.8rem;
+              color: white;
+            }
+          }
+
+          .horario-content {
+            h4 {
+              font-size: 1.2rem;
+              font-weight: 600;
+              color: var(--text-primary);
+              margin-bottom: 0.3rem;
+            }
+
+            p {
+              color: var(--text-secondary);
+              margin: 0;
+              font-size: 0.95rem;
+            }
+          }
+        }
+      }
+    }
+
+    .faq-section {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 3rem;
+      box-shadow: var(--shadow-sm);
+
+      @media (max-width: 768px) {
+        padding: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      .faq-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 2rem;
+        width: 100%;
+        box-sizing: border-box;
+
+        @media (max-width: 1200px) {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .faq-item {
+          padding: 2rem;
+          background: var(--background-gray);
+          border-radius: var(--border-radius);
+          border-left: 4px solid var(--primary-color);
+          transition: var(--transition);
+
+          &:hover {
+            background: white;
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
+          }
+
+          h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+          }
+
+          p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+            font-size: 0.95rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Container utility
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+// Responsive adjustments
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contato-section {
+    padding-top: 8rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+}
+

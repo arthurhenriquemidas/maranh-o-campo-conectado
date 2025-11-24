@@ -1,0 +1,57 @@
+{
+  "statusOptions": [
+    { "label": "Todos os Status", "value": "" },
+    { "label": "Aguardando", "value": "aberto" },
+    { "label": "Em Andamento", "value": "em_andamento" },
+    { "label": "Aguardando Resposta", "value": "aguardando_cliente" },
+    { "label": "Concluído", "value": "concluido" },
+    { "label": "Arquivado", "value": "arquivado" }
+  ],
+  "tipoOptions": [
+    { "label": "Todos os Tipos", "value": "" },
+    { "label": "Trabalhista", "value": "trabalhista" },
+    { "label": "Civil", "value": "civil" },
+    { "label": "Criminal", "value": "criminal" },
+    { "label": "Família", "value": "familia" },
+    { "label": "Tributário", "value": "tributario" },
+    { "label": "Empresarial", "value": "empresarial" }
+  ],
+  "areasDireito": [
+    { "label": "Cível", "value": "civil" },
+    { "label": "Trabalhista", "value": "trabalhista" },
+    { "label": "Consumidor", "value": "consumidor" },
+    { "label": "Criminal", "value": " criminal" },
+    { "label": "Família", "value": "familia" },
+    { "label": "Tributário", "value": "tributario" },
+    { "label": "Administrativo", "value": "administrativo" },
+    { "label": "Outro", "value": "outro" }
+  ],
+  "objetivosCliente": [
+    { "label": "Indenização", "value": "indenizacao" },
+    { "label": "Contestação", "value": "contestacao" },
+    { "label": "Revisão de Contrato", "value": "revisao_contrato" },
+    { "label": "Cobrança", "value": "cobranca" },
+    { "label": "Defesa", "value": "defesa" },
+    { "label": "Ação Preventiva", "value": "acao_preventiva" },
+    { "label": "Outro", "value": "outro" }
+  ],
+  "niveisUrgencia": [
+    { "label": "Baixa - Sem pressa", "value": "baixa" },
+    { "label": "Média - Prazo normal", "value": "media" },
+    { "label": "Alta - Urgente", "value": "alta" },
+    { "label": "Crítica - Liminar ou prazo judicial próximo", "value": "critica" }
+  ],
+  "menuItems": [
+    {
+      "label": "Dashboard",
+      "icon": "pi pi-home",
+      "routerLink": ["/cliente/dashboard"]
+    },
+    {
+      "label": "Meus Processos",
+      "icon": "pi pi-briefcase",
+      "routerLink": ["/cliente/processos"]
+    }
+  ]
+}
+
